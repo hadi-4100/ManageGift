@@ -54,9 +54,9 @@ If you don't want to edit the code of the bot, a permanent online version is ava
 
 ManageGift is licensed under the GPL 3.0 license. See the file `LICENSE` for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
 
-# 😘 Special Thanks :
+## 😘 Special Thanks :
 
- @ (owner and developer of `discord-giveaway` package) for help me, and thank you @ for help me too.
+@Androz2091 and (owner and developer of `discord-giveaway` package) for help me, and thank you @ZerioDev for help me too.
 
 ## ⬇ Installation :
 
@@ -71,3 +71,6 @@ ManageGift is licensed under the GPL 3.0 license. See the file `LICENSE` for mor
 * create `json.sqlite` file.
 
 * Run the ManageGift with `node index.js`!
+
+
+# الترجمة باللغة العربية قريبا" 😀
