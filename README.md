@@ -50,6 +50,10 @@ If you don't want to edit the code of the bot, a permanent online version is ava
 
 [![Discord Bots](https://discordbots.org/api/widget/598564396691750933.svg)](https://discordbots.org/bot/598564396691750933)
 
+## 📋 LICENSE
+
+ManageGift is licensed under the GPL 3.0 license. See the file `LICENSE` for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
+
 ## ⬇ Installation :
 
 * Make sure you have installed Node.js v12 or higher and install Git.
