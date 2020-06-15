@@ -56,7 +56,7 @@ ManageGift is licensed under the GPL 3.0 license. See the file `LICENSE` for mor
 
 ## 😘 Special Thanks :
 
-@Androz2091 and (owner and developer of `discord-giveaway` package) for help me, and thank you @ZerioDev for help me too.
+[Androz2091](https://github.com/Androz2091/discord-giveaway) and (owner and developer of `discord-giveaway` package) for help me, and thank you [ZerioDev](https://github.com/ZerioDev/GiveawayBot) for help me too.
 
 ## ⬇ Installation :
 
