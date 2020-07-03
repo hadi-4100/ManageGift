@@ -7,7 +7,7 @@
 [![](https://img.shields.io/badge/discord.js-v12.0.0--dev-blue.svg?logo=npm&style=for-the-badge)](https://github.com/discordjs)
 [![discord](https://img.shields.io/discord/710852417100578849?color=blue&label=DISCORD&style=for-the-badge)](https://discord.gg/7XfV4Md)
 [![support](https://img.shields.io/badge/SUPPORT-BY%20PAYPAL-orange?style=for-the-badge)](https://paypal.me/Hadikob)
-> ManageGift is very easy and simple for use on your server, and using `discord-giveaway` package!.
+> ManageGift is very easy and simple for use on your server, and using `discord-giveaways` package!.
 
 ## ✨  Features
 
@@ -54,9 +54,9 @@ If you don't want to edit the code of the bot, a permanent online version is ava
 
 ManageGift is licensed under the GPL 3.0 license. See the file `LICENSE` for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
 
-# 😘 Special Thanks :
+## 😘 Special Thanks :
 
- @ (owner and developer of `discord-giveaway` package) for help me, and thank you @ for help me too.
+[Androz2091](https://github.com/Androz2091/discord-giveaways) (owner and developer of `discord-giveaway` package) for help me, and thank you [ZerioDev](https://github.com/ZerioDev/GiveawayBot) for help me too.
 
 ## ⬇ Installation :
 
@@ -71,3 +71,6 @@ ManageGift is licensed under the GPL 3.0 license. See the file `LICENSE` for mor
 * create `json.sqlite` file.
 
 * Run the ManageGift with `node index.js`!
+
+
+# الترجمة باللغة العربية قريبا" 😀
