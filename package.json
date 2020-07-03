@@ -31,7 +31,7 @@
   "dependencies": {
     "discord.js": "12.2.0",
     "better-sqlite3": "^6.0.1",
-    "discord-giveaways": "4.1.7",
+    "discord-giveaways": "4.2.0",
     "fs": "0.0.1-security",
     "ms": "^2.1.2",
     "path": "0.12.7",
