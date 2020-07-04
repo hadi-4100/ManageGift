@@ -41,4 +41,18 @@ exports.run = async (client, message, args) => {
         message.channel.send(":flag_gb: | The language of this server is now English!")
 
     }
+
+    if (args[0] === "ru") {
+
+        if (!message.member.hasPermission("MANAGE_CHANNELS")) {
+            return message.channel.send(lang.lang.perms)
+        }
+
+        if (language === "ru") return message.channel.send(lang.lang.err)
+
+        db.set(`language_${message.guild.id}`, "ru")
+
+        message.channel.send(":flag_ru: | Язык установлен на Русский!")
+
+    }
 }
