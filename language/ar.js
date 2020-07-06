@@ -25,9 +25,9 @@ module.exports = {
       },
     
       units: {
-        seconds: `قانية`,
-        minutes: `دقيقة`,
-        hours: `ساعة`,
+        seconds: `ثانيه`,
+        minutes: `دقيقه`,
+        hours: `ساعه`,
         days: `يوم`,
       },
   
