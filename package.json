@@ -1,6 +1,6 @@
 {
   "name": "managegift",
-  "version": "1.1.0",
+  "version": "1.8.2",
   "description": "ManageGift's | By Hadi Koubeissi using discord-giveaways package",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hadi-Koubeissi/ManageGift..git"
+    "url": "git+https://github.com/Hadi-Koubeissi/ManageGift.git"
   },
   "keywords": [
     "ManageGift",
@@ -21,7 +21,8 @@
     "Arab bot",
     "setlang command",
     "discord.js",
-    "discord website"
+    "discord website",
+    "discord arabic bot"
   ],
   "author": "Hadi-Koubeissi",
   "license": "ISC",
