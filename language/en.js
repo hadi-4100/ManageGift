@@ -112,7 +112,8 @@ module.exports = {
     giv: `\`All Giveaways:\` `,
     link: `__${e.link} Links:__`
       },
-
+    prefixerror: `${e.error} Type a valid prefix!.`,
+    setprefix: `${e.success} The prefix on this server has been changed to `,  
     info:{
         ping: `> ${e.ping} My Ping is `,
     }
