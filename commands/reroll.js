@@ -1,23 +1,14 @@
-const ms = require('ms');
-
 exports.run = async (client, message, args) => {
-
-    const db = require('quick.db')
-
-    const config = require(`../config.js`)
-
+    const db = require("quick.db")
+    const config = require("../config.js")
     let language = db.fetch(`language_${message.guild.id}`)
-
-    if (language === null) language = config.basiclang
-
+    if(language === null) language = config.basiclang
     const lang = require(`../language/${language}.js`)
-
     let role = db.fetch(`role_${message.guild.id}`)
-
-    if (role === null) role = config.grole
+    if(role === null) role = config.grole
 
     // If the member doesn't have enough permissions
-    if(!message.member.hasPermission('MANAGE_MESSAGES') && !message.member.roles.cache.some((r) => r.name === role)){
+    if(!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role)){
         return message.channel.send(lang.start.perms + "** **" + "`" + role + "`" + ".");
     }
 
@@ -27,11 +18,7 @@ exports.run = async (client, message, args) => {
     }
 
     // try to found the giveaway with prize then with ID
-    let giveaway = 
-    // Search with giveaway prize
-    client.giveawaysManager.giveaways.find((g) => g.prize === args.join(' ')) ||
-    // Search with giveaway ID
-    client.giveawaysManager.giveaways.find((g) => g.messageID === args[0]);
+    let giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === args.join(' ')) || client.giveawaysManager.giveaways.find((g) => g.messageID === args[0]);
 
     // If no giveaway was found
     if(!giveaway){

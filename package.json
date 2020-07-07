@@ -1,6 +1,6 @@
 {
   "name": "managegift",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "ManageGift's | By Hadi Koubeissi using discord-giveaways package",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hadi-Koubeissi/ManageGift..git"
+    "url": "git+https://github.com/Hadi-Koubeissi/ManageGift.git"
   },
   "keywords": [
     "ManageGift",

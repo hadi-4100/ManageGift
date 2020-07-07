@@ -1,23 +1,15 @@
-const ms = require('ms');
-
 exports.run = async (client, message, args) => {
-    
-    const db = require('quick.db')
-
-    const config = require(`../config.js`)
-
+    const ms = require("ms");
+    const db = require("quick.db")
+    const config = require("../config.js")
     let language = db.fetch(`language_${message.guild.id}`)
-
-    if (language === null) language = config.basiclang
-
+    if(language === null) language = config.basiclang
     const lang = require(`../language/${language}.js`)
-
     let role = db.fetch(`role_${message.guild.id}`)
-
-    if (role === null) role = config.grole
+    if(role === null) role = config.grole
 
     // If the member doesn't have enough permissions
-    if(!message.member.hasPermission('MANAGE_MESSAGES') && !message.member.roles.cache.some((r) => r.name === role)){
+    if(!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role)){
         return message.channel.send(lang.start.perms + "** **" + "`" + role + "`" + "!.");
     }
 
@@ -51,25 +43,19 @@ exports.run = async (client, message, args) => {
 
     let mention = db.fetch(`mention_${message.guild.id}`)
 
-    if (mention === null) mention = false
+    if(mention === null) mention = false
+        if(mention === true){
+            var text1 = "@everyone\n\n" + lang.start.giveaway
+            var text2 = "@everyone\n\n" + lang.start.giveawayEnded
+        }
 
-    if (mention === true) {
-
-    var text1 = "@everyone\n\n" + lang.start.giveaway
-    var text2 = "@everyone\n\n" + lang.start.giveawayEnded
-
-    }
-
-    if (mention === false) {
-
-        var text1 = lang.start.giveaway
-        var text2 = lang.start.giveawayEnded
-    
-    }
+        if(mention === false){
+            var text1 = lang.start.giveaway
+            var text2 = lang.start.giveawayEnded
+        }
 
     // Start the giveaway
     client.giveawaysManager.start(giveawayChannel, {
-        
         // The giveaway duration
         time: ms(giveawayDuration),
         // The giveaway prize
@@ -100,6 +86,5 @@ exports.run = async (client, message, args) => {
         }
     });
 
-    message.channel.send(`${lang.start.good} ${giveawayChannel} !`);
-
+    message.channel.send(`${lang.start.good} ${giveawayChannel}!`);
 };

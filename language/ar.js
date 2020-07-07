@@ -1,8 +1,8 @@
+//arabic
 let config = require(`../config.js`);
 let e = config.emojis;
 
 module.exports = {
-
     start: {
         perms: `${e.error} ليس لديك رتبة ذات صلاحية \n\`MANAGE_MESSAGES \`،\n  يمكنك إنشاء رتبة للتحكم في اوامر القيف اوي واسمها\n:`,
         channel: `${e.error} يجب ان تفوم بفعل منشن \`لروم صالح\` لتثبيت القيف اوي فيه\n> مثال: %gstart \`#giveawaychannel (giveawaychannel: هذة الغرفة)\``,
@@ -59,7 +59,7 @@ module.exports = {
   
       lang: {
         perms: `${e.error} ليس لديك رتبة ذات صلاحية \n\`MANAGE_MESSAGES \`،\n  يمكنك إنشاء رتبة للتحكم في اوامر القيف اوي واسمها\n:`,
-        msg: `${e.error} الرجاء ادخال لغة صالحة مثال: (\`ar\`, \`en\`) !.`,
+        msg: `${e.error} الرجاء ادخال لغة صالحة مثال: (\`ar\`, \`en\`, \`ru\`, \`ua\`)`,
         err: `${e.error} اللغة التي اذخلتها هي بالفعل لغة السيرفر. حاول تغيير اللغة لترى!.`
       },
   
@@ -115,6 +115,4 @@ module.exports = {
     info:{
         ping: `> ${e.ping} سرعة استجابة البوت  `,
     }
-
-
 }
