@@ -1,25 +1,17 @@
-const ms = require('ms');
-const Discord = require('discord.js')
-
 exports.run = async (client, message, args) => {
-
-    const db = require('quick.db')
-
-    const config = require(`../config.js`)
-
+    const Discord = require("discord.js")
+    const db = require("quick.db")
+    const config = require("../config.js")
     let language = db.fetch(`language_${message.guild.id}`)
-
-    if (language === null) language = config.basiclang
-
+    if(language === null) language = config.basiclang
     const lang = require(`../language/${language}.js`)
 
-    
     let websiteURL = `http://managegift.ga`;
     let inviteLink = `https://discordapp.com/oauth2/authorize?client_id=${config.idbot}&scope=bot&permissions=8`;
     let voteURL = `https://discordbots.org/bot/${config.idbot}/vote`;
     let supportURL = config.auth.support
 
-    if(args[0] && args[0] === "copy"){
+    if(args[0] === "copy"){
         return message.channel.send(inviteLink);
     }
     
