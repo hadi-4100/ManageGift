@@ -111,9 +111,11 @@ module.exports = {
         giv: `\`:جميع القيف اويات\` `,
         link: `__${e.link} :الروابط__`
           },
+
         prefixerror: `${e.error} اكتب بادئه صالحه!.`,
         setprefix: `${e.success} البادئه الان في هذا السيرفر اصبحت  `,      
-      info:{
+    
+        info:{
         ping: `> ${e.ping} سرعة استجابة البوت  `,
     }
 }

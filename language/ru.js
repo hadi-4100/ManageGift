@@ -111,8 +111,10 @@ module.exports = {
     giv: `\`Кол-во розыграшей:\``,
     link: `__${e.link} Ссылки:__`
       },
+
     prefixerror: `${e.error} Укажите желаемый префикс!`,
     setprefix: `${e.success} Префикс был изменён на `,
+    
     info:{
         ping: `> ${e.ping} Мой пинг `,
     }
