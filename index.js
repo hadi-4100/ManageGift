@@ -132,9 +132,6 @@ fs.readdir("./commands/", (_err, files) => {
     });
 });
 
-<<<<<<< HEAD
 
 // Login
-=======
->>>>>>> fbdf75b3e63babd031281769bf691cc573ff8b3b
 client.login(config.token);
