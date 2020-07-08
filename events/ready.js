@@ -9,5 +9,5 @@ module.exports = (client) => {
             client.user.setActivity(toDisplay, {type: status[parseInt(i, 10)].type});
             if(status[parseInt(i+1, 10)]) i++
             else i = 0;
-        }, 20000);
+        }, 20000);//20 seconde
 };
