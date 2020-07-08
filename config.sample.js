@@ -20,7 +20,11 @@ module.exports = {
 			type: "LISTENING"
 		},
 		{
+<<<<<<< HEAD
 			name: "https://github.com/Hadi-Koubeissi/ManageGift",
+=======
+			name: "https://github.com/Hadi-Koubeissi/GiveawayBoT",
+>>>>>>> fbdf75b3e63babd031281769bf691cc573ff8b3b
 			type: "PLAYING"
 		}
 	],

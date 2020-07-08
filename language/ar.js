@@ -116,6 +116,4 @@ module.exports = {
       info:{
         ping: `> ${e.ping} سرعة استجابة البوت  `,
     }
-
-
 }
