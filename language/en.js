@@ -1,14 +1,15 @@
 //engilsh
 let config = require(`../config.js`);
 let e = config.emojis;
+let prefix = config.prefix;
 
 module.exports = {
     start: {
         perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation:`,
-        channel: `${e.error} You should mention on \`valid channel!\`\n> Ex: %gstart \`#giveawaychannel (giveawaychanne: this channel)\` 1h 1 Nitro!`,
+        channel: `${e.error} You should mention on \`valid channel!\`\n> Ex: ${prefix}start \`#giveawaychannel (giveawaychanne: this channel)\` 1h 1 Nitro!`,
         duration: `${e.error} Type a valid \`time\` please!\n> Ex: \`1d (1 day)\`, \`1h (1 hour)\`, \`1m (1 minute)\`, \`1s (1 seconds)\`!`,
-        argswinners: `${e.error} Type the \`number of winners!\`\n> Ex: \`%gstart #giveawaychannel 1h 4(4: number of winers) Nitro\``,
-        prize: `${e.error} Add the \`prize\` please!\n> Ex: %gstart #giveawaychannel 1h 1 \`Nitro(Nitro: the prize)\``,
+        argswinners: `${e.error} Type the \`number of winners!\`\n> Ex: \`${prefix}start #giveawaychannel 1h 4(4: number of winers) Nitro\``,
+        prize: `${e.error} Add the \`prize\` please!\n> Ex: ${prefix}start #giveawaychannel 1h 1 \`Nitro(Nitro: the prize)\``,
         good: `${e.success} **I launched the \` giveaway \` in the living room:**`,
   
         giveaway: `${e.gift} **GIVEAWAY START** ${e.gift}`,
@@ -50,8 +51,8 @@ module.exports = {
       edit: {
         perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation:`,
         msg: `${e.error} You have to specify a valid message ID!`,
-        argswinners: `${e.error} type the \`number of winners!\`\n> Ex: \`%gstart #giveawaychannel 1h 2(2: number of winers) Nitro\``,
-        prize:  `${e.error} add the \`prize\` please!\n> Ex: %gstart #giveawaychannel 1h 2 \`Nitro (Nitro: the prize)\``,
+        argswinners: `${e.error} type the \`number of winners!\`\n> Ex: \`${prefix}start #giveawaychannel 1h 2(2: number of winers) Nitro\``,
+        prize:  `${e.error} add the \`prize\` please!\n> Ex: ${prefix}start #giveawaychannel 1h 2 \`Nitro (Nitro: the prize)\``,
         err: `${e.error} Unable to recognize this id giveaway:`,
         good: `${e.success} The giveaway will be modified using the new parameters. The changes will take effect within 5 seconds!`,
         errmod: `${e.error} An error occurred, maybe this giveaway is already finished or deleted?!`
@@ -71,9 +72,9 @@ module.exports = {
         erron: `${e.error} This function is already activated. Try turning it off to see? `,
         mon: `${e.success} I have activated the function \`everyone\` for the next giveaways.`,
         moff: `${e.success} I've disabled the function \`everyone\` for the next giveaways.`,
-        channel: `${e.error} Please point me to a giveaway logs room, \n> Ex: %gset logs \`#logs\` to define the logs.`,
+        channel: `${e.error} Please point me to a giveaway logs room, \n> Ex: ${prefix}set logs \`#logs\` to define the logs.`,
         chon: `${e.success} I set up the giveaways logs on the channel:`,
-        role: `${e.error} Please select a valid role!\n> Ex: %gset role \`@giveaways\` to specify a role.`,
+        role: `${e.error} Please select a valid role!\n> Ex: ${prefix}set role \`@giveaways\` to specify a role.`,
         ron: `${e.success} I defined the alternative role with:`,
       },
   
@@ -88,7 +89,7 @@ module.exports = {
 
       invite: {
         main: `Main links`,
-        disc: `Type \`${config.prefix}invite copy\` to be able to copy the link!`,
+        disc: `Type \`${prefix}invite copy\` to be able to copy the link!`,
         web: `${e.link} ManageGift's Website`,
         inv: `${e.add} Invite ManageGift's Bot`,
         vote: `${e.vote} Vote For ManageGift's Bot`,
@@ -99,9 +100,9 @@ module.exports = {
     title: `ManageGift's Information:`,
     disc: 'It is an open source bot that allows you to create giveaway with ease and gives you many distinct features. The bot is Programmed in `javascript language` and By: ! -  HaDi KouBeIssI | 🇱🇧#4001',
     cm: `__${e.command} ManageGift's Commands:__`,
-    cmd: `**${config.prefix}start ${e.right} To create giveaway.**\n**${config.prefix}end ${e.right} To end giveaway start.**\n**${config.prefix}edit ${e.right} To edit giveaway.**\n**${config.prefix}reroll ${e.right} To Choose a new winner.**\n **${e.featured}__Featured commands:__**\n**${config.prefix}setlang ${e.right} To change the languag of bot.**\n**${config.prefix}set logs ${e.right} For setup the room of logs.**\n**${config.prefix}set mention on ${e.right} To active the mention on all start giveaway.**\n**${config.prefix}set mention off ${e.right} To disabel the mention on all start giveaway.**`,
+    cmd: `**${prefix}start ${e.right} To create giveaway.**\n**${prefix}end ${e.right} To end giveaway start.**\n**${prefix}edit ${e.right} To edit giveaway.**\n**${prefix}reroll ${e.right} To Choose a new winner.**\n **${e.featured}__Featured commands:__**\n**${prefix}setlang ${e.right} To change the languag of bot.**\n**${prefix}set logs ${e.right} For setup the room of logs.**\n**${prefix}set mention on ${e.right} To active the mention on all start giveaway.**\n**${prefix}set mention off ${e.right} To disabel the mention on all start giveaway.**`,
     cmm: `__${e.command} Info Commands__`,
-    cmdd: `**${config.prefix}help ${e.right} display commands and info of bot list.**\n**${config.prefix}ping ${e.right} display bot Latency.**\n**${config.prefix}invite ${e.right} display main links of bot.**`,
+    cmdd: `**${prefix}help ${e.right} display commands and info of bot list.**\n**${prefix}ping ${e.right} display bot Latency.**\n**${prefix}invite ${e.right} display main links of bot.**`,
     stats: `__${e.stats} Statistics:__`,
     stat: `\`Servers:\``,
     set: `\`Users:\``,

@@ -9,9 +9,9 @@
 [![support](https://img.shields.io/badge/SUPPORT-BY%20PAYPAL-orange?style=for-the-badge)](https://paypal.me/Hadikob)
 > ManageGift is very easy and simple for use on your server, and using `discord-giveaways` package.
 
-## ✨ Features
+## ✨ Features:
 
-> 😊 Total сommands In The ManageGift is **9 commands** and more soon.
+> 😊 Total сommands In The ManageGift is **10 commands** and more soon.
 > 🚀 24/7 ManageGift online.
 > 🔓 Open source.
 
@@ -44,13 +44,13 @@ ManageGift.
 %ginvite              Display main links of bot.
 ```
 
-## 📢 Vote for ManageGift
+## 📢 Vote for ManageGift:
 
 If you don't want to edit the code of the bot, a permanent online version is available, which you can invite to your own Discord or vote for ManageGift 😄
 
 [![Discord Bots](https://discordbots.org/api/widget/598564396691750933.svg)](https://discordbots.org/bot/598564396691750933)
 
-## 📋 LICENSE
+## 📋 LICENSE:
 
 ManageGift is licensed under the GPL 3.0 license. See the file `LICENSE` for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
 
@@ -73,4 +73,4 @@ ManageGift is licensed under the GPL 3.0 license. See the file `LICENSE` for mor
 * Run the ManageGift with `node index.js`!
 
 
-# الترجمة باللغة العربية قريبا" 😀
+# الترجمة باللغة العربية قريبا 😀

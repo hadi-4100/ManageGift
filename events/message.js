@@ -11,11 +11,12 @@ module.exports = (client, message) => {
   } else {
     prefix = prefixes;
   }
+  
   //now we done prefix fetching for guilds
   if (!message.content.startsWith(prefix) || !message.guild) return;
 
   //Our standard argument/command name definition.
-  const args = message.content.slice(client.config.prefix.length).trim().split(/ +/g);
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
   //Grab the command data from the client.commands Enmap
