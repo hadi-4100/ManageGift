@@ -13,49 +13,57 @@ exports.run = async (client, message, args) => {
         return message.channel.send(lang.start.perms + "** **" + "`" + role + "`" + "!.");
     }
 
-    // Giveaway channel
-    let giveawayChannel = message.mentions.channels.first();
-    // If no channel is mentionned
-    if(!giveawayChannel){
-        return message.channel.send(lang.start.channel);
-    }
-
     // Giveaway duration
-    let giveawayDuration = args[1];
+    let giveawayDuration = args[0];
     // If the duration isn't valid
     if(!giveawayDuration || isNaN(ms(giveawayDuration))){
-        return message.channel.send(lang.start.duration);
+        return message.channel.send(lang.start.duration)
+        .then(msg => {
+            msg.delete({ timeout: 10000 })
+            message.delete({ timeout: 10000 })
+        });
     }
 
     // Number of winners
-    let giveawayNumberWinners = args[2];
+    let giveawayNumberWinners = args[1];
     // If the specified number of winners is not a number
     if(isNaN(giveawayNumberWinners)){
-        return message.channel.send(lang.start.argswinners);
+        return message.channel.send(lang.start.argswinners)
+        .then(msg => {
+            msg.delete({ timeout: 10000 })
+            message.delete({ timeout: 10000 })
+        });
     }
 
     // Giveaway prize
-    let giveawayPrize = args.slice(3).join(' ');
+    let giveawayPrize = args.slice(2).join(' ');
     // If no prize is specified
     if(!giveawayPrize){
-        return message.channel.send(lang.start.prize);
+        return message.channel.send(lang.start.prize)
+        .then(msg => {
+            msg.delete({ timeout: 10000 })
+            message.delete({ timeout: 10000 })
+        });
     }
 
     let mention = db.fetch(`mention_${message.guild.id}`)
 
     if(mention === null) mention = false
         if(mention === true){
-            var text1 = "@everyone\n\n" + lang.start.giveaway
-            var text2 = "@everyone\n\n" + lang.start.giveawayEnded
+            var text1 = "@everyone\n\n" + lang.create.giveaway
+            var text2 = "@everyone\n\n" + lang.create.giveawayEnded
         }
 
         if(mention === false){
-            var text1 = lang.start.giveaway
-            var text2 = lang.start.giveawayEnded
+            var text1 = lang.create.giveaway
+            var text2 = lang.create.giveawayEnded
         }
 
+    
+    let MessageChannel = message.channel;
+
     // Start the giveaway
-    client.giveawaysManager.start(giveawayChannel, {
+    client.giveawaysManager.start(MessageChannel, {
         // The giveaway duration
         time: ms(giveawayDuration),
         // The giveaway prize
@@ -68,14 +76,14 @@ exports.run = async (client, message, args) => {
         messages: {
             giveaway: text1,
             giveawayEnded: text2,
-            timeRemaining: lang.start.timeRemaining,
-            inviteToParticipate: lang.start.inviteToParticipate(message),
-            winMessage: lang.start.winMessage(message),
-            embedFooter: lang.start.embedFooter,
-            noWinner: lang.start.noWinner,
-            hostedBy: lang.start.hostedBy,
-            winners: lang.start.winners,
-            endedAt: lang.start.endedAt,
+            timeRemaining: lang.create.timeRemaining,
+            inviteToParticipate: lang.create.inviteToParticipate(message),
+            winMessage: lang.create.winMessage(message),
+            embedFooter: lang.create.embedFooter,
+            noWinner: lang.create.noWinner,
+            hostedBy: lang.create.hostedBy,
+            winners: lang.create.winners,
+            endedAt: lang.create.endedAt,
             units: {
                 seconds: lang.units.seconds,
                 minutes: lang.units.minutes,
@@ -84,7 +92,5 @@ exports.run = async (client, message, args) => {
                 pluralS: false // Not needed, because units end with a S so it will automatically removed if the unit value is lower than 2
             }
         }
-    });
-
-    message.channel.send(`${lang.start.good} ${giveawayChannel}!`);
+    }, message.delete({ timeout: 10000 }) );
 };
