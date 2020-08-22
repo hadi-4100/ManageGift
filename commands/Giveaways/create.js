@@ -1,23 +1,34 @@
 exports.run = async (client, message, args) => {
     const ms = require("ms");
     const db = require("quick.db")
-    const config = require("../config.js")
+    const config = require("../../config.js")
     let language = db.fetch(`language_${message.guild.id}`)
     if(language === null) language = config.basiclang
-    const lang = require(`../language/${language}.js`)
+    const lang = require(`../../language/${language}.js`)
     let role = db.fetch(`role_${message.guild.id}`)
     if(role === null) role = config.grole
 
     // If the member doesn't have enough permissions
     if(!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role)){
-        return message.channel.send(lang.start.perms + "** **" + "`" + role + "`" + "!.");
+        return message.channel.send(lang.create.perms + "** **" + "`" + role + "`" + "!.");
+    }
+
+    // Giveaway channel
+    let giveawayChannel = message.mentions.channels.first();
+    // If no channel is mentionned
+    if(!giveawayChannel){
+        return message.channel.send(lang.create.channel)
+        .then(msg => {
+            msg.delete({ timeout: 10000 })
+            message.delete({ timeout: 10000 })
+        });
     }
 
     // Giveaway duration
-    let giveawayDuration = args[0];
+    let giveawayDuration = args[1];
     // If the duration isn't valid
     if(!giveawayDuration || isNaN(ms(giveawayDuration))){
-        return message.channel.send(lang.start.duration)
+        return message.channel.send(lang.create.duration)
         .then(msg => {
             msg.delete({ timeout: 10000 })
             message.delete({ timeout: 10000 })
@@ -25,10 +36,10 @@ exports.run = async (client, message, args) => {
     }
 
     // Number of winners
-    let giveawayNumberWinners = args[1];
+    let giveawayNumberWinners = args[2];
     // If the specified number of winners is not a number
     if(isNaN(giveawayNumberWinners)){
-        return message.channel.send(lang.start.argswinners)
+        return message.channel.send(lang.create.argswinners)
         .then(msg => {
             msg.delete({ timeout: 10000 })
             message.delete({ timeout: 10000 })
@@ -36,10 +47,10 @@ exports.run = async (client, message, args) => {
     }
 
     // Giveaway prize
-    let giveawayPrize = args.slice(2).join(' ');
+    let giveawayPrize = args.slice(3).join(' ');
     // If no prize is specified
     if(!giveawayPrize){
-        return message.channel.send(lang.start.prize)
+        return message.channel.send(lang.create.prize)
         .then(msg => {
             msg.delete({ timeout: 10000 })
             message.delete({ timeout: 10000 })
@@ -59,11 +70,8 @@ exports.run = async (client, message, args) => {
             var text2 = lang.create.giveawayEnded
         }
 
-    
-    let MessageChannel = message.channel;
-
     // Start the giveaway
-    client.giveawaysManager.start(MessageChannel, {
+    client.giveawaysManager.start(giveawayChannel, {
         // The giveaway duration
         time: ms(giveawayDuration),
         // The giveaway prize
@@ -93,4 +101,6 @@ exports.run = async (client, message, args) => {
             }
         }
     }, message.delete({ timeout: 10000 }) );
+
+    message.channel.send(`${lang.create.good} ${giveawayChannel}!`);
 };
