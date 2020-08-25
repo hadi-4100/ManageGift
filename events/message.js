@@ -25,6 +25,10 @@ module.exports = (client, message) => {
   //If that command doesn't exist, silently exit and do nothing
   if (!cmd) return;
 
+  //log for any user run command
+  console.log(`${message.author.username} id:(${message.author.id}) Use a command ${command}`)
+  client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${command}\``);
+
   //Run the command
   cmd.run(client, message, args);
 };
