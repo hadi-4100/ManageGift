@@ -108,6 +108,7 @@ client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reactio
         return;
     }
 });
+// logs for bot
 
 client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
     console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
@@ -163,5 +164,5 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 
-// Login
+// Login to bot
 client.login(config.token);
