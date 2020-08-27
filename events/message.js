@@ -20,11 +20,13 @@ module.exports = (client, message) => {
   const command = args.shift().toLowerCase();
 
   //Grab the command data from the client.commands Enmap
-  const cmd = client.commands.get(command);
+  const cmd = client.commands.get(command) /*|| client.commands.get(client.aliases.get(command))*/;
 
   //If that command doesn't exist, silently exit and do nothing
   if (!cmd) return;
-
+ /* if (!cmd.conf.enabled) return message.channel.send('cette commande est désactivée');
+  if (cmd.conf.owner && message.author.id !== client.config.owner) return message.channel.send('Cette commande est réservée au développeur du bot');
+*/
   //log for any user run command
   console.log(`${message.author.username} id:(${message.author.id}) Use a command ${command}`)
   client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${command}\``);

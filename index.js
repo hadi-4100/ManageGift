@@ -5,24 +5,24 @@ const fs = require("fs");
 client.config = config;
 const { GiveawaysManager } = require("discord-giveaways");
 const db = require("quick.db");
-if(!db.get("giveaways")) db.set("giveaways", []);
+if (!db.get("giveaways")) db.set("giveaways", []);
 
 const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
 
     // This function is called when the manager needs to get all the giveaway stored in the database.
-    async getAllGiveaways(){
+    async getAllGiveaways() {
         // Get all the giveaway in the database.
         return db.get("giveaways");
     }
 
     // This function is called when a giveaway needs to be saved in the database (when a giveaway is created or when a giveaway is edited).
-    async saveGiveaway(messageID, giveawayData){
+    async saveGiveaway(messageID, giveawayData) {
         // Add the new one.
         db.push("giveaways", giveawayData);
         return true;
     }
 
-    async editGiveaway(messageID, giveawayData){
+    async editGiveaway(messageID, giveawayData) {
         // Gets all the current giveaways
         const giveaways = db.get("giveaways");
         // Remove the old giveaway from the current giveaways ID
@@ -35,7 +35,7 @@ const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
     }
 
     // This function is called when a giveaway needs to be deleted from the database.
-    async deleteGiveaway(messageID){
+    async deleteGiveaway(messageID) {
         // Remove the giveaway from the array
         const newGiveawaysArray = db.get("giveaways").filter((giveaway) => giveaway.messageID !== messageID);
         // Save the updated array
@@ -60,14 +60,14 @@ client.giveawaysManager = manager;
 // We now have a client.giveawaysManager property to manage our giveaways!
 
 client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
-    try{
-        if(member.user.bot) return;
+    try {
+        if (member.user.bot) return;
 
         let language = db.fetch(`language_${member.guild.id}`)
-        if(language === null) language = config.basiclang
+        if (language === null) language = config.basiclang
         const lang = require(`./language/${language}.js`)
         let logs = db.fetch(`logs_${member.guild.id}`)
-        if(logs === null) return;
+        if (logs === null) return;
         const salon = member.guild.channels.cache.get(logs);
 
         const Embed = new Discord.MessageEmbed()
@@ -79,20 +79,20 @@ client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction)
 
         salon.send(Embed)
 
-    }catch(e){
+    } catch (e) {
         return;
     }
 });
 
 client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
-    try{
-        if(member.user.bot) return;
+    try {
+        if (member.user.bot) return;
 
         let language = db.fetch(`language_${member.guild.id}`)
-        if(language === null) language = config.basiclang
+        if (language === null) language = config.basiclang
         const lang = require(`./language/${language}.js`)
         let logs = db.fetch(`logs_${member.guild.id}`)
-        if(logs === null) return;
+        if (logs === null) return;
         const salon = member.guild.channels.cache.get(logs);
 
         const Embed = new Discord.MessageEmbed()
@@ -104,14 +104,40 @@ client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reactio
 
         salon.send(Embed)
 
-    }catch(e){
+    } catch (e) {
         return;
     }
 });
 
+client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
+    console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
+});
+
+client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
+    console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
+});
+
+client.on("guildCreate", async guild => {
+    let embed = new Discord.MessageEmbed()
+        .setAuthor(guild.name, guild.iconURL({ dynamic: true }))
+        .setDescription(`ManageGift is joind in: **${guild.name}** server iD: **${guild.id}** owner server iD: **${guild.ownerID}** with ${guild.members.cache.size} members & (${guild.members.cache.filter((m) => m.user.bot).size} bots)`)
+        .setColor("#7CFC00")
+        .setFooter(client.config.embeds.footers)
+    client.channels.cache.get(client.config.logs.bot).send(embed)
+});
+
+client.on("guildDelete", async guild => {
+    let embed = new Discord.MessageEmbed()
+        .setAuthor(guild.name, guild.iconURL({ dynamic: true }))
+        .setDescription(`ManageGift is leave **${guild.name}** | **${guild.id}** server and the id of owner server is **${guild.ownerID}**`)
+        .setColor("#DC143C")
+        .setFooter(client.config.embeds.footers)
+    client.channels.cache.get(client.config.logs.bot).send(embed)
+});
+
 fs.readdir("./events/", (_err, files) => {
     files.forEach((file) => {
-        if(!file.endsWith(".js")) return;
+        if (!file.endsWith(".js")) return;
         const event = require(`./events/${file}`);
         let eventName = file.split(".")[0];
         console.log(`(👌) Event loaded : ${eventName} !`);
@@ -122,13 +148,17 @@ fs.readdir("./events/", (_err, files) => {
 
 client.commands = new Discord.Collection();
 
-fs.readdir("./commands/", (_err, files) => {
-    files.forEach((file) => {
-        if(!file.endsWith(".js")) return;
-        let props = require(`./commands/${file}`);
-        let commandName = file.split(".")[0];
-        client.commands.set(commandName, props);
-        console.log(`[📕] Command loaded: ${commandName}!`);
+fs.readdir("./commands/", (err, files) => {
+    files.forEach((dir) => {
+        fs.readdir(`./commands/${dir}/`, (err, cmd) => {
+            cmd.forEach(file => {
+                if (!file.endsWith(".js")) return;
+                let props = require(`./commands/${dir}/${file}`);
+                let commandName = file.split(".")[0];
+                client.commands.set(commandName, props);
+                console.log(`[📕] Command loaded: ${commandName}!`);
+            });
+        });
     });
 });
 
