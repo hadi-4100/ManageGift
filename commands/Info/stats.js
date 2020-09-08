@@ -3,12 +3,12 @@ exports.run = async (client, message) => {
     const db = require("quick.db")
     const moment = require('moment')
     require('moment-duration-format')
-    const config = require("../../config.js")
+    const config = require("../config.js")
     let language = db.fetch(`language_${message.guild.id}`)
     if(language === null) language = config.basiclang
     const lang = require(`../../language/${language}.js`)
-    let version = require("../../package.json").version;
-    let discord_giveaways = require("../../package.json").dependencies["discord-giveaways"];
+    let version = require("../package.json").version;
+    let discord_giveaways = require("../package.json").dependencies["discord-giveaways"];
     let supportURL = config.auth.support;
     let web = "http://managegift.ga";
     let donate = "https://paypal.me/Hadikob";
