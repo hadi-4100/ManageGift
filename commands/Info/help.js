@@ -3,7 +3,7 @@ exports.run = async (client, message) => {
     const db = require("quick.db")
     const config = require("../../config.js")
     let language = db.fetch(`language_${message.guild.id}`)
-    if(language === null) language = config.basiclang
+    if (language === null) language = config.basiclang
     const lang = require(`../../language/${language}.js`)
     let version = require("../../package.json").version;
     let discord_giveaways = require("../../package.json").dependencies["discord-giveaways"];
@@ -22,5 +22,5 @@ exports.run = async (client, message) => {
         .setColor(config.embeds.color)
         .setFooter(config.embeds.footers)
 
-    message.channel.send(embed)   
+    message.channel.send(embed)
 }

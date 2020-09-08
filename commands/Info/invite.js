@@ -3,7 +3,7 @@ exports.run = async (client, message, args) => {
     const db = require("quick.db")
     const config = require("../../config.js")
     let language = db.fetch(`language_${message.guild.id}`)
-    if(language === null) language = config.basiclang
+    if (language === null) language = config.basiclang
     const lang = require(`../../language/${language}.js`)
 
     let websiteURL = `http://managegift.ga`;
@@ -11,10 +11,10 @@ exports.run = async (client, message, args) => {
     let voteURL = `https://discordbots.org/bot/${config.idbot}/vote`;
     let supportURL = config.auth.support
 
-    if(args[0] === "copy"){
+    if (args[0] === "copy") {
         return message.channel.send(inviteLink);
     }
-    
+
     let embed = new Discord.MessageEmbed()
         .setAuthor(lang.invite.main)
         .setDescription(lang.invite.disc)
@@ -24,7 +24,7 @@ exports.run = async (client, message, args) => {
         .addField(lang.invite.sup, (`[Click Here](${supportURL})`))
         .setColor(config.embeds.color)
         .setFooter(config.embeds.footers);
-    
+
     message.channel.send(embed);
-       
+
 }
