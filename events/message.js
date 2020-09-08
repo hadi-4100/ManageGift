@@ -1,36 +1,49 @@
-const config = require('../config');
-const db = require('quick.db');
+const config = require('../config'),
+  db = require('quick.db');
+let cd = new Set(),
+  cdseconds = 5;
 
 module.exports = (client, message) => {
+  //for cooldown
+  let language = db.fetch(`language_${message.guild.id}`)
+  if (language === null) language = config.basiclang
+  const lang = require(`../language/${language}.js`)
 
   //for setprefix command 
   let prefix;
   let prefixes = db.fetch(`prefix_${message.guild.id}`);
-  if(prefixes == null) {
-    prefix = config.prefix 
+  if (prefixes == null) {
+    prefix = config.prefix
   } else {
     prefix = prefixes;
   }
-  
+
   //now we done prefix fetching for guilds
   if (!message.content.startsWith(prefix) || !message.guild) return;
 
   //Our standard argument/command name definition.
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
-
+  const commandName = args.shift().toLowerCase();
   //Grab the command data from the client.commands Enmap
-  const cmd = client.commands.get(command) /*|| client.commands.get(client.aliases.get(command))*/;
+  const command = client.commands.get(commandName);
 
   //If that command doesn't exist, silently exit and do nothing
-  if (!cmd) return;
- /* if (!cmd.conf.enabled) return message.channel.send('cette commande est désactivée');
-  if (cmd.conf.owner && message.author.id !== client.config.owner) return message.channel.send('Cette commande est réservée au développeur du bot');
-*/
+  if (!command) return;
+
+  //cooldown
+  if (cd.has(message.author.id)) {
+    message.delete();
+    return message.channel.send(lang.cooldown.err) .then(msg => { msg.delete({ timeout: 6000 })})
+  }
+  cd.add(message.author.id);
+  setTimeout(() => {
+    cd.delete(message.author.id)
+  }, cdseconds * 1000)
+
   //log for any user run command
-  console.log(`${message.author.username} id:(${message.author.id}) Use a command ${command}`)
-  client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${command}\``);
+  console.log(`${message.author.username} id:(${message.author.id}) Use a command ${commandName}`)
+  client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${commandName}\``);
 
   //Run the command
-  cmd.run(client, message, args);
+  command.run(client, message, args);
 };
