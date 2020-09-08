@@ -1,6 +1,9 @@
 const Discord = require("discord.js");
 const config = require("./config.js");
-const client = new Discord.Client();
+const { Client, Collection } = require("discord.js");
+const client = new Client({
+    disableMentions: "everyone"
+});
 const fs = require("fs");
 client.config = config;
 const { GiveawaysManager } = require("discord-giveaways");
