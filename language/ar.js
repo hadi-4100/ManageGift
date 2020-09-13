@@ -135,5 +135,8 @@ module.exports = {
   },
   cooldown: {
     err: `${e.error} | ** يجب ان تنتظر \`4 ثواني\` لاعادة استعمال هذا الامر**`
+  },
+  blacklist: {
+    blacklist: `:lock: | **لا يمكنك استخدام\`ManageGift Commands\` لانك ممنوع بسبب مخالفتك قوانين البوت`
   }
 }

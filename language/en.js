@@ -144,5 +144,8 @@ module.exports = {
   },
   cooldown: {
     err: `${e.error} | **You must wait \`4 second(s)\` ${e.time} to be able to run this command again!**`
+  },
+  blacklist: {
+    blacklist: `:lock: **You cannot use \`ManageGift commands\` because you are in the \`Blacklist!!\`**`
   }
 }
