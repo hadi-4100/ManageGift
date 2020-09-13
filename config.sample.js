@@ -5,6 +5,8 @@ module.exports = {
 
 	idbot: "", // Bot ID | ايدي البوت
 
+    OwnerID: "", //Owner ID | ابدي اونر البوت
+
 	hostedBy: true, // Why hosted gift | لماذا استضافت الهدية
 
 	basiclang: "en", // Default lang | اللغة الاساسية
