@@ -4,7 +4,7 @@ let cd = new Set(),
   cdseconds = 5;
 
 module.exports = (client, message) => {
-  //for cooldown
+  //for cooldown & blacklist
   let language = db.fetch(`language_${message.guild.id}`)
   if (language === null) language = config.basiclang
   const lang = require(`../language/${language}.js`)
@@ -33,13 +33,17 @@ module.exports = (client, message) => {
   //cooldown
   if (cd.has(message.author.id)) {
     message.delete();
-    return message.channel.send(lang.cooldown.err) .then(msg => { msg.delete({ timeout: 6000 })})
+    return message.channel.send(lang.cooldown.err).then(msg => { msg.delete({ timeout: 6000 }) })
   }
   cd.add(message.author.id);
   setTimeout(() => {
     cd.delete(message.author.id)
   }, cdseconds * 1000)
 
+  //blacklist
+  let blacklist = db.fetch(`blacklist_${message.author.id}`)
+  if (blacklist === "Blacklisted") return message.reply(lang.blacklist.blacklist)
+  
   //log for any user run command
   console.log(`${message.author.username} id:(${message.author.id}) Use a command ${commandName}`)
   client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${commandName}\``);
