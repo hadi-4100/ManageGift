@@ -1,6 +1,6 @@
 {
   "name": "managegift",
-  "version": "1.8.2",
+  "version": "2.0.2",
   "description": "ManageGift's | By Hadi Koubeissi using discord-giveaways package",
   "main": "index.js",
   "scripts": {
@@ -32,12 +32,17 @@
     "url": "https://github.com/Hadi-Koubeissi/ManageGift/issues"
   },
   "dependencies": {
-    "discord.js": "12.2.0",
     "better-sqlite3": "^6.0.1",
+    "chalk": "^4.1.0",
     "discord-giveaways": "4.2.1",
+    "discord.js": "12.2.0",
     "fs": "0.0.1-security",
+    "moment": "^2.27.0",
+    "moment-duration-format": "^2.3.2",
     "ms": "^2.1.2",
+    "num-parse": "^1.0.1",
     "path": "0.12.7",
+    "pretty-ms": "^7.0.0",
     "quick.db": "^7.1.1"
   },
   "devDependencies": {
