@@ -2,7 +2,7 @@ const ms = require("ms");
 
 exports.run = async (client, message, args, lang) => {
     let role = client.db.fetch(`role_${message.guild.id}`);
-    if (!role) role = config.grole;
+    if (!role) role = client.config.grole;
     // If the member doesn't have enough permissions
     if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role))
         return message.channel.send(lang.create.perms + "** **" + "`" + role + "`" + "!.");
