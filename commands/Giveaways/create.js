@@ -1,73 +1,63 @@
-exports.run = async (client, message, args) => {
-    const ms = require("ms");
-    const db = require("quick.db")
-    const config = require("../../config.js")
-    let language = db.fetch(`language_${message.guild.id}`)
-    if (language === null) language = config.basiclang
-    const lang = require(`../../language/${language}.js`)
-    let role = db.fetch(`role_${message.guild.id}`)
-    if (role === null) role = config.grole
+const ms = require("ms");
 
+exports.run = async (client, message, args, lang) => {
+    let role = client.db.fetch(`role_${message.guild.id}`);
+    if (!role) role = config.grole;
     // If the member doesn't have enough permissions
-    if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role)) {
+    if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role))
         return message.channel.send(lang.create.perms + "** **" + "`" + role + "`" + "!.");
-    }
+    
 
     // Giveaway channel
     let giveawayChannel = message.mentions.channels.first();
     // If no channel is mentionned
-    if (!giveawayChannel) {
-        return message.channel.send(lang.create.channel)
+    if (!giveawayChannel) return message.channel.send(lang.create.channel)
             .then(msg => {
-                msg.delete({ timeout: 10000 })
-                message.delete({ timeout: 10000 })
+                msg.delete({ timeout: 10000 });
+                message.delete({ timeout: 10000 });
             });
-    }
 
     // Giveaway duration
     let giveawayDuration = args[1];
     // If the duration isn't valid
-    if (!giveawayDuration || isNaN(ms(giveawayDuration))) {
-        return message.channel.send(lang.create.duration)
+    if (!giveawayDuration || isNaN(ms(giveawayDuration))) return message.channel.send(lang.create.duration)
             .then(msg => {
-                msg.delete({ timeout: 10000 })
-                message.delete({ timeout: 10000 })
+                msg.delete({ timeout: 10000 });
+                message.delete({ timeout: 10000 });
             });
-    }
+    
 
     // Number of winners
     let giveawayNumberWinners = args[2];
     // If the specified number of winners is not a number
-    if (isNaN(giveawayNumberWinners)) {
-        return message.channel.send(lang.create.argswinners)
+    if (isNaN(giveawayNumberWinners)) return message.channel.send(lang.create.argswinners)
             .then(msg => {
-                msg.delete({ timeout: 10000 })
-                message.delete({ timeout: 10000 })
+                msg.delete({ timeout: 10000 });
+                message.delete({ timeout: 10000 });
             });
-    }
+    
 
     // Giveaway prize
     let giveawayPrize = args.slice(3).join(' ');
     // If no prize is specified
-    if (!giveawayPrize) {
-        return message.channel.send(lang.create.prize)
+    if (!giveawayPrize) return message.channel.send(lang.create.prize)
             .then(msg => {
-                msg.delete({ timeout: 10000 })
-                message.delete({ timeout: 10000 })
+                msg.delete({ timeout: 10000 });
+                message.delete({ timeout: 10000 });
             });
+    
+
+    let mention = client.db.fetch(`mention_${message.guild.id}`);
+
+    if (!mention) mention = false;
+    if (mention) {
+        var text1 = "@everyone\n\n" + lang.create.giveaway;
+        var text2 = "@everyone\n\n" + lang.create.giveawayEnded;
     }
 
-    let mention = db.fetch(`mention_${message.guild.id}`)
-
-    if (mention === null) mention = false
-    if (mention === true) {
-        var text1 = "@everyone\n\n" + lang.create.giveaway
-        var text2 = "@everyone\n\n" + lang.create.giveawayEnded
-    }
-
-    if (mention === false) {
-        var text1 = lang.create.giveaway
-        var text2 = lang.create.giveawayEnded
+    if (!mention) {
+        var text1 = lang.create.giveaway;
+        var text2 = lang.create.giveawayEnded;
     }
 
     // Start the giveaway
