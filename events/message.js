@@ -26,13 +26,10 @@ module.exports = (client, message) => {
   //cooldown
   if (cd.has(message.author.id)) {
     message.delete();
-    return message.channel.send(lang.cooldown.err).then(msg => { msg.delete({ timeout: 6000 }) })
+    return message.channel.send(lang.cooldown.err).then(msg => msg.delete({ timeout: 6000 }).catch(()=> {/* Lol */}));
   }
   cd.add(message.author.id);
-  setTimeout(() => {
-    cd.delete(message.author.id)
-  }, cdseconds * 1000)
-
+  setTimeout(() => cd.delete(message.author.id), cdseconds * 1000);
   //blacklist
   let blacklist = client.db.fetch(`blacklist_${message.author.id}`)
   if (blacklist === "Blacklisted") return message.reply(lang.blacklist.blacklist)
@@ -44,5 +41,5 @@ module.exports = (client, message) => {
   */
  
   //Run the command
-  command.run(client, message, args);
+  command.run(client, message, args, lang);
 };
