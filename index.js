@@ -1,14 +1,13 @@
-const Discord = require("discord.js");
-const config = require("./config.js");
-const { Client, Collection } = require("discord.js");
-const client = new Client({
-    disableMentions: "everyone"
-});
-const fs = require("fs");
-client.config = config;
-const { GiveawaysManager } = require("discord-giveaways");
-const db = require("quick.db");
+const config = require("./config.js"), { Client, Collection, MessageEmbed } = require("discord.js");
+const client = new Client({ disableMentions: "everyone" }),
+      db = require("quick.db"), 
+      { GiveawaysManager } = require("discord-giveaways"),
+      { readdir } = require("fs");
+
 if (!db.get("giveaways")) db.set("giveaways", []);
+client.config = config;
+client.db = db;
+client.commands = new Collection();
 
 const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
 
@@ -62,84 +61,59 @@ const manager = new GiveawayManagerWithOwnDatabase(client, {
 client.giveawaysManager = manager;
 // We now have a client.giveawaysManager property to manage our giveaways!
 
-client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
-    try {
+manager
+    .on("giveawayReactionAdded", (giveaway, member, reaction) => {
         if (member.user.bot) return;
-
-        let language = db.fetch(`language_${member.guild.id}`)
-        if (language === null) language = config.basiclang
-        const lang = require(`./language/${language}.js`)
-        let logs = db.fetch(`logs_${member.guild.id}`)
-        if (logs === null) return;
+        let language = db.fetch(`language_${member.guild.id}`);
+        if (!language) language = config.basiclang;
+        const lang = require(`./language/${language}.js`);
+        let logs = db.fetch(`logs_${member.guild.id}`);
+        if (!logs) return;
         const salon = member.guild.channels.cache.get(logs);
-
-        const Embed = new Discord.MessageEmbed()
+           salon.send(new MessageEmbed()
             .setAuthor(lang.logs.raddtitle)
             .setDescription(lang.logs.raddmsg1 + "** **" + "`" + member.user.tag + "`" + "** **" + lang.logs.raddmsg2 + "** **" + "`" + giveaway.messageID + "`" + "** **" + config.reaction)
             .setFooter(config.embeds.footers)
             .setColor(config.events.addcolor)
-            .setTimestamp()
-
-        salon.send(Embed)
-
-    } catch (e) {
-        return;
-    }
-});
-
-client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
-    try {
+            .setTimestamp()).catch(()=>{});
+})
+    .on("giveawayReactionRemoved", (giveaway, member, reaction) => {
         if (member.user.bot) return;
-
-        let language = db.fetch(`language_${member.guild.id}`)
-        if (language === null) language = config.basiclang
-        const lang = require(`./language/${language}.js`)
-        let logs = db.fetch(`logs_${member.guild.id}`)
-        if (logs === null) return;
+        let language = db.fetch(`language_${member.guild.id}`);
+        if (!language) language = config.basiclang;
+        const lang = require(`./language/${language}.js`);
+        let logs = db.fetch(`logs_${member.guild.id}`);
+        if (!logs) return;
         const salon = member.guild.channels.cache.get(logs);
 
-        const Embed = new Discord.MessageEmbed()
+        salon.send(new Discord.MessageEmbed()
             .setAuthor(lang.logs.rremtitle)
             .setDescription(lang.logs.rremmsg1 + "** **" + "`" + member.user.tag + "`" + "** **" + lang.logs.rremmsg2 + "** **" + "`" + giveaway.messageID + "`" + "** **" + config.reaction)
             .setFooter(config.embeds.footers)
             .setColor(config.events.remcolor)
-            .setTimestamp()
-
-        salon.send(Embed)
-
-    } catch (e) {
-        return;
-    }
-});
+            .setTimestamp()).catch(console.error);
+})
 // logs for bot
+.on("giveawayReactionAdded", (giveaway, member, reaction) => console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`))
+.on("giveawayReactionRemoved", (giveaway, member, reaction) => console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`));
 
-client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
-    console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
-});
-
-client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
-    console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
-});
-
-client.on("guildCreate", async guild => {
-    let embed = new Discord.MessageEmbed()
+client
+    .on("guildCreate", async guild => {
+await client.channels.cache.get(client.config.logs.bot).send(new MessageEmbed()
         .setAuthor(guild.name, guild.iconURL({ dynamic: true }))
         .setDescription(`ManageGift is joind in: **${guild.name}** server iD: **${guild.id}** owner server iD: **${guild.ownerID}** with ${guild.members.cache.size} members & (${guild.members.cache.filter((m) => m.user.bot).size} bots)`)
         .setColor("#7CFC00")
-        .setFooter(client.config.embeds.footers)
-    client.channels.cache.get(client.config.logs.bot).send(embed)
-});
-
-client.on("guildDelete", async guild => {
-    let embed = new Discord.MessageEmbed()
+        .setFooter(client.config.embeds.footers)).catch(()=>{});
+})
+    .on("guildDelete", async guild => {
+await client.channels.cache.get(client.config.logs.bot).send(new MessageEmbed()
         .setAuthor(guild.name, guild.iconURL({ dynamic: true }))
         .setDescription(`ManageGift is leave **${guild.name}** | **${guild.id}** server and the id of owner server is **${guild.ownerID}**`)
         .setColor("#DC143C")
-        .setFooter(client.config.embeds.footers)
-    client.channels.cache.get(client.config.logs.bot).send(embed)
+        .setFooter(client.config.embeds.footers)).catch(()=>{});
 });
 
-fs.readdir("./events/", (_err, files) => {
+readdir("./events/", (_err, files) => {
     files.forEach((file) => {
         if (!file.endsWith(".js")) return;
         const event = require(`./events/${file}`);
@@ -150,11 +124,9 @@ fs.readdir("./events/", (_err, files) => {
     });
 });
 
-client.commands = new Discord.Collection();
-
-fs.readdir("./commands/", (err, files) => {
+readdir("./commands/", (err, files) => {
     files.forEach((dir) => {
-        fs.readdir(`./commands/${dir}/`, (err, cmd) => {
+        readdir(`./commands/${dir}/`, (err, cmd) => {
             cmd.forEach(file => {
                 if (!file.endsWith(".js")) return;
                 let props = require(`./commands/${dir}/${file}`);
