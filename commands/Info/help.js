@@ -14,6 +14,6 @@ exports.run = async (client, message, args, lang) => {
         .addField(lang.help.cm, lang.help.cmd)
         .addField(lang.help.cmm, lang.help.cmdd)
         .addField(lang.help.link, `[Support server](${supportURL}) ● [Donate](${donate}) ● [Website](${web}) ● [Invite](${invite})`)
-        .setColor(config.embeds.color)
-        .setFooter(config.embeds.footers));
+        .setColor(client.config.embeds.color)
+        .setFooter(client.config.embeds.footers));
 }
