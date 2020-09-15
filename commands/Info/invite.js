@@ -2,8 +2,8 @@ const { MessageEmbed } = require("discord.js");
 
 exports.run = async (client, message, args, lang) => {
     let websiteURL = `http://managegift.ga`;
-    let inviteLink = `https://discordapp.com/oauth2/authorize?client_id=${client.config.idbot}&scope=bot&permissions=8`;
-    let voteURL = `https://discordbots.org/bot/${client.config.idbot}/vote`;
+    let inviteLink = `https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=8`;
+    let voteURL = `https://discordbots.org/bot/${client.user.id}/vote`;
     let supportURL = client.config.auth.support
     if (args[0] == "copy")return message.channel.send(inviteLink);
 
@@ -14,7 +14,7 @@ exports.run = async (client, message, args, lang) => {
         .addField(lang.invite.inv, (`[Click Here](${inviteLink})`))
         .addField(lang.invite.vote, (`[Click Here](${voteURL})`))
         .addField(lang.invite.sup, (`[Click Here](${supportURL})`))
-        .setColor(config.embeds.color)
-        .setFooter(config.embeds.footers));
+        .setColor(client.config.embeds.color)
+        .setFooter(client.config.embeds.footers));
 
 }
