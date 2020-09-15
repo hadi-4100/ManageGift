@@ -1,16 +1,16 @@
 let cd = new Set(), cdseconds = 5;
 
 module.exports = (client, message) => {
- if(message.author.bot || !message.guilg)return;
+ if(message.author.bot || !message.guild)return;
   //for cooldown & blacklist
   let language = client.db.fetch(`language_${message.guild.id}`);
-  if (!language) language = config.basiclang;
+  if (!language) language = client.config.basiclang;
   const lang = require(`../language/${language}`);
 
   //for setprefix command 
   let prefix;
   let prefixes = client.db.fetch(`prefix_${message.guild.id}`);
-  (!prefixes) ? (prefix = config.prefix) : (prefix = prefixes);
+  (!prefixes) ? (prefix = client.config.prefix) : (prefix = prefixes);
   
   //now we done prefix fetching for guilds
   if (!message.content.startsWith(prefix)) return;
@@ -36,7 +36,7 @@ module.exports = (client, message) => {
   
   //log for any user run command
   console.log(`${message.author.username} id:(${message.author.id}) Use a command ${commandName}`);
-  /* Really u don't need t ouse this >_<
+  /* Really u don't need t use this >_<
      client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${commandName}\``);
   */
  
