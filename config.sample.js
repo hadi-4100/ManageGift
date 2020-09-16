@@ -43,7 +43,7 @@ module.exports = {
 
 	//logs for bot
 	logs: {
-		commands: "", //log To see who uses bot commands
+		command: "", //log To see who uses bot commands
 		bot: "", //To find out who invited the bot to the server or took it out
 	},
 
