@@ -3,3 +3,4 @@ node_modules/
 package-lock.json
 json.sqlite
 config.js
+assets/
