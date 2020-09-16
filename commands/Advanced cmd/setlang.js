@@ -1,5 +1,5 @@
 exports.run = async (client, message, args, lang) => {
-    
+let language = client.db.fetch(`language_${message.guild.id}`);
     if (!args[0]) return message.channel.send(lang.lang.msg);
 
     // Arabic lang
