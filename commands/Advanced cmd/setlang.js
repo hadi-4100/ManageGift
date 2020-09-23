@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
     if (!args[0]) return message.channel.send(lang.lang.msg)
 
     // Arabic lang
-    if (args[0] === "ar") {
+    if (args[0].toUpperCase() === "ar" || "arabic") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.lang.perms)
         }
@@ -18,7 +18,7 @@ exports.run = async (client, message, args) => {
     }
 
     // English lang
-    if (args[0] === "en") {
+    if (args[0].toUpperCase() === "en" || "english") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.lang.perms)
         }
@@ -29,7 +29,7 @@ exports.run = async (client, message, args) => {
     }
 
     // Russian lang
-    if (args[0] === "ru") {
+    if (args[0].toUpperCase() === "ru" || "russian") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.lang.perms)
         }
@@ -40,7 +40,7 @@ exports.run = async (client, message, args) => {
     }
 
     // Ukranian lang
-    if (args[0] === "ua") {
+    if (args[0].toUpperCase() === "ua" || "urainian") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.lang.perms)
         }
