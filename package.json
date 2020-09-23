@@ -1,6 +1,6 @@
 {
   "name": "managegift",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "ManageGift's | By Hadi Koubeissi using discord-giveaways package",
   "main": "index.js",
   "scripts": {
@@ -18,8 +18,10 @@
     "discord bot",
     "giveaway discord bot",
     "giveawaybot",
-    "Arab bot",
-    "setlang command",
+    "Russian bot",
+    "English bot",
+    "Ukrainian bot",
+    "Arabic bot",
     "discord.js",
     "discord website",
     "discord arabic bot",
