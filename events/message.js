@@ -46,7 +46,7 @@ module.exports = (client, message) => {
   
   //log for any user run command
   console.log(`${message.author.username} id:(${message.author.id}) Use a command ${commandName}`)
-  client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${commandName}\``);
+  client.channels.cache.get(config.logs.commands).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${commandName}\``);
 
   //Run the command
   command.run(client, message, args);
