@@ -3,7 +3,7 @@ let language = client.db.fetch(`language_${message.guild.id}`);
     if (!args[0]) return message.channel.send(lang.lang.msg);
 
     // Arabic lang
-    if (args[0].toUpperCase() === "ar" || "arabic") {
+    if (args[0] === "ar") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.lang.perms)
         }
@@ -14,7 +14,7 @@ let language = client.db.fetch(`language_${message.guild.id}`);
     }
 
     // English lang
-    if (args[0].toUpperCase() === "en" || "english") {
+    if (args[0] === "en") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.lang.perms)
         }
@@ -25,7 +25,7 @@ let language = client.db.fetch(`language_${message.guild.id}`);
     }
 
     // Russian lang
-    if (args[0].toUpperCase() === "ru" || "russian") {
+    if (args[0] === "ru") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.lang.perms)
         }
@@ -36,7 +36,7 @@ let language = client.db.fetch(`language_${message.guild.id}`);
     }
 
     // Ukranian lang
-    if (args[0].toUpperCase() === "ua" || "urainian") {
+    if (args[0] === "ua") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.lang.perms)
         }
