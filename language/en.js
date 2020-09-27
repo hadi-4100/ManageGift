@@ -1,7 +1,7 @@
 //engilsh
 let config = require(`../config.js`);
-const message = require("../events/message.js");
-let e = config.emojis;
+let emojis = require(`../emojis.json`);
+let e = emojis;
 let prefix = config.prefix;
 
 module.exports = {
@@ -113,12 +113,12 @@ module.exports = {
 
   help: {
     title: `Help Documents Overview:`,
-    disc: '`Here you can find all` **ManageGift Commands**',
-    cm: `__${e.command} ManageGift's Commands:__`,
-    cmd: `**${prefix}create ${e.right} To create giveaway with more options.**\n**${prefix}end ${e.right} To end giveaway start.**\n**${prefix}edit ${e.right} To edit giveaway.**\n**${prefix}reroll ${e.right} To Choose a new winner.**\n **${e.featured}__Featured commands:__**\n**${prefix}setlang ${e.right} To change the languag of bot.**\n**${prefix}set logs ${e.right} For setup the room of logs.**\n**${prefix}set mention on ${e.right} To active the mention on all start giveaway.**\n**${prefix}set mention off ${e.right} To disabel the mention on all start giveaway.**`,
-    cmm: `__${e.command} Info Commands__`,
-    cmdd: `**${prefix}help ${e.right} display commands and info of bot list.**\n**${prefix}ping ${e.right} display bot Latency.**\n**${prefix}invite ${e.right} display main links of bot.**`,
-    link: `__${e.link} Links:__`
+    disc: '● Here you can find all `ManageGift Commands`',
+    giveawaycmd: `${e.givcmd} Giveaway commands - (6)`,
+    featuredcmd: `${e.featured} Featured commands - (6)`,
+    infocmd: `${e.info} Info commands - (4)`,
+    ownerbot: `${e.owner} Owner bot commands - (2)`,
+    link: `${e.link} Links:`
   },
 
   stats: {
@@ -127,6 +127,7 @@ module.exports = {
     stats: `${e.stats} • __Statistics:__`,
     stat: `\`Servers:\``,
     set: `\`Users:\``,
+    ch: `\`Channels:\``,
     ver: `${e.ver} • __Versions:__`,
     ram: `${e.ram} • __RAM__`,
     on: `${e.on} • __Online__`,

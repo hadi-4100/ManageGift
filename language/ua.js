@@ -1,7 +1,7 @@
 //ukranian
 let config = require(`../config.js`);
-const message = require("../events/message.js");
-let e = config.emojis;
+let emojis = require(`../emojis.json`)
+let e = emojis;
 let prefix = config.prefix;
 
 module.exports = {
@@ -113,11 +113,12 @@ module.exports = {
 
   help: {
     title: `ManageGift's информація:`,
-    disc: 'Це open-source проект для створення розіграшей с можливістю повной зміни конфігурації. Бот написаний на мові `javascript language` і розробив: ! -  HaDi KouBeIssI | 🇱🇧#4001! Перевод: LWJerri#3290',
-    cm: `__${e.command} ManageGift's команди:__`,
-    cmd: `**${prefix}start ${e.right} Розпочати розіграш.**\n**${prefix}end ${e.right} Закінчити розіграш.**\n**${prefix}edit ${e.right} Змінити параметри розіграша.**\n**${prefix}reroll ${e.right} Выбрати нового переможця.**\n **${e.featured}__Корисні команди:__**\n**${prefix}setlang ${e.right} Змінити мову.**\n**${prefix}set logs ${e.right} Встановити канал для логів.**\n**${prefix}set mention on ${e.right} Активувать повідомлення для розіграшів.**\n**${prefix}set mention off ${e.right} Відключіть повідомлення для розіграшів.**`,
-    cmm: `__${e.command} Информація по командам__`,
-    cmdd: `**${prefix}help ${e.right} Показати всі команди бота.**\n**${prefix}ping ${e.right} Пінг бота.**\n**${prefix}invite ${e.right} Запрошенні посилання.**`,
+    /* translate this */
+    disc: '● Here you can find all `ManageGift Commands`',
+    giveawaycmd: `${e.givcmd} Giveaway commands - (6)`,
+    featuredcmd: `${e.featured} Featured commands - (6)`,
+    infocmd: `${e.info} Info commands - (4)`,
+    ownerbot: `${e.owner} Owner bot commands - (2)`,
     link: `__${e.link} Посиланння:__`
   },
 
@@ -127,6 +128,8 @@ module.exports = {
     stats: `${e.stats} • __Статистика:__`,
     stat: `\`Серверів:\``,
     set: `\`Участників:\``,
+    /* translate this */
+    ch: `\`Channels:\``,
     ver: `${e.ver} • __Версія:__`,
     ram: `${e.ram} • __RAM__`,
     on: `${e.on} • __В мережі__`,
