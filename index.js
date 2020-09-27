@@ -54,7 +54,7 @@ const manager = new GiveawayManagerWithOwnDatabase(client, {
     default: {
         botsCanWin: false,
         exemptPermissions: [],
-        embedColor: "#413E3E",
+        embedColor: "#f6546a",
         reaction: config.reaction
     }
 });
