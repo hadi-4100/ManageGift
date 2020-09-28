@@ -28,7 +28,7 @@ module.exports = {
 	],
 
 	embeds: {
-		color: "#FF4500", // Embed color | لون الامبد
+		color: "#9AC1FF", // Embed color | لون الامبد
 		footers: "🎁 ManageGift's | http://managegift.ga" // Embed footer | الكتابة لي تكون اخر الامبد
 	},
 
@@ -43,30 +43,7 @@ module.exports = {
 
 	//logs for bot
 	logs: {
-		commands: "", //log To see who uses bot commands
+		command: "", //log To see who uses bot commands
 		bot: "", //To find out who invited the bot to the server or took it out
 	},
-
-	// All emojis in ManageGift support server | الاينوحيات بتلقوها بروم في السيبورت سيرفر الخاص بالبوت
-	emojis: {
-		success: "",
-		error: "",
-		gift: "",
-		end: "",
-		time: "",
-		hoste: "",
-		ping: "",
-		link: "",
-		add: "",
-		vote: "",
-		supp: "",
-		command: "",
-		featured: "",
-		right: "",
-		stats: "",
-		ver: "",
-		info: "",
-		ram: "",
-		on: ""
-	}
 }

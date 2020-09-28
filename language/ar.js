@@ -1,7 +1,7 @@
 //arabic
 let config = require(`../config.js`);
-const { cooldown } = require("./en.js");
-let e = config.emojis;
+let emojis = require(`../emojis.json`)
+let e = emojis;
 let prefix = config.prefix;
 
 module.exports = {
@@ -105,11 +105,11 @@ module.exports = {
 
   help: {
     title: `Help Documents Overview:`,
-    disc: '`هنا يمكنك الحصول على جميع اوامر` **Manage Gift**',
-    cm: `__${e.command} ManageGift's Commands:__`,
-    cmd: `**${prefix}create ${e.right} لانشاء قيف اوي بخيارات اكثر.**\n**${prefix}end ${e.right} لانهاء قيف اوي.**\n**${prefix}edit ${e.right} لتعديل قيف اوي.**\n**${prefix}reroll ${e.right} لاختيار فائز جديد.**\n **${e.featured}__:الاوامر المميزة__** \n**${prefix}setlang ${e.right} لتغيير لغة البوت في السيرفر.**\n**${prefix}set logs ${e.right} لتثبيت روم السجلات/اللوق.**\n**${prefix}set mention on ${e.right} لتفعيل منشن الجميع عند بداء كل قيف اوي جديد.**\n**${prefix}set mention off ${e.right} لالغاء تفعيل المنشن.**`,
-    cmm: `__${e.command} Info Commands__`,
-    cmdd: `**${prefix}help ${e.right} لعرض قائمة الاوامر ومعلومات البوت.**\n**${prefix}ping ${e.right} لعرض حالة استجابة البوت.**\n**${prefix}invite ${e.right} لعرض الروابط الاساسية الخاصة بالبوت.**`,
+    disc: '● هنا يمكنك ان تجد جميع `ManageGift Commands`',
+    giveawaycmd: `${e.givcmd} أوامر القيف آوي - (٦)`,
+    featuredcmd: `${e.featured} أوامر المميزه - (٦)`,
+    infocmd: `${e.info} أوامر المعلومات - (٤)`,
+    ownerbot: `${e.owner} أوامر صاحب البوت - (٢)`,
     link: `__${e.link} :الروابط__`
   },
 
@@ -117,8 +117,9 @@ module.exports = {
     title: `ManageGift's Information:`,
     info: 'انه بوت مفتوح المصدر، يسمح لك بانشاء القيف اوي بسهولة تامة ويوفر لك العديد من المميزات. \n :تم برمجة البوت بلغة `javascript language` :وايضا بواسطة ! -  HaDi KouBeIssI | 🇱🇧#4001',
     stats: `__${e.stats} :الاحصائيات__`,
-    stat: `\`:إجمالي السيرفرات\` `,
-    set: `\`:إجمالي المستخدمين\` `,
+    stat: `\`:إجمالي السيرفرات\``,
+    set: `\`:إجمالي المستخدمين\``,
+    ch: `\`:إجمالي الرومات\``,
     ver: `__${e.ver} :الإصدارات__`,
     ram: `__${e.ram} الرامات__`,
     on: `${e.on} • __نشّط__`,
