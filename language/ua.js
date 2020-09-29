@@ -113,12 +113,11 @@ module.exports = {
 
   help: {
     title: `ManageGift's информація:`,
-    /* translate this */
-    disc: '● Here you can find all `ManageGift Commands`',
-    giveawaycmd: `${e.givcmd} Giveaway commands - (6)`,
-    featuredcmd: `${e.featured} Featured commands - (6)`,
-    infocmd: `${e.info} Info commands - (4)`,
-    ownerbot: `${e.owner} Owner bot commands - (2)`,
+    disc: '● Тут Ви можете знайти всі команди `ManageGift`',
+    giveawaycmd: `${e.givcmd} Команди для проведення розіграшів - (6)`,
+    featuredcmd: `${e.featured} Команди для конфігурації бота - (6)`,
+    infocmd: `${e.info} Інформаційні команди - (4)`,
+    ownerbot: `${e.owner} Команди для розробника бота - (2)`,
     link: `__${e.link} Посиланння:__`
   },
 
@@ -128,8 +127,7 @@ module.exports = {
     stats: `${e.stats} • __Статистика:__`,
     stat: `\`Серверів:\``,
     set: `\`Участників:\``,
-    /* translate this */
-    ch: `\`Channels:\``,
+    ch: `\`Каналів:\``,
     ver: `${e.ver} • __Версія:__`,
     ram: `${e.ram} • __RAM__`,
     on: `${e.on} • __В мережі__`,
