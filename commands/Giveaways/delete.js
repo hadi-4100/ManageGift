@@ -5,6 +5,9 @@ exports.run = async (client, message, args, lang) => {
     // If the member doesn't have enough permissions
     if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role)) 
         return message.channel.send(lang.create.perms + "** **" + "`" + role + "`" + "!.");
+
+    if(message.member.guild.id != client.giveawaysManager.giveaways.find((g) => g.messageID).guildID) return message.channel.send(lang.delete.otherServer);
+    if("<@" + message.member.id + ">" != client.giveawaysManager.giveaways.find((g) => g.messageID).hostedBy) return message.channel.send(lang.delete.otherUser);
    
     let id = args[0];
     if (!id) return message.channel.send(lang.edit.msg);
