@@ -70,7 +70,9 @@ module.exports = {
   },
 
   delete: {
-    done: `${e.success} Done the giveaway is deleted`
+    done: `${e.success} Done the giveaway is deleted`,
+    otherServer: `${e.error} You cannot control someone else's draw on this server!`,
+    otherUser: `${e.error} You cannot control this draw, since you are not its owner!`
   },
 
   lang: {
