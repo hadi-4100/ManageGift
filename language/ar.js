@@ -8,6 +8,7 @@ module.exports = {
   create: {
     perms: `${e.error} ليس لديك رتبة ذات صلاحية \n\`MANAGE_MESSAGES \`،\n  يمكنك إنشاء رتبة للتحكم في اوامر القيف اوي واسمها\n:`,
     channel: `${e.error} يجب ان تفوم بفعل منشن \`لروم صالح\` لتثبيت القيف اوي فيه\n> مثال: ${prefix}create \`#giveawaychannel (giveawaychannel: هذة الغرفة)\``,
+    otherServer: `${e.error} .!لا يمكنك انشاء \`قيف اوي\` في خادم اخر غير هذا`,
     duration: `${e.error} عليك ادخال \`وقت صالح\`\n مثا: 1d`,
     argswinners: `${e.error} عليك ادخال عدد \`فائزين صالح\`\n> مثال: ${prefix}create #giveawaychannel 1m \`4 (4: عدد الفائزين)\` Nitro`,
     prize: `${e.error} ادخل ماهي \`الجائزة\` رجاء\n> مثال: ${prefix}create #giveawaychannel 1h 4 \`Nitro(Nitro: الجائزة)\``,

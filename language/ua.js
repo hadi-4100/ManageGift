@@ -15,6 +15,7 @@ module.exports = {
   create: {
     perms: `${e.error} У Вас немає права \`MANAGE_MESSAGES\`, Ви можете зробити роль для використання цієї ролі:`,
     channel: `${e.error} Ви повинні вказати \`правильний канал!\` \n> Приклад: ${prefix}start \`#giveawaychannel (giveawaychannel: канал для повідомлення)\` 1h 1 Nitro!.`,
+    otherServer: `${e.error} Ви не можете створювати розіграші на чужому сервері!`,
     duration: `${e.error} Вкажіть коректний \`час\`, будь ласка! \n> Приклад: \`1d (1 день)\`, \`1h (1 година)\`, \`1m (1 хвилина)\`, \`1s (1 секунда)\`!.`,
     argswinners: `${e.error} Вкажіть \`кількість перемежців!\` \n> Приклад: \`${prefix}start #giveawaychannel 1h 4(4: кількість переможців) Nitro\``,
     prize: `${e.error} Додайте \`приз\`, будь ласка! \n> Приклад: ${prefix}start #giveawaychannel 1h 1 \`Nitro(Nitro: приз)\``,
