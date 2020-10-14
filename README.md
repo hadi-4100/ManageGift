@@ -11,7 +11,7 @@
 
 ## ✨ Features:
 
-> 😊 Total сommands In The ManageGift is **10 commands** and more soon.
+> 😊 Total сommands In The ManageGift is **15 commands** and more soon.
 > 🚀 24/7 ManageGift online.
 > 🔓 Open source.
 
@@ -35,6 +35,8 @@ ManageGift.
 %gset mention on       Active the mention on all start giveaway.
 %gset mention off      Disable the mention on all start giveaway.
 %gset logs             Setup the room logs of giveaway.
+%gsetprefix            Set bot prefix for your guild.
+$gset role             Set default role for your guild.
 ```
 
 

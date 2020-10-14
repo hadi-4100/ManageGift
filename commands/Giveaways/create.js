@@ -1,4 +1,4 @@
-const ms = require("ms");
+const ms = require("ms"), { Channel, Guild, GuildAuditLogs } = require('discord.js');
 
 exports.run = async (client, message, args, lang) => {
     let role = client.db.fetch(`role_${message.guild.id}`);
@@ -12,40 +12,42 @@ exports.run = async (client, message, args, lang) => {
     let giveawayChannel = message.mentions.channels.first();
     // If no channel is mentionned
     if (!giveawayChannel) return message.channel.send(lang.create.channel)
-            .then(msg => {
-                msg.delete({ timeout: 10000 });
-                message.delete({ timeout: 10000 });
-            });
+        .then(msg => {
+            msg.delete({ timeout: 10000 });
+            message.delete({ timeout: 10000 });
+        });
 
+        if(message.member.guild.id != giveawayChannel.guild.id) return message.channel.send(lang.create.otherServer);
+ 
     // Giveaway duration
     let giveawayDuration = args[1];
     // If the duration isn't valid
     if (!giveawayDuration || isNaN(ms(giveawayDuration))) return message.channel.send(lang.create.duration)
-            .then(msg => {
-                msg.delete({ timeout: 10000 });
-                message.delete({ timeout: 10000 });
-            });
-    
+        .then(msg => {
+            msg.delete({ timeout: 10000 });
+            message.delete({ timeout: 10000 });
+        });
+
 
     // Number of winners
     let giveawayNumberWinners = args[2];
     // If the specified number of winners is not a number
     if (isNaN(giveawayNumberWinners)) return message.channel.send(lang.create.argswinners)
-            .then(msg => {
-                msg.delete({ timeout: 10000 });
-                message.delete({ timeout: 10000 });
-            });
-    
+        .then(msg => {
+            msg.delete({ timeout: 10000 });
+            message.delete({ timeout: 10000 });
+        });
+
 
     // Giveaway prize
     let giveawayPrize = args.slice(3).join(' ');
     // If no prize is specified
     if (!giveawayPrize) return message.channel.send(lang.create.prize)
-            .then(msg => {
-                msg.delete({ timeout: 10000 });
-                message.delete({ timeout: 10000 });
-            });
-    
+        .then(msg => {
+            msg.delete({ timeout: 10000 });
+            message.delete({ timeout: 10000 });
+        });
+
 
     let mention = client.db.fetch(`mention_${message.guild.id}`);
 

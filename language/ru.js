@@ -15,6 +15,7 @@ module.exports = {
   create: {
     perms: `${e.error} У Вас нет права \`MANAGE_MESSAGES\`, Вы можете создать роль для использования данной команды:`,
     channel: `${e.error} Вы должны указать \`правильный канал!\`\n> Пример: ${prefix}start \`#giveawaychannel (giveawaychannel: канал для сообщения)\` 1h 1 Nitro!`,
+    otherServer: `Вы не можете создать розыграши на чужом сервере!`,
     duration: `${e.error} Укажите корректное \`время\`, пожалуйста!\n> Пример: \`1d (1 день)\`, \`1h (1 час)\`, \`1m (1 минута)\`, \`1s (1 секунда)\`!`,
     argswinners: `${e.error} Укажите \`кол-во побидителей!\`\n> Пример: \`${prefix}start #giveawaychannel 1h 4(4: кол-во побидителей) Nitro\``,
     prize: `${e.error} Добавьте \`приз\`, пожалуйста!\n> Пример: ${prefix}start #giveawaychannel 1h 1 \`Nitro(Nitro: приз)\``,
@@ -70,7 +71,9 @@ module.exports = {
   },
 
   delete: {
-    done: `${e.success} Розыграш успешно отменён!`
+    done: `${e.success} Розыграш успешно отменён!`,
+    otherServer: `${e.error} Вы не можете управлять чужим розыграшем на этом сервере!`,
+    otherUser: `${e.error} Вы не можете управлять этим розыграашем, т.к Вы не его владелец!`
   },
 
   lang: {

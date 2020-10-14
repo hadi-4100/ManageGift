@@ -15,6 +15,7 @@ module.exports = {
   create: {
     perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation:`,
     channel: `${e.error} You should mention on \`valid channel!\`\n> Ex: ${prefix}create \`#giveawaychannel (giveawaychanne: this channel)\` 1h 1 Nitro!`,
+    otherServer: `${e.error} You cannot create a \`giveaway\` on another server!.`,
     duration: `${e.error} Type a valid \`time\` please!\n> Ex: \`1d (1 day)\`, \`1h (1 hour)\`, \`1m (1 minute)\`, \`1s (1 seconds)\`!`,
     argswinners: `${e.error} Type the \`number of winners!\`\n> Ex: \`${prefix}create #giveawaychannel 1h 4(4: number of winers) Nitro\``,
     prize: `${e.error} Add the \`prize\` please!\n> Ex: ${prefix}create #giveawaychannel 1h 1 \`Nitro(Nitro: the prize)\``,
@@ -70,7 +71,9 @@ module.exports = {
   },
 
   delete: {
-    done: `${e.success} Done the giveaway is deleted`
+    done: `${e.success} Done the giveaway is deleted`,
+    otherServer: `${e.error} You cannot control someone else's \`giveaway\` on this server!`,
+    otherUser: `${e.error} You cannot control this \`giveaway\`, since you are not its owner!`
   },
 
   lang: {
