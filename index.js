@@ -1,8 +1,18 @@
 const config = require("./config.js"), { Client, Collection, MessageEmbed } = require("discord.js");
 const client = new Client({ disableMentions: "everyone" }),
-      db = require("quick.db"), 
-      { GiveawaysManager } = require("discord-giveaways"),
-      { readdir } = require("fs");
+    db = require("quick.db"),
+    { Database } = require("quickmongo"),
+    mongo = new Database(config.mongoDB),
+    { GiveawaysManager } = require("discord-giveaways"),
+    { readdir } = require("fs");
+//Mongodb
+function importData() {
+    const data = db.all();
+    mongo.import(data).then(() => {
+        console.log("[📥] All objects have been loaded to a database mongodb")
+    });
+}
+mongo.on("ready", () => importData());
 
 if (!db.get("giveaways")) db.set("giveaways", []);
 client.config = config;
@@ -55,7 +65,7 @@ const manager = new GiveawayManagerWithOwnDatabase(client, {
         botsCanWin: false,
         exemptPermissions: [],
         embedColor: "#f6546a",
-        reaction: config.reaction
+        reaction: config.giveaway.reaction
     }
 });
 client.giveawaysManager = manager;
@@ -70,13 +80,13 @@ manager
         let logs = db.fetch(`logs_${member.guild.id}`);
         if (!logs) return;
         const salon = member.guild.channels.cache.get(logs);
-           salon.send(new MessageEmbed()
+        salon.send(new MessageEmbed()
             .setAuthor(lang.logs.raddtitle)
-            .setDescription(lang.logs.raddmsg1 + "** **" + "`" + member.user.tag + "`" + "** **" + lang.logs.raddmsg2 + "** **" + "`" + giveaway.messageID + "`" + "** **" + config.reaction)
+            .setDescription(lang.logs.raddmsg1 + "** **" + "`" + member.user.tag + "`" + "** **" + lang.logs.raddmsg2 + "** **" + "`" + giveaway.messageID + "`" + "** **" + config.giveaway.reaction)
             .setFooter(config.embeds.footers)
             .setColor(config.events.addcolor)
-            .setTimestamp()).catch(()=>{});
-})
+            .setTimestamp()).catch(() => { });
+    })
     .on("giveawayReactionRemoved", (giveaway, member, reaction) => {
         if (member.user.bot) return;
         let language = db.fetch(`language_${member.guild.id}`);
@@ -86,32 +96,33 @@ manager
         if (!logs) return;
         const salon = member.guild.channels.cache.get(logs);
 
-        salon.send(new Discord.MessageEmbed()
+        salon.send(new MessageEmbed()
             .setAuthor(lang.logs.rremtitle)
-            .setDescription(lang.logs.rremmsg1 + "** **" + "`" + member.user.tag + "`" + "** **" + lang.logs.rremmsg2 + "** **" + "`" + giveaway.messageID + "`" + "** **" + config.reaction)
+            .setDescription(lang.logs.rremmsg1 + "** **" + "`" + member.user.tag + "`" + "** **" + lang.logs.rremmsg2 + "** **" + "`" + giveaway.messageID + "`" + "** **" + config.giveaway.reaction)
             .setFooter(config.embeds.footers)
             .setColor(config.events.remcolor)
             .setTimestamp()).catch(console.error);
-})
-// logs for bot
-.on("giveawayReactionAdded", (giveaway, member, reaction) => console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`))
-.on("giveawayReactionRemoved", (giveaway, member, reaction) => console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`));
+    })
+
+    // logs for bot
+    .on("giveawayReactionAdded", (giveaway, member, reaction) => console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`))
+    .on("giveawayReactionRemoved", (giveaway, member, reaction) => console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`));
 
 client
     .on("guildCreate", async guild => {
-await client.channels.cache.get(client.config.logs.bot).send(new MessageEmbed()
-        .setAuthor(guild.name, guild.iconURL({ dynamic: true }))
-        .setDescription(`ManageGift is joind in: **${guild.name}** server iD: **${guild.id}** owner server iD: **${guild.ownerID}** with ${guild.members.cache.size} members & (${guild.members.cache.filter((m) => m.user.bot).size} bots)`)
-        .setColor("#7CFC00")
-        .setFooter(client.config.embeds.footers)).catch(()=>{});
-})
+        await client.channels.cache.get(client.config.auth.logs).send(new MessageEmbed()
+            .setAuthor(guild.name, guild.iconURL({ dynamic: true }))
+            .setDescription(`ManageGift is joind in: **${guild.name}** server iD: **${guild.id}** owner server iD: **${guild.ownerID}** with ${guild.members.cache.size} members & (${guild.members.cache.filter((m) => m.user.bot).size} bots)`)
+            .setColor("#7CFC00")
+            .setFooter(client.config.embeds.footers)).catch(() => { });
+    })
     .on("guildDelete", async guild => {
-await client.channels.cache.get(client.config.logs.bot).send(new MessageEmbed()
-        .setAuthor(guild.name, guild.iconURL({ dynamic: true }))
-        .setDescription(`ManageGift is leave **${guild.name}** | **${guild.id}** server and the id of owner server is **${guild.ownerID}**`)
-        .setColor("#DC143C")
-        .setFooter(client.config.embeds.footers)).catch(()=>{});
-});
+        await client.channels.cache.get(client.config.auth.logs).send(new MessageEmbed()
+            .setAuthor(guild.name, guild.iconURL({ dynamic: true }))
+            .setDescription(`ManageGift is leave **${guild.name}** | **${guild.id}** server and the id of owner server is **${guild.ownerID}**`)
+            .setColor("#DC143C")
+            .setFooter(client.config.embeds.footers)).catch(() => { });
+    });
 
 readdir("./events/", (_err, files) => {
     files.forEach((file) => {

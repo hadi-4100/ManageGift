@@ -42,7 +42,8 @@
     "ms": "^2.1.2",
     "num-parse": "^1.0.1",
     "pretty-ms": "^7.0.0",
-    "quick.db": "^7.1.1"
+    "quick.db": "^7.1.1",
+    "quickmongo": "^2.0.4"
   },
   "devDependencies": {
     "nodemon": "2.0.2"
