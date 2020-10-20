@@ -126,7 +126,7 @@ module.exports = {
 
   stats: {
     title: `ManageGift's Information:`,
-    info: 'It is an open source bot that allows you to create giveaway with ease and gives you many distinct features. The bot is Programmed in `javascript language` and By: ! -  HaDi KouBeIssI | 🇱🇧#4001',
+    info: `It is an open source bot that allows you to create giveaway with ease and gives you many distinct features. The bot is Programmed in \`javascript language\` and By: ${config.owner.name}`,
     stats: `${e.stats} • __Statistics:__`,
     stat: `\`Servers:\``,
     set: `\`Users:\``,
