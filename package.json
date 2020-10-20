@@ -1,6 +1,6 @@
 {
   "name": "managegift",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "ManageGift's | By Hadi Koubeissi using discord-giveaways package",
   "main": "index.js",
   "scripts": {
