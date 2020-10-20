@@ -5,8 +5,8 @@ exports.run = async (client, message, args, lang) => {
     // If the member doesn't have enough permissions
     if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role))return message.channel.send(lang.start.perms + "** **" + "`" + role + "`" + ".");
 
-    if(message.member.guild.id != client.giveawaysManager.giveaways.find((g) => g.messageID).guildID) return message.channel.send(lang.delete.otherServer);
-    if("<@" + message.member.id + ">" != client.giveawaysManager.giveaways.find((g) => g.messageID).hostedBy) return message.channel.send(lang.delete.otherUser);
+    if(message.member.guild.id != client.giveawaysManager.giveaways.find((g) => g.messageID === args[0]).guildID) return message.channel.send(lang.delete.otherServer);
+    if("<@" + message.member.id + ">" != client.giveawaysManager.giveaways.find((g) => g.messageID === args[0]).hostedBy) return message.channel.send(lang.delete.otherUser);
 
     // If no message ID or giveaway name is specified
     if (!args[0]) return message.channel.send(lang.reroll.msg);
