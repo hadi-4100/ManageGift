@@ -1,7 +1,7 @@
 const ms = require("ms");
 exports.run = async (client, message, args, lang) => {
     let role = client.db.fetch(`role_${message.guild.id}`)
-    if (!role) role = client.config.grole
+    if (!role) role = client.config.giveaway.grole
 
     // If the member doesn't have enough permissions
     if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role)) return message.channel.send(lang.start.perms + "** **" + "`" + role + "`" + "!.");
@@ -65,7 +65,7 @@ exports.run = async (client, message, args, lang) => {
         // The giveaway winner count
         winnerCount: giveawayNumberWinners,
         // Who hosts this giveaway
-        hostedBy: client.config.hostedBy ? message.author : null,
+        hostedBy: client.config.giveaway.hostedBy ? message.author : null,
         // Messages
         messages: {
             giveaway: text1,

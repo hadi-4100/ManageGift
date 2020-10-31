@@ -2,7 +2,7 @@ const ms = require("ms"), num = require('num-parse');
 
 exports.run = async (client, message, args, lang) => {
     let role = client.db.fetch(`role_${message.guild.id}`);
-    if (!role) role = client.config.grole;
+    if (!role) role = client.config.giveaway.grole;
 
     if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.some((r) => r.name === role)) return message.channel.send(lang.start.perms + "** **" + "`" + role + "`" + "!.");
 

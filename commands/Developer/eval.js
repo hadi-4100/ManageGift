@@ -6,7 +6,7 @@ function clean(text) {
         return text;
 }
 exports.run = (client, message, args) => {
-    if (message.author.id !== client.config.OwnerID) return message.channel.send(`❌ | this command only for Owner the bot`)
+    if (message.author.id !== client.config.owner.id) return message.channel.send(`❌ | this command only for Owner the bot`)
     const content = message.content.split(" ").slice(1).join(" ");
     const result = new Promise((resolve, reject) => resolve(eval(content)));
     

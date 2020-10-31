@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
-  if (message.author.id !== client.config.OwnerID) return message.reply("you do not have permission to use this command!");
+  if (message.author.id !== client.config.owner.id) return message.reply("you do not have permission to use this command!");
   const user = message.mentions.users.first();
   if (!user) return message.reply("❌ | **Please mention someone!**");
   if (user.id === message.author.id)return message.reply("❌ | **You cannot give yourself a blacklist**");
