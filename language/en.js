@@ -90,8 +90,6 @@ module.exports = {
     erron: `${e.error} This function is already activated. Try turning it off to see? `,
     mon: `${e.success} I have activated the function \`everyone\` for the next giveaways.`,
     moff: `${e.success} I've disabled the function \`everyone\` for the next giveaways.`,
-    channel: `${e.error} Please point me to a giveaway logs room, \n> Ex: ${prefix}set logs \`#logs\` to define the logs.`,
-    chon: `${e.success} I set up the giveaways logs on the channel:`,
     role: `${e.error} Please select a valid role!\n> Ex: ${prefix}set role \`@giveaways\` to specify a role.`,
     ron: `${e.success} I defined the alternative role with:`,
   },
