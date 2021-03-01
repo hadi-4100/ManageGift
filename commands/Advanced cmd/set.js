@@ -31,18 +31,6 @@ exports.run = async (client, message, args, lang) => {
         message.channel.send(lang.set.mon)
     }
 
-    if (args[0] === "logs") {
-        if (!message.member.hasPermission("MANAGE_CHANNELS")) {
-            return message.channel.send(lang.set.perms)
-        }
-        
-        var channel = message.mentions.channels.first();
-        if (!channel) return message.channel.send(lang.set.channel);
-        client.db.set(`logs_${message.guild.id}`, channel.id);
-
-        message.channel.send(lang.set.chon + "** **" + "`" + channel.name + "`" + ".")
-    }
-
     if (args[0] === "role") {
         if (!message.member.hasPermission("MANAGE_CHANNELS")) {
             return message.channel.send(lang.set.perms)
