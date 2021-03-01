@@ -1,20 +1,69 @@
 const config = require("./config.js"), { Client, Collection, MessageEmbed } = require("discord.js");
 const client = new Client({ disableMentions: "everyone" }),
-    db = require("quick.db"),
-    { Database } = require("quickmongo"),
-    mongo = new Database(config.mongoDB),
+    mongoose = require("mongoose"),
     { GiveawaysManager } = require("discord-giveaways"),
     { readdir } = require("fs");
-//Mongodb
-function importData() {
-    const data = db.all();
-    mongo.import(data).then(() => {
-        console.log("[📥] All objects have been loaded to a database mongodb")
-    });
-}
-mongo.on("ready", () => importData());
 
-if (!db.get("giveaways")) db.set("giveaways", []);
+
+// Connect to database
+mongoose.connect('mongodb://localhost/managegift-dev', { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true });
+const db = mongoose.connection;
+
+// Check the connection
+db.on('error', console.error.bind(console, 'Connection error:'));
+db.once('open', () => {
+    console.log('Connected to MongoDB.');
+});
+
+// Create the schema for giveaways
+const giveawaySchema = new mongoose.Schema({
+    messageID: String,
+    channelID: String,
+    guildID: String,
+    startAt: Number,
+    endAt: Number,
+    ended: Boolean,
+    winnerCount: Number,
+    prize: String,
+    messages: {
+        giveaway: String,
+        giveawayEnded: String,
+        inviteToParticipate: String,
+        timeRemaining: String,
+        winMessage: String,
+        embedFooter: String,
+        noWinner: String,
+        winners: String,
+        endedAt: String,
+        hostedBy: String,
+        units: {
+            seconds: String,
+            minutes: String,
+            hours: String,
+            days: String,
+            pluralS: Boolean,
+        },
+    },
+    hostedBy: String,
+    winnerIDs: [String],
+    reaction: mongoose.Mixed,
+    botsCanWin: Boolean,
+    embedColor: mongoose.Mixed,
+    embedColorEnd: mongoose.Mixed,
+    exemptPermissions: [],
+    bonusEntries: String,
+    extraData: mongoose.Mixed,
+    lastChance: {
+        enabled: Boolean,
+        content: String,
+        threshold: Number,
+        embedColor: mongoose.Mixed
+    }
+});
+
+// Create the model
+const giveawayModel = mongoose.model('giveaways', giveawaySchema);
+
 client.config = config;
 client.db = db;
 client.commands = new Collection();
@@ -24,34 +73,33 @@ const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
     // This function is called when the manager needs to get all the giveaway stored in the database.
     async getAllGiveaways() {
         // Get all the giveaway in the database.
-        return db.get("giveaways");
+        return await giveawayModel.find({});
     }
 
     // This function is called when a giveaway needs to be saved in the database (when a giveaway is created or when a giveaway is edited).
     async saveGiveaway(messageID, giveawayData) {
-        // Add the new one.
-        db.push("giveaways", giveawayData);
+        // Add the new one
+        await giveawayModel.create(giveawayData);
+        // Don't forget to return something!
         return true;
     }
 
     async editGiveaway(messageID, giveawayData) {
-        // Gets all the current giveaways
-        const giveaways = db.get("giveaways");
-        // Remove the old giveaway from the current giveaways ID
-        const newGiveawaysArray = giveaways.filter((giveaway) => giveaway.messageID !== messageID);
-        // Push the new giveaway to the array
-        newGiveawaysArray.push(giveawayData);
-        // Save the updated array
-        db.set("giveaways", newGiveawaysArray);
+        // Find by messageID and update it
+        await giveawayModel
+            .findOneAndUpdate({ messageID: messageID }, giveawayData)
+            .exec();
+        // Don't forget to return something!
         return true;
     }
 
     // This function is called when a giveaway needs to be deleted from the database.
     async deleteGiveaway(messageID) {
-        // Remove the giveaway from the array
-        const newGiveawaysArray = db.get("giveaways").filter((giveaway) => giveaway.messageID !== messageID);
-        // Save the updated array
-        db.set("giveaways", newGiveawaysArray);
+        // Find by messageID and delete it
+        await giveawayModel
+            .findOneAndDelete({ messageID: messageID })
+            .exec();
+        // Don't forget to return something!
         return true;
     }
 
@@ -65,6 +113,7 @@ const manager = new GiveawayManagerWithOwnDatabase(client, {
         botsCanWin: false,
         exemptPermissions: [],
         embedColor: "#f6546a",
+        embedColorEnd: '#ff0023',
         reaction: config.giveaway.reaction
     }
 });
@@ -79,8 +128,8 @@ manager
         const lang = require(`./language/${language}.js`);
         let logs = db.fetch(`logs_${member.guild.id}`);
         if (!logs) return;
-        const salon = member.guild.channels.cache.get(logs);
-        salon.send(new MessageEmbed()
+        const channel1 = member.guild.channels.cache.get(logs);
+        channel1.send(new MessageEmbed()
             .setAuthor(lang.logs.raddtitle)
             .setDescription(lang.logs.raddmsg1 + "** **" + "`" + member.user.tag + "`" + "** **" + lang.logs.raddmsg2 + "** **" + "`" + giveaway.messageID + "`" + "** **" + config.giveaway.reaction)
             .setFooter(config.embeds.footers)
@@ -94,9 +143,9 @@ manager
         const lang = require(`./language/${language}.js`);
         let logs = db.fetch(`logs_${member.guild.id}`);
         if (!logs) return;
-        const salon = member.guild.channels.cache.get(logs);
+        const channel2 = member.guild.channels.cache.get(logs);
 
-        salon.send(new MessageEmbed()
+        channel2.send(new MessageEmbed()
             .setAuthor(lang.logs.rremtitle)
             .setDescription(lang.logs.rremmsg1 + "** **" + "`" + member.user.tag + "`" + "** **" + lang.logs.rremmsg2 + "** **" + "`" + giveaway.messageID + "`" + "** **" + config.giveaway.reaction)
             .setFooter(config.embeds.footers)
