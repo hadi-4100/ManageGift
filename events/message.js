@@ -1,44 +1,57 @@
-let cd = new Set(), cdseconds = 5;
+const config = require("../config");
+const cd = new Set(), cdseconds = 5;
 
 module.exports = (client, message) => {
- if(message.author.bot || !message.guild)return;
-  //for cooldown & blacklist
-  let language = client.db.fetch(`language_${message.guild.id}`);
+	if(message.author.bot || !message.guild)return;
+	//for cooldown & blacklist
+	/*let language = client.db.fetch(`language_${message.guild.id}`);
   if (!language) language = client.config.basiclang;
-  const lang = require(`../language/${language}`);
+  const lang = require(`../language/${language}`);*/
 
-  //for setprefix command 
-  let prefix;
+	//for setprefix command 
+	/*let prefix;
   let prefixes = client.db.fetch(`prefix_${message.guild.id}`);
-  (!prefixes) ? (prefix = client.config.prefix) : (prefix = prefixes);
+  (!prefixes) ? (prefix = client.config.prefix) : (prefix = prefixes);*/
+
+	const guildDB = client.data.getGuildDB(message.guild.id);
+
+	//Get prefix from guild else get from config file
+	const prefix = !guildDB.prefix ? config.prefix : guildDB.prefix;
   
-  //now we done prefix fetching for guilds
-  if (!message.content.startsWith(prefix)) return;
+	//now we done prefix fetching for guilds
+	if (!message.content.startsWith(prefix)) return;
 
-  //Our standard argument/command name definition.
-  const args = message.content.slice(prefix.length).trim().split(/ +/g), commandName = args.shift().toLowerCase();
-  //Grab the command data from the client.commands Enmap
-  const command = client.commands.get(commandName);
+	//Our standard argument/command name definition.
+	const args = message.content.slice(prefix.length).trim().split(/ +/g), commandName = args.shift().toLowerCase();
+	//Grab the command data from the client.commands Enmap
+	const command = client.commands.get(commandName);
 
-  //If that command doesn't exist, silently exit and do nothing
-  if (!command) return;
+	//If that command doesn't exist, silently exit and do nothing
+	if (!command) return;
 
-  //cooldown
-  if (cd.has(message.author.id)) {
-    message.delete();
-    return message.channel.send(lang.cooldown.err).then(msg => msg.delete({ timeout: 6000 }).catch(()=> {/* Lol */}));
-  }
-  cd.add(message.author.id);
-  setTimeout(() => cd.delete(message.author.id), cdseconds * 1000);
-  //blacklist
-  let blacklist = client.db.fetch(`blacklist_${message.author.id}`)
-  if (blacklist === "Blacklisted") return message.reply(lang.blacklist.blacklist)
+	//Get the user database
+	const userDB = client.data.getUserDB(message.author.id);
+	const data = {};
+	data.user = userDB;
+	data.guild = guildDB;
+
+	//cooldown
+	if (cd.has(message.author.id)) {
+		message.delete();
+		// eslint-disable-next-line no-undef
+		return message.channel.send(lang.cooldown.err).then(msg => msg.delete({ timeout: 6000 }).catch(()=> {/* Lol */}));
+	}
+	cd.add(message.author.id);
+	setTimeout(() => cd.delete(message.author.id), cdseconds * 1000);
+	//blacklist
+	/*let blacklist = client.db.fetch(`blacklist_${message.author.id}`)
+  if (blacklist === "Blacklisted") return message.reply(lang.blacklist.blacklist)*/
   
-  //log for any user run command
-  console.log(`${message.author.username} id:(${message.author.id}) Use a command ${commandName}`);
+	//log for any user run command
+	console.log(`${message.author.username} id:(${message.author.id}) Use a command ${commandName}`);
   
-  client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${commandName}\``);
+	client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${commandName}\``, "cmd");
 
-  //Run the command
-  command.run(client, message, args, lang);
+	//Run the command
+	command.run(client, message, args, data, prefix);
 };
