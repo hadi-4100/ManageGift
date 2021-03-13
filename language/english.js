@@ -6,14 +6,14 @@ const { prefix, owner } = require("../config.js"),
 
 module.exports = {
 	start: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`setrole [on / off] {your role}\`!.`,
+		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
 		duration: `${e.error} Type a valid \`time\` please!\n> Ex: \`1d (1 day)\`, \`1h (1 hour)\`, \`1m (1 minute)\`, \`1s (1 seconds)\`!`,
 		argswinners: `${e.error} Type the \`number of winners!\`\n> Ex: \`${prefix}start 1h 4(4: number of winers) Nitro\``,
 		prize: `${e.error} Add the \`prize\` please!\n> Ex: ${prefix}start 1h 1 \`Nitro(Nitro: the prize)\``
 	},
 
 	create: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`setrole [on / off] {your role}\`!.`,
+		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
 		channel: `${e.error} You should mention on \`valid channel!\`\n> Ex: ${prefix}create \`#giveawaychannel (giveawaychanne: this channel)\` 1h 1 Nitro!`,
 		otherServer: `${e.error} You cannot create a \`giveaway\` on another server!.`,
 		duration: `${e.error} Type a valid \`time\` please!\n> Ex: \`1d (1 day)\`, \`1h (1 hour)\`, \`1m (1 minute)\`, \`1s (1 seconds)\`!`,
@@ -44,7 +44,7 @@ module.exports = {
 	lastchance: { content: `${e.warning} **LAST CHANCE TO ENTER !** ${e.warning}` },
 
 	end: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`setrole [on / off] {your role}\`!.`,
+		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
 		msg: `${e.error} You have to specify a valid message ID!`,
 		err: `${e.error} Unable to recognize this id giveaway:`,
 		errmod: `${e.error} This giveaway already ended or deleted!`,
@@ -52,7 +52,7 @@ module.exports = {
 	},
 
 	reroll: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`setrole [on / off] {your role}\`!.`,
+		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
 		msg: `${e.error} You have to specify a valid message ID!`,
 		err: `${e.error} Unable to recognize this id giveaway:`,
 		good: ":tada: New winner(s): {winners}! Congratulations!",
@@ -60,7 +60,7 @@ module.exports = {
 	},
 
 	edit: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`setrole [on / off] {your role}\`!.`,
+		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
 		msg: `${e.error} You have to specify a valid message ID!`,
 		wipr: `${e.error} You need to either edit the prize or the winners!`,
 		argswinners: `${e.error} type the \`number of winners!\`\n> Ex: \`${prefix}edit {giveawayid} winners 2(2: number of winers)\``,
@@ -78,9 +78,8 @@ module.exports = {
 	},
 
 	lang: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`setrole [on / off] {your role}\`!.`,
+		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
 		msg: `${e.error} please enter a vaild language (\`ar\`, \`en\`, \`ru\`, \`ua\`)`,
-		err: `${e.error} The chosen language is already the one active on this server. Try another one to see?!`
 	},
 
 	set: {
