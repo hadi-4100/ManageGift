@@ -1,3 +1,4 @@
+// ESLIENT CONFIG FILE
 module.exports = {
 	"env": {
 		"commonjs": true,

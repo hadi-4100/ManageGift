@@ -1,6 +1,6 @@
 {
   "name": "managegift",
-  "version": "2.1.6",
+  "version": "2.3.3",
   "description": "ManageGift's | By Hadi Koubeissi using discord-giveaways package",
   "main": "index.js",
   "scripts": {
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "discord-giveaways": "github:Nico105/discord-giveaways#not-reroll-same-winner",
+    "discord-giveaways": "github:Androz2091/discord-giveaways#develop",
     "discord.js": "^12.5.1",
     "moment": "^2.28.0",
     "moment-duration-format": "^2.3.2",
