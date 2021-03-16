@@ -105,7 +105,7 @@ module.exports = {
 		title: "Help Documents Overview:",
 		disc: "● Here you can find all `ManageGift Commands`",
 		giveawaycmd: `${e.givcmd} Giveaway commands - (6)`,
-		featuredcmd: `${e.featured} Featured commands - (6)`,
+		featuredcmd: `${e.featured} Featured commands - (4)`,
 		infocmd: `${e.info} Info commands - (4)`,
 		ownerbot: `${e.owner} Owner bot commands - (2)`,
 		link: `${e.link} Links:`
