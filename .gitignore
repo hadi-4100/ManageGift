@@ -1,5 +1,4 @@
 # Git ignore file list
 node_modules/
 package-lock.json
-json.sqlite
 config.js
