@@ -17,7 +17,7 @@ module.exports = {
 		channel: `${e.error} Вы должны указать \`канал\`!\n> Пример: ${prefix}create \`#channel (Канал для розыгрыша)\` 1h 1 Nitro!`,
 		otherServer: `${e.error} Вы не можете создать \`розыграши\` на других серверах!`,
 		duration: `${e.error} Укажите корректное \`время\`!\n> Пример: \`1d (1 день)\`, \`1h (1 час)\`, \`1m (1 минута)\`, \`1s (1 секунда)\`!`,
-		argswinners: `${e.error} Укажите \`кол-во победителей\`!\n> пимер: \`${prefix}create #channel 1h 4(Кол-во победителей) Nitro\``,
+		argswinners: `${e.error} Укажите \`кол-во победителей\`!\n> Пример: \`${prefix}create #channel 1h 4(Кол-во победителей) Nitro\``,
 		prize: `${e.error} Добавьте \`приз\`!\n> Пример: ${prefix}create #channel 1h 1 \`Nitro(Ваш приз)\``,
 		good: `${e.success} ** Я запустил \` розыгрыш \` в указанном чате: **`,
 
