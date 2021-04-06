@@ -17,7 +17,7 @@ module.exports = {
 		channel: `${e.error} Вы должны указать \`канал\`!\n> Пример: ${prefix}create \`#channel (Канал для розыгрыша)\` 1h 1 Nitro!`,
 		otherServer: `${e.error} Вы не можете создать \`розыграши\` на других серверах!`,
 		duration: `${e.error} Укажите корректное \`время\`!\n> Пример: \`1d (1 день)\`, \`1h (1 час)\`, \`1m (1 минута)\`, \`1s (1 секунда)\`!`,
-		argswinners: `${e.error} Укажите \`кол-во победителей\`!\n> Пример: \`${prefix}create #channel 1h 4(Кол-во победителей) Nitro\``,
+		argswinners: `${e.error} Укажите \`кол-во победителей\`!\n> Пример: \`${prefix}create #channel 1h 4(Кол-во победителей) Nitro\``,https://github.com/LWJerri/ManageGift/network/members
 		prize: `${e.error} Добавьте \`приз\`!\n> Пример: ${prefix}create #channel 1h 1 \`Nitro(Ваш приз)\``,
 		good: `${e.success} ** Я запустил \` розыгрыш \` в указанном чате: **`,
 
@@ -63,8 +63,8 @@ module.exports = {
 		perms: `${e.error} У Вас нет права \`MANAGE_MESSAGES\`, Вы можете создать роль с названием \`Giveaway Manger\` и дать доступ к командам \`start & create & edit ...\` или установите свою роль, используя команду \`${prefix}setrole [on / off] {Ваша роль}\`!`,
 		msg: `${e.error} Вам необходимо указать корректный ID сообщения с розыгрышем.`,
 		wipr: `${e.error} Вам необходимо указать кол-во победителей!`,
-		argswinners: `${e.error} укажите \`кол-во победителей\`!\n> Пример: \`${prefix}edit {giveawayid} winners 2(Кол-во победителей)\``,
-		prize: `${e.error} добавьте \`приз\`!\n> Пример: ${prefix}edit {giveawayid} prize \`Nitro (Ваш приз)\``,
+		argswinners: `${e.error} Укажите \`кол-во победителей\`!\n> Пример: \`${prefix}edit {giveawayid} winners 2(Кол-во победителей)\``,
+		prize: `${e.error} Добавьте \`приз\`!\n> Пример: ${prefix}edit {giveawayid} prize \`Nitro (Ваш приз)\``,
 		timepr: (numberOfSecondsMax)=> `${e.success} Приз розыгрыша будет обновлён через \`${numberOfSecondsMax}\` секунд.`,
 		timwi: (numberOfSecondsMax)=> `${e.success} Кол-во победителей будет обновлено через \`${numberOfSecondsMax}\` секунд.`,
 		err: `${e.error} Ошибка при получении данных розыгрыша: `,
