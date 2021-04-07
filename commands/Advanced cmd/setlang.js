@@ -1,48 +1,34 @@
-exports.run = async (client, message, args, lang) => {
-let language = client.db.fetch(`language_${message.guild.id}`);
-    if (!args[0]) return message.channel.send(lang.lang.msg);
+exports.run = async (client, message, args, guildData, lang) => {
+	if (!message.member.hasPermission("MANAGE_CHANNELS"))
+		return message.channel.send(lang.lang.perms);
 
-    // Arabic lang
-    if (args[0] === "ar") {
-        if (!message.member.hasPermission("MANAGE_CHANNELS")) {
-            return message.channel.send(lang.lang.perms)
-        }
+	if (!args[0]) return message.channel.send(lang.lang.msg);
 
-        if (language === "ar") return message.channel.send(lang.lang.err)
-        client.db.set(`language_${message.guild.id}`, "ar");
-        message.channel.send(":flag_lb: | لغة هذا السيرفر هي العربية الآن!")
-    }
+	// Arabic lang
+	if (args[0] === "ar") {
+		guildData.language = "arabic";
+		await guildData.save();
+		return message.channel.send(":flag_lb: | لغة هذا السيرفر هي العربية الآن!");
+	}
 
-    // English lang
-    if (args[0] === "en") {
-        if (!message.member.hasPermission("MANAGE_CHANNELS")) {
-            return message.channel.send(lang.lang.perms)
-        }
+	// English lang
+	if (args[0] === "en") {
+		guildData.language = "english";
+		await guildData.save();
+		return message.channel.send(":flag_gb: | The language of this server is now English!");
+	}
 
-        if (language === "en") return message.channel.send(lang.lang.err)
-        client.db.set(`language_${message.guild.id}`, "en")
-        message.channel.send(":flag_gb: | The language of this server is now English!")
-    }
+	// Russian lang
+	if (args[0] === "ru") {
+		guildData.language = "russian";
+		await guildData.save();
+		return message.channel.send(":flag_ru: | Язык изменён на Русский!");
+	}
 
-    // Russian lang
-    if (args[0] === "ru") {
-        if (!message.member.hasPermission("MANAGE_CHANNELS")) {
-            return message.channel.send(lang.lang.perms)
-        }
-
-        if (language === "ru") return message.channel.send(lang.lang.err)
-        client.db.set(`language_${message.guild.id}`, "ru")
-        message.channel.send(":flag_ru: | Язык изменён на Русский!")
-    }
-
-    // Ukranian lang
-    if (args[0] === "ua") {
-        if (!message.member.hasPermission("MANAGE_CHANNELS")) {
-            return message.channel.send(lang.lang.perms)
-        }
-
-        if (language === "ua") return message.channel.send(lang.lang.err)
-        client.db.set(`language_${message.guild.id}`, "ua")
-        message.channel.send(":flag_ua: | Мову змінено на Українську!")
-    }
-}
+	// Ukranian lang
+	if (args[0] === "ua") {
+		guildData.language = "ukranian";
+		await guildData.save();
+		return message.channel.send(":flag_ua: | Мову змінено на Українську!");
+	}
+};

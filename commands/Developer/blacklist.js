@@ -1,30 +1,44 @@
-const { MessageEmbed } = require('discord.js');
+/* eslint-disable no-unused-vars */
+const blacklistUser = require("../../Base/User"),
+	blacklistGuild = require("../../Base/Guild");
 
-exports.run = async (client, message, args) => {
-  if (message.author.id !== client.config.owner.id) return message.reply("you do not have permission to use this command!");
-  const user = message.mentions.users.first();
-  if (!user) return message.reply("❌ | **Please mention someone!**");
-  if (user.id === message.author.id)return message.reply("❌ | **You cannot give yourself a blacklist**");
+exports.run = async (client, message, args, guildData, lang) => {
+	if (message.author.id !== client.config.owner.id) return message.channel.send("❌ | this command only for Owner the bot");
+	const type = args[0];
+	if (type !== "user" && type !== "guild") {
+		return message.channel.send("**Choose between user & guild**");
+	}
+	if (type === "user") {
+		const User = message.guild.members.cache.get(args[1]);
+		if (!User) return message.channel.send("User is not valid.");
 
-let blacklist = await client.db.fetch(`blacklist_${user.id}`);
-if (blacklist === "Not") {
-client.db.set(`blacklist_${user.id}`, "Blacklisted")
-message.channel.send(new MessageEmbed()
-      .setTitle(':beginner: New User In Blacklist :beginner:')
-      .setDescription(`:octagonal_sign: | ${user} has been blacklisted! \n By: ${message.author}`)
-      .setColor('RED')
-      .setFooter(client.config.embeds.footers)
-      .setTimestamp());
-  } else if (blacklist === "Blacklisted") {
-    client.db.set(`blacklist_${user.id}`, "Not");
-message.channel.send(new MessageEmbed()
-      .setTitle(':beginner: New User Has Unblacklisted :beginner:')
-      .setDescription(`:white_circle: | ${user} has been unblacklisted!`)
-      .setColor('GREEN')
-      .setFooter(client.config.embeds.footers)
-      .setTimestamp());
-  } else {
-    client.db.set(`blacklist_${user.id}`, "Not");
-message.channel.send(new MessageEmbed().setDescription(`Set up data for ${user}!`));
-  }
-}
+		blacklistUser.findOne({ id: User.user.id }, async (err, userData) => {
+			if (err) throw err;
+			if (userData) {
+				message.channel.send(`**${User.displayName}** has already been blacklisted!`);
+			} else {
+				userData = new blacklistUser({ id: User.user.id });
+				userData.save()
+					.catch(err => console.log(err));
+				message.channel.send(`**${User.user.tag}** has been added to blacklist.`);
+			}
+		});
+	}
+	if (type === "guild") {
+		const Guild = message.client.guilds.cache.get(args[1]);
+		if (!Guild) return message.channel.send("**Guild is not vaild.**");
+		blacklistGuild.findOne({ id: Guild.id }, async (err, guildData) => {
+			if (err) throw err;
+			if (guildData) {
+				message.channel.send(`**${Guild.name}** hase already been blacklisted!.`);
+			} else {
+				guildData = new blacklistGuild({ id: Guild.id });
+				guildData.save()
+					.catch(err => console.log(err));
+				message.channel.send(`**${Guild.name}** has been added to blacklist.`);
+			}
+		});
+		Guild.leave();
+		Guild.owner.send(`**:no_pedestrians: | Your server has blacklisted now!. \n You can now longer use the bot on this server \`${Guild.name}\` because you violated the bot laws, and this is the last decision, unfortunately.**`);
+	}
+};

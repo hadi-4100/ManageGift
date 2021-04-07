@@ -1,7 +1,13 @@
-exports.run = async (client, message, args, lang) => {
-    if(!message.member.hasPermission("MANAGE_CHANNELS")) return message.channel.send(lang.lang.perms)
+exports.run = async (client, message, args, guildData, lang) => {
+	if (!message.member.hasPermission("MANAGE_CHANNELS"))
+		return message.channel.send(lang.lang.perms);
 
-    if (!args[0]) return message.reply(lang.prefixerror);
-    await client.db.set(`prefix_${message.guild.id}`, args[0]);
-    message.channel.send(lang.setprefix + `\`${args[0]}\``);
+	const prefix = args[0];
+	if (!prefix) return message.channel.send(lang.prefixerror);
+	if(prefix.length > 5){
+		return message.channel.send(lang.prefixerrcarc);
+	}
+	guildData.prefix = prefix;
+	await guildData.save();
+	message.channel.send(lang.setprefix + `\`${guildData.prefix}\``);
 };
