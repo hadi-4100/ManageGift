@@ -53,9 +53,8 @@ exports.run = async (client, message, args, guildData, lang) => {
 	if (guildData.plugins.mention.enabled) {
 		var text1 = "@everyone\n\n" + lang.create.giveaway;
 		var text2 = "@everyone\n\n" + lang.create.giveawayEnded;
-	}
-
-	if (!guildData.plugins.mention.enabled) {
+	} else {
+		(!guildData.plugins.mention.enabled);
 		var text1 = lang.create.giveaway;
 		var text2 = lang.create.giveawayEnded;
 	}

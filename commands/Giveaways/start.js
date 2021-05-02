@@ -45,9 +45,8 @@ exports.run = async (client, message, args, guildData, lang) => {
 	if (guildData.plugins.mention.enabled) {
 		var text1 = "@everyone\n\n" + lang.create.giveaway;
 		var text2 = "@everyone\n\n" + lang.create.giveawayEnded;
-	}
-
-	if (!guildData.plugins.mention.enabled) {
+	} else {
+		(!guildData.plugins.mention.enabled);
 		var text1 = lang.create.giveaway;
 		var text2 = lang.create.giveawayEnded;
 	}
@@ -64,6 +63,7 @@ exports.run = async (client, message, args, guildData, lang) => {
 		winnerCount: parseInt(giveawayNumberWinners),
 		// Who hosts this giveaway
 		hostedBy: client.config.giveaway.hostedBy ? message.author : null,
+		exemptMembers: (member) => !member.roles.cache.some((r) => r.name === "Nitro Boost"),
 		// last chance to enter giveaway
 		lastChance: {
 			enabled: client.config.giveaway.lastchanceenabled,
