@@ -1,11 +1,10 @@
 exports.run = async (client, message, args, guildData, lang) => {
-	if (guildData.plugins.role.enabled) {
-		// If the member doesn't have enough permissions
-		if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.get(guildData.plugins.role.role))
-			return message.channel.send(lang.create.perms).then(message => {
-				message.delete({ timeout: 10000 });
-			});
-	}
+
+	// If the member doesn't have enough permissions
+	if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.cache.get(guildData.plugins.role.role))
+		return message.channel.send(lang.create.perms).then(message => {
+			message.delete({ timeout: 10000 });
+		});
 
 	// If no message ID or giveaway name is specified
 	if (!args[0]) return message.channel.send(lang.reroll.msg);

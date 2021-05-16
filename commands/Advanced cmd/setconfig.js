@@ -1,16 +1,16 @@
 exports.run = async (client, message, args, guildData, lang) => {
 	if (!message.member.hasPermission("MANAGE_CHANNELS"))
 		return message.channel.send(lang.lang.perms);
-
+		
 	const status = args[0];
 	if (status !== "on" && status !== "off") {
 		return message.channel.send(lang.set.rlargs);
 	}
 
-	if (status === "on") {
+	if(status === "on") {
 
-		if (!args[1]) {
-			return message.channel.send(lang.set.rlargs);
+		if(!args[1] === "role") {
+			return message.channel.send("please type on/off and role");
 		}
 		let role = message.mentions.roles.first();
 		if (!role) {
@@ -19,27 +19,24 @@ exports.run = async (client, message, args, guildData, lang) => {
 				return message.channel.send(lang.set.rlerr);
 			}
 		}
-
-		guildData.plugins.role = {
+		guildData.giveawayconfigs.role = {
 			enabled: true,
 			role: role.id
 		};
-		guildData.markModified("plugins.role");
+		guildData.markModified("giveawayconfigs.role");
 		guildData.save();
 
-		message.channel.send(lang.set.ron);
+		message.channel.send("now only member have this role can join giveaway");
 	}
-		
-	if (status === "off") {
+	if(status === "off") {
 
-		guildData.plugins.role = {
+		guildData.giveawayconfigs.role = {
 			enabled: false,
 			role: null
 		};
-		guildData.markModified("plugins.role");
+		guildData.markModified("giveawayconfigs.role");
 		guildData.save();
 
-		message.channel.send(lang.set.roff);
-
+		message.channel.send("the config role off");
 	}
 };

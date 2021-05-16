@@ -30,6 +30,7 @@ module.exports = {
 		embedFooter: "ManageGift",
 		noWinner: "❌ Giveaway cancelled, not enough participants :(",
 		hostedBy: `${e.hoste} **Hosted by:** {user}`,
+		rolerequirement: (roleName) => `${e.join} Role Requirement: <@&${roleName}>`,
 		winners: "Winner(s) 🎉",
 		endedAt: "Ended at",
 	},

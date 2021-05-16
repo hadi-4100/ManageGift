@@ -1,4 +1,5 @@
-const cd = new Set(), cdseconds = 5;
+const Discord = require("discord.js"),
+	cd = new Set(), cdseconds = 5;
 
 module.exports = async (client, message) => {
 
@@ -13,11 +14,6 @@ module.exports = async (client, message) => {
 	if (message.content.match(new RegExp(`^<@!?${client.user.id}>( |)$`))) {
 		return message.channel.send(lang.myprefix.hello + "**" + `${message.author.tag}` + "**" + "," + lang.myprefix.prefixis(guildData));
 	}
-
-	// logs for bot
-	client.manager
-		.on("giveawayReactionAdded", (giveaway, member, reaction) => console.log(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`))
-		.on("giveawayReactionRemoved", (giveaway, member, reaction) => console.log(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`));
 
 	//now we done prefix fetching for guilds
 	if (!message.content.startsWith(guildData.prefix)) return;
@@ -40,8 +36,15 @@ module.exports = async (client, message) => {
 	//log for any user run command
 	client.logger.log(`${message.author.username} id:(${message.author.id}) Use a command ${commandName}`);
 
-	client.channels.cache.get(client.config.logs.command).send(`> **${message.author.username}** iD:(\`${message.author.id}\`) **Use a command** \`${commandName}\``);
-
+	const commandEmbed = new Discord.MessageEmbed()
+		.setAuthor(`${message.guild.name}`, `${message.guild.iconURL()}`)
+		.setColor("#3af070")
+		.setDescription("**User use a command**")
+		.addField("Command", `${commandName}`)
+		.setFooter("User ID:" + `${message.author.id}`)
+		.setTimestamp();
+	client.channels.cache.get(client.config.logs.command).send(commandEmbed);
+	
 	//Run the command
 	command.run(client, message, args, guildData, lang);
 };

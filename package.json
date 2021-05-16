@@ -4,9 +4,8 @@
   "description": "ManageGift's | By Hadi Koubeissi using discord-giveaways package",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js",
     "start": "node index.js",
-    "dev": "nodemon"
+    "test": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -36,11 +35,12 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "discord-giveaways": "github:Androz2091/discord-giveaways#develop",
+    "discord-giveaways": "^4.5.1",
     "discord.js": "^12.5.1",
     "moment": "^2.28.0",
     "moment-duration-format": "^2.3.2",
-    "mongoose": "5.11.18",
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.11.18",
     "ms": "^2.1.2",
     "num-parse": "^1.0.1",
     "pretty-ms": "^7.0.0"

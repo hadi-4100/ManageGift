@@ -1,4 +1,4 @@
-module.exports = (client) => {
+module.exports = async (client) => {
 	client.logger.ready(`${client.user.tag}, ready to serve ${client.users.cache.size} users in ${client.guilds.cache.size} servers.`);
 	// Bot status 
 	const status = require("../config.js").status,

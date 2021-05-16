@@ -3,12 +3,12 @@
   * Loading all needed File Information Parameters
 */
 const config = require("./config.js"),
-	Client = require("./Base/Client"), 
+	Client = require("./Base/Client"),
 	client = new Client(),
 	mongoose = require("mongoose"),
 	{ readdir } = require("fs");
 
-	
+
 readdir("./events/", (_err, files) => {
 	files.forEach((file) => {
 		if (!file.endsWith(".js")) return;
@@ -33,6 +33,18 @@ readdir("./commands/", (err, files) => {
 		});
 	});
 });
+
+//Giveaway Events
+client.manager
+	.on("giveawayReactionAdded", (giveaway, member, reaction) => {
+		require("./events/giveawayReactionAdded")(giveaway, member, reaction);
+	})
+	.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
+		require("./events/giveawayReactionRemoved")(giveaway, member, reaction);
+	})
+	.on("giveawayEnded", (giveaway, winners) => {
+		require("./events/giveawayEnded")(giveaway, winners);
+	});
 
 //Connect to mongoose database
 mongoose.connect(config.mongoDB, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }).then(() => {

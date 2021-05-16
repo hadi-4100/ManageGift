@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create the schema for giveaways
-const giveawaySchema = new mongoose.Schema({
+module.exports = mongoose.model("giveaways", new Schema({
 	messageID: String,
 	channelID: String,
 	guildID: String,
@@ -32,21 +32,21 @@ const giveawaySchema = new mongoose.Schema({
 		},
 	},
 	hostedBy: String,
-	winnerIDs: [String],
+	winnerIDs: [],
 	reaction: mongoose.Mixed,
 	botsCanWin: Boolean,
 	embedColor: mongoose.Mixed,
 	embedColorEnd: mongoose.Mixed,
 	exemptPermissions: [],
+	exemptMembers: String,
+	extraData: {
+		ConfigRole: String,
+	},
 	bonusEntries: String,
-	extraData: mongoose.Mixed,
 	lastChance: {
 		enabled: Boolean,
 		content: String,
 		threshold: Number,
 		embedColor: mongoose.Mixed
 	}
-});
-
-// Create the model
-module.exports = mongoose.model("giveaways", giveawaySchema);
+}));

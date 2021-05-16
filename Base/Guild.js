@@ -17,10 +17,17 @@ module.exports = mongoose.model("Guild", new Schema({
 		//role
 		role: { 
 			enabled: false,
-			type: null, default: config.giveaway.grole 
+			role: null,
 		},
 	}},
-
+	/* ROLE & INVITE COUNT TO JOIN GIVEAWAY */
+	giveawayconfigs: { type: Object, default: { // Plugins data
+		//role
+		role: { 
+			enabled: false,
+			role: null
+		},
+	}},
 	/* 	FOR PREMIUM SERVERS */ 
 	premium: { type: Boolean, default: false }
 }));
