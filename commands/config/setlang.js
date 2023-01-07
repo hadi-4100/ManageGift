@@ -49,7 +49,7 @@ module.exports = {
 		if (newLanguage === "russian") {
 			guildData.language = newLanguage;
 			await guildData.save();
-			return interaction.reply(":flag_ru: | Язык изменён на Русский!")
+			return interaction.reply(":flag_ru: | К сожалению, мы не смогли предоставить русский переводчик для новой версии бота. Если вы хорошо владеете русским и языком и хотели бы помочь нам с переводом, [присоединяйтесь к нам](https://discord.gg/7XfV4Md).!")
 		}
 
 		// Ukranian lang

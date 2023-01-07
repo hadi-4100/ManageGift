@@ -1,6 +1,5 @@
 //arabic
-const { prefix, owner } = require('../config.js'),
-	emojis = require('../emojis.json'),
+const emojis = require('../emojis.json'),
 	e = emojis;
 
 module.exports = {
@@ -267,7 +266,7 @@ ${e.bot_logo}**`,
 		user: ureason => `${e.warning} **لا يمكنك استخدام أوامر ManageGift** \n \`\`\`السبب: ${ureason}\`\`\` \n**إذا كنت تعتقد أن هذا خطأ أو شيء من هذا القبيل، لا تتردد في تقديم اعتراضك في [خدمة الدعم الفني](https://discord.gg/7XfV4Md)**`,
 		guild: sreason => `${e.warning} **هذا الخادم موجود في القائمة السوداء، لا يمكنك استخدام أي أمر فيه**\n \`\`\`السبب: ${sreason}\`\`\` \n**إذا كنت تعتقد أن هذا خطأ أو شيء من هذا القبيل، لا تتردد في تقديم اعتراضك في [خدمة الدعم الفني](https://discord.gg/7XfV4Md)**`
 	},
-	
+
 	moved: {
 		update: `${e.news} تحديث!`,
 		slash: 'من الإصدار `v4.0.0` فصاعداً تم تحويل أوامر **ManageGift** إلى **أوامر السلاش**! الرجاء كتابة `/help` للتعرف على جميع الأوامر!'

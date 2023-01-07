@@ -1,6 +1,5 @@
 //engilsh
-const { prefix, owner } = require("../config.js"),
-	emojis = require("../emojis.json"),
+const emojis = require("../emojis.json"),
 	e = emojis;
 
 module.exports = {
