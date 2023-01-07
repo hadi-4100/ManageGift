@@ -1,0 +1,77 @@
+const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, PermissionsBitField } = require("discord.js"),
+    ms = require("ms");
+
+module.exports = {
+    name: 'resume',
+    description: 'resume a giveaway',
+    group: __dirname,
+    owner: false,
+    premium: false,
+    run: async (client, interaction, guildData, lang) => {
+
+		// If the member doesn't have enough permissions
+		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages) && (guildData.plugins.role.enabled && !interaction.member.roles.cache.get(guildData.plugins.role.role))) {
+			return interaction.reply({ content: lang.create.perms, ephemeral: true });
+		}
+
+        let options = [];
+        const activeegivs = client.manager.giveaways.filter((g) => g.guildId === interaction.guild.id && g.pauseOptions.isPaused === true && !g.isDrop);
+
+        for (let i = 0; i < activeegivs.length; i++) {
+            let value = activeegivs[i];
+            options.push({
+                label: lang.delete.option1(value),
+                description: lang.resume.autodes + `${ms(value.pauseOptions.unPauseAfter)}`,
+                value: `${value.messageId}`,
+                emoji: `<:botlogo:1024760383677927484>`
+            })
+        }
+
+        options.push({
+            label: lang.cancel.option1,
+            description: lang.cancel.option2,
+            value: `cancel`,
+            emoji: `<:backk:1021855656879341659>`
+        })
+
+        const resumegiveaway = new ActionRowBuilder()
+            .addComponents(
+                new SelectMenuBuilder()
+                    .setCustomId("resume-giveaway")
+                    .setPlaceholder(lang.selectmenu.choose)
+                    .addOptions(options),
+            )
+
+        await interaction.reply({ content: lang.resume.forresume, components: [resumegiveaway], ephemeral: true })
+
+        const filter = (i) => interaction.user.id === i.user.id
+
+        const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 300000 });
+
+        collector.on('collect', (interaction) => {
+            if (interaction.values[0] === "cancel") {
+                interaction.update({ content: lang.cancel.cancelled, components: [] })
+            } else {
+
+                const messageID = interaction.values[0];
+
+                client.manager.unpause(interaction.values[0])
+                    .then(() => {
+                        interaction.reply(lang.resume.done(messageID));
+                    })
+                    .catch((err) => {
+                        interaction.reply(lang.resume.errmod);
+                    });
+            }
+        })
+
+        collector.on('end', (collected, reason) => {
+            if (reason == "time") {
+                interaction.editReply({
+                    content: lang.collector.time,
+                    components: [],
+                });
+            }
+        });
+    }
+};
