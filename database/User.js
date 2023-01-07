@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-	id: { type: String }, // USER ID
-	
-	/* 	FOR PRO USERS */ 
+
+	id: { type: String },
+
+	blacklisted: {
+		type: Object, default: {
+			status: false,
+			reason: null
+		}
+	},
+
 	pro: { type: Boolean, default: false }
 });
 
