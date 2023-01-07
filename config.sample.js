@@ -1,44 +1,51 @@
+/*
+
+To make the robot work without problems,
+you must fill in the requirements,
+which have a (very important) word next to them
+
+*/
+
+const version = require("./package.json").version;
 module.exports = {
-	/* The token of your Discord Bot // توكن البوت الخاص فيك */
-	token: "",
-	/* for the support server // رابط سيرفر الدعم الخاص فيك */
-	auth: {
-		support: "https://discord.gg/7XfV4Md", // URL for support server
-		logs: "", // id of the logs channel on your server if the bot join new server
-	},
-	mongoDB: "", // The URl of the mongodb database
-	prefix: "!", // The default prefix for the bot
-	/* For the embeds (embeded messages) */
-	embeds: {
-		color: "#8b2f2f", // Embed color | لون الامبد
-		footers: "🎁 ManageGift's | http://managegift.ga" // Embed footer | الكتابة لي تكون اخر الامبد
-	},
-	/* Bot's owner informations */
-	owner: {
-		id: "442793591501357056", // The ID of the bot's owner
-		name: "! -  HaDi KouBeIssI | 🇱🇧#4001" // The ID of the bot's owner
-	},
-	/* The Bot status */
+
+	token: "", //(very important)
+
+	owners: "442793591501357056",
+
+	mongoDB: "", //(very important)
+
+	basiclang: "english",
+
 	status: [
 		{
-			name: "%ghelp | ManageGift's on {server} servers!",
-			type: "LISTENING"
+			name: `/help ▪︎ ManageGift's on {guild} guilds! ▪︎ v{version}`,
+			type: 0
 		},
 		{
-			name: "https://github.com/Hadi-Koubeissi/ManageGift",
-			type: "PLAYING"
+			name: `{total_giveaways} Giveaways Launched ▪︎ {ac_giveaways} Active giveaways`,
+			type: 0
 		}
 	],
-	/* Default lang | اللغة الاساسية */
-	basiclang: "english",
-	/* Giveaway settings */
+
+	embeds: {
+		color: "#454dfc",
+		footers: `🎁 ManageGift's v${version} | http://managegift.ga`
+	},
+
+	webhooklogs: { //(very important)
+		cmd: "",
+		join_leave: ""
+	},
+
 	giveaway: {
-		hostedBy: true, // Why hosted gift | لماذا استضافت الهدية
-		reaction: "🎉", // Reaction to the giveaways if you in the console you see 'unknown emoji' that's what this emoji is not recognized by Discord | الايموجي الي بس تضغط عليها يصير القيف اوي اذا طلع لك ايرور بالكونسول يعني الايموجي ما تعرف بالديسكورد
+		reaction: "", //(very important)
 		lastchanceenabled: true,
 	},
-	//logs for cmd bot
-	logs: {
-		command: "623946197773582377" //log To see who uses bot commands
+
+	links: {
+		web: "http://managegift.ga",
+		supportserver: "https://discord.gg/7XfV4Md",
+		vote: "https://top.gg/bot/598564396691750933/vote"
 	}
 };
