@@ -1,147 +1,279 @@
-/* eslint-disable no-unused-vars */
 //engilsh
-const { prefix, owner } = require("../config.js"),
-	emojis = require("../emojis.json"),
+const emojis = require("../emojis.json"),
 	e = emojis;
 
 module.exports = {
-	start: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
-		duration: `${e.error} Type a valid \`time\` please!\n> Ex: \`1d (1 day)\`, \`1h (1 hour)\`, \`1m (1 minute)\`, \`1s (1 seconds)\`!`,
-		argswinners: `${e.error} Type the \`number of winners!\`\n> Ex: \`${prefix}start 1h 4(4: number of winers) Nitro\``,
-		prize: `${e.error} Add the \`prize\` please!\n> Ex: ${prefix}start 1h 1 \`Nitro(Nitro: the prize)\``
-	},
 
 	create: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
-		channel: `${e.error} You should mention on \`valid channel!\`\n> Ex: ${prefix}create \`#giveawaychannel (giveawaychanne: this channel)\` 1h 1 Nitro!`,
-		otherServer: `${e.error} You cannot create a \`giveaway\` on another server!.`,
-		duration: `${e.error} Type a valid \`time\` please!\n> Ex: \`1d (1 day)\`, \`1h (1 hour)\`, \`1m (1 minute)\`, \`1s (1 seconds)\`!`,
-		argswinners: `${e.error} Type the \`number of winners!\`\n> Ex: \`${prefix}create #giveawaychannel 1h 4(4: number of winers) Nitro\``,
-		prize: `${e.error} Add the \`prize\` please!\n> Ex: ${prefix}create #giveawaychannel 1h 1 \`Nitro(Nitro: the prize)\``,
-		good: `${e.success} **I launched the \` giveaway \` in the living room:**`,
-
-		giveaway: `${e.gift} **GIVEAWAY START** ${e.gift}`,
-		giveawayEnded: `${e.end} **GIVEAWAY ENDED** ${e.end}`,
-
-		timeRemaining: `${e.time} **Remaining time:** **{duration}**!`,
-		inviteToParticipate: (message) => "REACT WITH 🎉 TO ENTER!",
-		winMessage: (message) => "🎉 | Congratulations, {winners}! You Won: **{prize}**!",
-		embedFooter: "ManageGift",
-		noWinner: "❌ Giveaway cancelled, not enough participants :(",
-		hostedBy: `${e.hoste} **Hosted by:** {user}`,
-		winners: "Winner(s) 🎉",
-		endedAt: "Ended at",
+		EXAMPLES: `/create duration:1m winners:1 prize:Nitro \n /create duration:1m winners:1 prize:Nitro channel:#general \n /create duration:1m winners:1 prize:Nitro required_role:@Vip`,
+		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, You can set specify role to create & manage giveaways from your guild By using the following command \`/setrole\`!.`,
+		duration: `${e.error} Type a valid \`time\` please!\n> Ex: \`1d (1 day)\`, \`1h (1 hour)\`, \`1m (1 minute)\`!`,
+		argswinners: `${e.error} Type the \`number of winners!\`\n> Ex: \`1\`, \`2\` **...** \`10\` `,
+		prizee: `${e.error} Please put a \`prize\` less **50 letter**`,
+		good: `${e.success} **Done, The \`giveaway\` has been \`created\` successfully**`,
+		errorlink: `${e.error} Please enter a valid **LINK OF GUILD** or \`something went wrong\``,
+		notinserver: `${e.error} Hey! I am not in this **server**, you can \`add me\` by **[clicking here](https://discord.com/api/oauth2/authorize?client_id=598564396691750933&permissions=8&scope=applications.commands%20bot)**`,
+		view: `Giveaway Link:`,
 	},
 
-	units: {
-		seconds: "second(s)",
-		minutes: "minute(s)",
-		hours: "hour(s)",
-		days: "day(s)",
-	},
-
-	lastchance: { content: `${e.warning} **LAST CHANCE TO ENTER !** ${e.warning}` },
-
-	end: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
-		msg: `${e.error} You have to specify a valid message ID!`,
-		err: `${e.error} Unable to recognize this id giveaway:`,
-		errmod: `${e.error} This giveaway already ended or deleted!`,
-		good: `${e.success} The giveaway will be finished in less than:`
-	},
-
-	reroll: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
-		msg: `${e.error} You have to specify a valid message ID!`,
-		err: `${e.error} Unable to recognize this id giveaway:`,
-		good: ":tada: New winner(s): {winners}! Congratulations!",
-		parts: `${e.error} There weren't enough participants for this giveaway i can't choose!`
-	},
-
-	edit: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
-		msg: `${e.error} You have to specify a valid message ID!`,
-		wipr: `${e.error} You need to either edit the prize or the winners!`,
-		argswinners: `${e.error} type the \`number of winners!\`\n> Ex: \`${prefix}edit {giveawayid} winners 2(2: number of winers)\``,
-		prize: `${e.error} add the \`prize\` please!\n> Ex: ${prefix}edit {giveawayid} prize \`Nitro (Nitro: the prize)\``,
-		timepr: (numberOfSecondsMax)=> `${e.success} The giveaway prize will updated in less than \`${numberOfSecondsMax}\` seconds.`,
-		timwi: (numberOfSecondsMax)=> `${e.success} The giveaway winner count will updated in less than \`${numberOfSecondsMax}\` seconds.`,
-		err: `${e.error} Unable to recognize this id giveaway: `,
-		errmod: `${e.error} An error occurred, maybe this giveaway is already finished or deleted?!`
+	drop: {
+		EXAMPLES: `/drop winners:1 prize:Steam Gift card \n /drop winners:1 prize:Steam Gift card channel:#general`,
+		dropstart: `${e.success} **Done, The \`drop\` has been \`created\` successfully**`,
+		viewdrop: `Drop Link:`
 	},
 
 	delete: {
-		done: `${e.success} Done the giveaway is deleted`,
-		otherServer: `${e.error} You cannot control someone else's \`giveaway\` on this server!`,
-		otherUser: `${e.error} You cannot control this \`giveaway\`, since you are not its owner!`
+		EXAMPLES: `/delete => \`chose giveaway id\``,
+		option1: (value) => `Giveaway Prize: ${value.prize}`,
+		option2: (value) => `Giveaway Id: ${value.messageId}`,
+		fordelete: `${e.for} **For Delete a Giveaway:**`,
+		done: (giveawayid) => `${e.success} Done the giveaway is deleted \n${e.hash} GiveawayID: \`${giveawayid}\``,
+		errmod: `${e.error} An error occurred!`
 	},
 
-	lang: {
-		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\`, you can create a rank for implementation named \`Giveaway Manger\` and addd to a user for \`start & create & edit ...\` giveaways or set specify role from your guild By using the following command \`${prefix}setrole [on / off] {your role}\`!.`,
-		msg: `${e.error} please enter a vaild language (\`ar\`, \`en\`, \`ru\`, \`ua\`)`,
+	edit: {
+		EXAMPLES: `/edit value:Winners new_value:5 => \`chose giveaway id\` \n /edit value:Prize new_value:5$ paypal => \`chose giveaway id\` \n /edit value:duration new_value:1d => \`chose giveaway id\``,
+		pr: (messageID) => `${e.success} The giveaway prize has been updated. \n${e.hash} GiveawayID: \`${messageID}\``,
+		wi: (messageID) => `${e.success} The giveaway winner has been updated. \n${e.hash} GiveawayID: \`${messageID}\``,
+		ti: (messageID) => `${e.success} The giveaway duration has been updated. \n${e.hash} GiveawayID: \`${messageID}\``,
+		errmod: `${e.error} An error occurred!`,
+		ending: " Ending ",
+		foredit: `${e.for} **For Edit a Giveaway:**`
 	},
 
-	set: {
-		args: `${e.error} | Please indicate \`on\` or \`off\``,
-		mon: `${e.success} | setmention command correctly activated!.`,
-		moff: `${e.success} | setmention command correctly deactivated!`,
-		rlargs: `${e.error} | Please indicate \`on\` or \`off\` and a role name!`,
-		rlerr: `${e.error} | No role found with this name`,
-		ron: `${e.success} | role manager correctly activated!`,
-		roff: `${e.success} | role manager correctly deactivated!`
+	end: {
+		EXAMPLES: `/end => \`chose giveaway id\``,
+		errmod: `${e.error} An error occurred!`,
+		good: (messageID) => `${e.success} The giveaway has been finished. \n${e.hash} GiveawayID: \`${messageID}\``,
+		forend: `${e.for} **For End a Giveaway:**`
+	},
+
+	pause: {
+		EXAMPLES: `/pause => \`chose giveaway id\``,
+		forpause: `${e.for} **For Pause a Giveaway:**`,
+		done: (messageID) => `${e.success} Done the giveaway is paused. \n${e.hash} GiveawayID: \`${messageID}\``,
+		errmod: `${e.error} An error occurred!`,
+	},
+
+	resume: {
+		EXAMPLES: `/resume => \`chose giveaway id\``,
+		autodes: `Auto play after:`,
+		forresume: `${e.for} **For Resume a Giveaway:**`,
+		done: (messageID) => `${e.success} Done the giveaway is resumed. \n${e.hash} GiveawayID: \`${messageID}\``,
+		errmod: `${e.error} An error occurred!`,
+	},
+
+	reroll: {
+		EXAMPLES: `/reroll => \`chose giveaway id\``,
+		startat: `Start At`,
+		forreroll: `${e.for} **For Reroll a Giveaway:**`,
+		good: ":tada: New winner(s): {winners}! Congratulations!",
+		parts: `${e.error} There weren't enough participants for this giveaway i can't choose!`,
+		errmod: `${e.error} An error occurred!`,
+	},
+
+	messages: {
+		giveaway: `${e.gift} **GIVEAWAY START** ${e.gift}`,
+		giveawayEnded: `${e.end} **GIVEAWAY ENDED** ${e.end}`,
+		dropstart: `${e.drpstart} **DROP START** ${e.drpstart}`,
+		dropend: `${e.drpend} **DROP ENDED** ${e.drpend}`,
+		content1: `**React with ${e.bot_logo} to enter!**`,
+		content2: `・${e.winners} Winner(s) : **\` {winners} \`**`,
+		content3: `・${e.duration} Duration : **{time}**`,
+		hostedBy: `・${e.host} Hosted By : {hostedBy}`,
+		req: `${e.requirements} Requirements:`,
+		rolereq: `・${e.rolereq} Role: <@&{rolereq}>`,
+		serverreq: (servername, serverrequired) => `・${e.serverreq} Guild: [${servername}](${serverrequired})`,
+		drop: `・${e.first} Be the first to react with ${e.bot_logo}`,
+		end1: `**Giveaway Ended!**`,
+		end2: `・${e.prize} Prize :  **\` {prize} \`**`,
+		end3: `・${e.win} Winner(s) : {winners}`,
+		drpend: `**Drop Ended!**`,
+		novalid1: `**Giveaway cancelled!**`,
+		novalid2: `・${e.warning} Reason : \` Not enough participants :/ \``,
+		embedFooter: "ManageGift • Ended At",
+		dropfooter: "ManageGift • Drop!",
+		novalidfoo: "ManageGift • Ended",
+		winners: "Winner(s) 🎉",
+		approved1: `${e.approved} | Entry Approved!`,
+		approved2: `**Your entry to [This Giveaway]({messageURL}) has been approved!** \n \n > **You now have a chance to win! ${e.bot_logo}**`,
+		denied1: `${e.denied} | Entry Denied!`,
+		denied2: `**Your entry to [This Giveaway]({messageURL}) has been denied!** \n \n > **Please review the Giveaway Requirements!** ${e.requirements}`,
+		dm1: `**Congratulations {winner}! ${e.bot_logo}**`,
+		dm2: `・You Won ${e.gift}:`,
+		dm3: `・Hosted By ${e.host}:`,
+		winMessage: `${e.bot_logo} | Congratulations, {winners}! You won **{this.prize}**!`
+	},
+
+	setdm: {
+		EXAMPLES: `/setdm status:on \n /setdm status:off`,
+		doneon: `${e.success} | direct winner message correctly activated${e.online}!.`,
+		doneoff: `${e.success} | direct winner message correctly deactivated${e.dnd}!.`
+	},
+
+	setmention: {
+		EXAMPLES: `/setmention status:on \n /setmention status:off`,
+		mon: `${e.success} | setmention command correctly activated${e.online}!.`,
+		moff: `${e.success} | setmention command correctly deactivated${e.dnd}!`,
+	},
+
+	setrole: {
+		EXAMPLES: `/setrole role role_value:@Manager \n /setrole status status_value:on \n /setrole status status_value:off`,
+		setrlebedore: `${e.error} | Please choose a role before activating or deactivating it..`,
+		roledone: (role) => `${e.success} | Role manager is set: ||<@&${role.id}>||, And \`activated\``,
+		ron: `${e.success} | Role manager correctly activated${e.online}!`,
+		roff: `${e.success} | Role manager correctly deactivated${e.dnd}!`
+	},
+
+	config: {
+		EXAMPLES: `/configuration`,
+		configuration: "Configuration:",
+		status: `status: `,
+		language: `language ${e.lang}`,
+		mentiont: `setmention ${e.mention}`,
+		setdmt: `setdm ${e.dm}`,
+		setrolet: `setrole ${e.role}`,
+		setrolede: `role: `,
+		norole: `\`No role\``
 	},
 
 	invite: {
-		main: "Main links",
-		disc: `Type \`${prefix}invite copy\` to be able to copy the link!`,
-		web: `${e.link} ManageGift's Website`,
-		inv: `${e.add} Invite ManageGift's Bot`,
-		vote: `${e.vote} Vote For ManageGift's Bot`,
-		sup: `${e.supp} Join The Support Server`
+		EXAMPLES: `/invite`,
+		main: "Hey, you want to invite our bot?",
+		disc: `> **You can invite our bot by pressing the \`Invite\` button below.**\n\n > **You can access the \`webiste\` links, \`support server\` and \`vote\`** \`\`\`through the buttons at the bottom\`\`\``,
 	},
 
-	help: {
-		title: "Help Documents Overview:",
-		disc: "● Here you can find all `ManageGift Commands`",
-		giveawaycmd: `${e.givcmd} Giveaway commands - (6)`,
-		featuredcmd: `${e.featured} Featured commands - (4)`,
-		infocmd: `${e.info} Info commands - (4)`,
-		ownerbot: `${e.owner} Owner bot commands - (2)`,
-		link: `${e.link} Links:`
+	ping: {
+		EXAMPLES: `/ping`,
+		pingmsg: (messagePing, apiPing, status) => `> **Status**: ${status} \n > ${e.ping} **Message ping**: \`${messagePing}\` - ${e.api} ** API ping**: \`${apiPing}\``
 	},
 
 	stats: {
+		EXAMPLES: `/stats`,
 		title: "ManageGift's Information:",
-		info: `It is an open source bot that allows you to create giveaway with ease and gives you many distinct features. The bot is Programmed in \`javascript language\` and By: ${owner.name}`,
+		creator: `${e.owner} • __Creator:__`,
 		stats: `${e.stats} • __Statistics:__`,
 		stat: "`Servers:`",
 		set: "`Users:`",
-		ch: "`Channels:`",
-		ver: `${e.ver} • __Versions:__`,
+		ver: `${e.ver} • __Changelog:__`,
 		ram: `${e.ram} • __RAM__`,
-		on: `${e.on} • __Online__`,
+		on: `${e.online} • __Uptime__`,
+		startat: "**Started At**: ",
 		for: "**online for** ",
 		moreinfo: `${e.info} • __MoreInfos:__`,
 		comd: "`Total Commands:`",
 		giv: "`All Giveaways:`",
+		acgiv: "`Active Giveaways:`"
 	},
 
-	prefixerror: `${e.error} Type a valid prefix!.`,
-	prefixerrcarc: `${e.error} | The prefix shouldn't exceed 5 characters!`,
-	setprefix: `${e.success} The prefix on this server has been changed to `,
+	help: {
+		EXAMPLES: `/help \n /help create \n /help ping`,
+		title: "Help Documents Overview:",
+		disc: "• Here you can find all `ManageGift Commands` \n • Please select a `category` from below",
+		giveawaycmd: `Giveaway commands - (8)`,
+		configcmd: `Config commands - (4)`,
+		infocmd: `Info commands - (4)`,
+		ownerbot: `Owner bot commands - (1)`,
+		cancel: "Back to the home page",
+		link: `${e.link} Links:`,
+		web: `${e.link} ManageGift's Website`,
+		inv: `${e.add} Invite ManageGift's`,
+		vote: `${e.vote} Vote For ManageGift's`,
+		sup: `${e.supp} Join The Support Server`,
+		errcmd: `${e.error} **Couldn't find command with that \`name\`**`,
+		cmd_title: (cmd) => `Help: ${cmd}`,
+		cmd_usage: `${e.usage} Usage:`,
+		cmd_examples: `${e.example} Examples:`,
+		cmd_description: `${e.description} Description:`,
+		cmd_categorie: `${e.categorie} Group:`
+	},
 
-	info: {
-		ping: `> ${e.ping} My Ping is `,
+	givcmd: {
+		givtit: `${e.page} Categories: \`Giveaway\``,
+		givfind: "```fix\nHere you can find all Giveaway Commands:```**Required permissions:** \n \`MANAGE_MESSAGES\` or \`Set Role\`",
+		createe: `> \`Start a giveaway in your guild!\``,
+		dropee: `> \`Create a giveaway drop in your guild!\``,
+		deletee: `> \`Delete a giveaway in your guild!\``,
+		editt: `> \`Edit a giveaway in your guild!\``,
+		endd: `> \`End a giveaway in your guild!\``,
+		pausee: `> \`Pause a giveaway in your guild!\``,
+		rerolll: `> \` Choose new winner(s) of a giveaway in your guild!\``,
+		resumeee: `> \`resume a giveaway in your guild!\``,
 	},
-	cooldown: {
-		err: `${e.error} | **You must wait \`4 second(s)\` ${e.time} to be able to run this command again!**`
+
+	cnfgcmd: {
+		cnfgtit: `${e.page} Categories: \`Config\``,
+		cnfgfind: "```fix\nHere you can find all Config Commands:```**Required permissions:** \n \`MANAGE_MESSAGES\`",
+		setlangg: `> \`Change the bot's language in your guild!\``,
+		setdmm: `> \`Activate or Deactivate the winning dm message to the winner in your guild!\``,
+		setmentionn: `> \`Activate or Deactivate the started giveaway mention alert in your guild!\``,
+		setrolee: `> \`Activate or Deactivate the role manager in your guild!\``,
 	},
-	myprefix: {
-		hello: `${e.info} |  Hello `,
-		prefixis: (guildData) => ` my prefix on this server is \`${guildData.prefix}\`.Use \`${guildData.prefix}help\` to get the list of the commands!`,
+
+	infocmd: {
+		infotit: `${e.page} Categories: \`Info\``,
+		infofind: "```fix\nHere you can find all Info Commands:```",
+		helpp: `> \`Get the bot command\``,
+		invitee: `> \`Get the bot invitation link\``,
+		pingg: `> \`Show the bot ping\``,
+		statss: `> \`Show bot statistics\``,
+		configg: `> \`Display the current configuration of the bot\``
 	},
+
+	owner: {
+		tit: `${e.page} Categories: \`Owner\``,
+		ownerfind: "```fix\nHere you can find all Owner Commands:```",
+		blacklistt: `> \`Add or remove or get list, users & guilds in blacklist\``
+	},
+
+	otherUser: `${e.error} You cannot **edit**, **end** or **delete** this \`giveaway\`, since you are not the \`host\`!`,
+
+	lang: {
+		perms: `${e.error} You do not have permission \`MANAGE_MESSAGES\``,
+	},
+
+	lastchance: {
+		content: `${e.warning} **LAST CHANCE TO ENTER !** ${e.warning}`
+	},
+
+	pauseoptions: {
+		content: `${e.pause} **THIS GIVEAWAY IS PAUSED !** ${e.pause}`,
+		autostart: (autotime) => `\`Auto Start After:\` ${autotime}`
+	},
+
+	already: {
+		enb: `${e.afk} | An error occurred. This command may already be \`enabled\``,
+		dis: `${e.afk} | An error occurred. This command may already be \`disabled\``
+	},
+
+	selectmenu: {
+		choose: `Please Choose a Giveaway`
+	},
+
+	collector: {
+		time: `${e.timeout}**Time is out! try again.**`,
+		btntime: `Time is out!`
+	},
+
+	cancel: {
+		option1: `Cancel`,
+		option2: `Cancel the selection`,
+		cancelled: `${e.success} Cancelled`
+	},
+
+	cmd: {
+		cooldown: `${e.error} | **You must wait \`4 second(s)\` ${e.timeout} to be able to run this command again!**`,
+		owneronly: `${e.error} | Only the owner of ManageGift can do these commands!`,
+		botperm: `${e.error} | I don't have **\`Administrator\`** permission to execute this command.`
+	},
+
 	blacklist: {
-		blacklist: ":lock: **You cannot use `ManageGift commands` because you are in the `Blacklist!!`**"
+		user: (ureason) => `${e.warning} **You cannot use ManageGift Bot commands** \n \`\`\`Reason: ${ureason}\`\`\` \n**If you think this is a mistake or something like that, do not hesitate and submit your objection in the [Support Server](https://discord.gg/7XfV4Md)**`,
+		guild: (sreason) => `${e.warning} **This server is in the blacklist, you cannot use any command on it**\n \`\`\`Reason: ${sreason}\`\`\` \n**If you think this is a mistake or something like that, do not hesitate and submit your objection in the [Support Server](https://discord.gg/7XfV4Md)**`
+	},
+
+	moved: {
+		update: `${e.news} Update!`,
+		slash: "From version `v4.0.0` onwards **ManageGift** moved to **slash commands**! Please type \`/help\` to see all commands!"
 	}
 };

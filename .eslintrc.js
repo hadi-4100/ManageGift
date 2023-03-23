@@ -1,28 +1,23 @@
-// ESLIENT CONFIG FILE
 module.exports = {
 	"env": {
+		"browser": true,
 		"commonjs": true,
-		"es6": true,
-		"node": true
+		"es2021": true
 	},
 	"extends": "eslint:recommended",
-	"globals": {
-		"Atomics": "readonly",
-		"SharedArrayBuffer": "readonly"
-	},
+	"overrides": [
+	],
 	"parserOptions": {
-		"ecmaVersion": 2020
+		"ecmaVersion": "latest"
 	},
 	"rules": {
-		"prefer-const": [
-			"error"
-		],
 		"indent": [
 			"error",
-			"tab",
-			{
-				"SwitchCase": 1
-			}
+			"tab"
+		],
+		"linebreak-style": [
+			"error",
+			"windows"
 		],
 		"quotes": [
 			"error",
@@ -31,8 +26,6 @@ module.exports = {
 		"semi": [
 			"error",
 			"always"
-		],
-		"linebreak-style": 0,
-		"require-atomic-updates": 0
+		]
 	}
 };

@@ -3,19 +3,13 @@ const Discord = require("discord.js"),
 	ms = require("ms");
 
 module.exports = {
-	name: 'create',
-	description: 'create a giveaway',
+	name: 'drop',
+	description: 'create a drop',
 	group: __dirname,
 	owner: false,
 	premium: false,
 
 	options: [
-		{
-			name: 'duration',
-			description: 'How long the giveaway should last for. Example values: 1m, 1h, 1d',
-			type: Discord.ApplicationCommandOptionType.String,
-			required: true
-		},
 		{
 			name: 'winners',
 			description: 'How many winners the giveaway should have',
@@ -35,23 +29,11 @@ module.exports = {
 			channelTypes: ['0'],
 			required: false
 		},
-		{
-			name: 'required_role',
-			description: 'Users must have a specific role to participate',
-			type: Discord.ApplicationCommandOptionType.Role,
-			required: false
-		},
-		{
-			name: 'require_server',
-			description: 'Users must be in a specific server to participate',
-			type: Discord.ApplicationCommandOptionType.String,
-			required: false
-		}
 	],
 
 	run: async (client, interaction, guildData, lang) => {
-
-		// If the bot doesn't have Administrator permissions
+        		
+        // If the bot doesn't have Administrator permissions
 		if (!interaction.guild.members.me.permissions.has(PermissionsBitField.resolve('Administrator'))) {
 			return interaction.reply(lang.cmd.botperm);
 		}
@@ -61,19 +43,9 @@ module.exports = {
 			return interaction.reply({ content: lang.create.perms, ephemeral: true });
 		}
 
-		const giveawayDuration = interaction.options.getString('duration');
 		const giveawayNumberWinners = interaction.options.getInteger('winners');
 		const giveawayPrize = interaction.options.getString('prize');
 		const Channel = interaction.options.getChannel('channel');
-		const rolerequired = interaction.options.getRole('required_role');
-		const serverrequired = interaction.options.getString('require_server');
-
-		if (isNaN(ms(giveawayDuration)) || ms(giveawayDuration) < ms("40s")) {
-			return interaction.reply({
-				content: lang.create.duration,
-				ephemeral: true
-			})
-		}
 
 		if (giveawayNumberWinners < 1) {
 			return interaction.reply({
@@ -95,40 +67,10 @@ module.exports = {
 			channel = interaction.channel
 		}
 
-		if (rolerequired) {
-			var role = rolerequired.id
-		}
-
-		if (serverrequired) {
-
-			let serverinfo = await client.fetchInvite(serverrequired).catch((err) => {
-				return interaction.reply({ content: lang.create.errorlink, ephemeral: true })
-			})
-
-			var serverreq = serverinfo.guild.id,
-				servername = serverinfo.guild.name;
-
-			let managegiftinserver = client.guilds.cache.get(serverinfo.guild.id)
-			if (!managegiftinserver) {
-				return interaction.reply({ content: lang.create.notinserver, ephemeral: true })
-			}
-		}
-
-		// IF mention enabled bot mention when giveaway created
-		if (guildData.plugins.mention.enabled) {
-			var text1 = "@everyone\n" + lang.messages.giveaway;
-			var text2 = "@everyone\n" + lang.messages.giveawayEnded;
-		} else {
-			var text1 = lang.messages.giveaway;
-			var text2 = lang.messages.giveawayEnded;
-		}
-
-		const autotime = ms(18000000);
-
-		// Create the giveaway
-		const giveawaycreated = await client.manager.start(channel, {
-			// The giveaway duration
-			duration: ms(giveawayDuration),
+        // Create the giveaway
+		const drop = await client.manager.start(channel, {
+			// if this is drop
+			isDrop: true,
 			// The giveaway prize
 			prize: giveawayPrize,
 			// The giveaway winner count
@@ -137,34 +79,18 @@ module.exports = {
 			hostedBy: interaction.user,
 			// Using for store the role and send it to giveaway event
 			extraData: {
-				required_role: role,
-				required_server: serverreq,
 				dmwinners: guildData.plugins.dmwinners.enabled
 			},
-			// last chance to enter giveaway
-			lastChance: {
-				enabled: client.config.giveaway.lastchanceenabled,
-				content: lang.lastchance.content,
-				threshold: 30000,
-				embedColor: "#c30000"
-			},
-			pauseOptions: {
-				isPaused: null,
-				content: lang.pauseoptions.content,
-				unPauseAfter: 18000000,
-				embedColor: "0B0F6D",
-				infiniteDurationText: lang.pauseoptions.autostart(autotime)
-			},
+			// Messages
 			messages: {
-				giveaway: text1,
-				giveawayEnded: text2,
+				giveaway: lang.messages.dropstart,
+				giveawayEnded: lang.messages.dropend,
 				content1: lang.messages.content1,
 				content2: lang.messages.content2,
 				content3: lang.messages.content3,
 				hostedBy: lang.messages.hostedBy,
 				requirements: lang.messages.req,
 				rolereq: lang.messages.rolereq,
-				serverreq: lang.messages.serverreq(servername, serverrequired),
 				dropMessage: lang.messages.drop,
 				end1: lang.messages.end1,
 				end2: lang.messages.end2,
@@ -186,20 +112,20 @@ module.exports = {
 				dm3: lang.messages.dm3,
 				winMessage: {
 					embed: new Discord.EmbedBuilder().setDescription(lang.messages.winMessage).setColor("#454DFC"),
-					components: [new Discord.ActionRowBuilder().addComponents(new Discord.ButtonBuilder().setLabel(lang.create.view).setEmoji('<:botlogo:1024760383677927484>').setURL(`https://canary.discord.com/channels/{this.guildId}/{this.channelId}/{this.messageId}`).setStyle(ButtonStyle.Link))]
+					components: [new Discord.ActionRowBuilder().addComponents(new Discord.ButtonBuilder().setLabel(lang.drop.viewdrop).setEmoji('<:botlogo:1024760383677927484>').setURL(`https://canary.discord.com/channels/{this.guildId}/{this.channelId}/{this.messageId}`).setStyle(ButtonStyle.Link))]
 				}
 			}
 		});
 
 		const btn = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel(lang.create.view)
-					.setEmoji('<:botlogo:1024760383677927484>')
-					.setURL(giveawaycreated.messageURL)
-					.setStyle(ButtonStyle.Link)
-			);
+		.addComponents(
+			new ButtonBuilder()
+				.setLabel(lang.drop.viewdrop)
+				.setEmoji('<:botlogo:1024760383677927484>')
+				.setURL(drop.messageURL)
+				.setStyle(ButtonStyle.Link)
+		);
 
-		return await interaction.reply({ content: lang.create.good, components: [btn], ephemeral: true })
-	}
+		return await interaction.reply({ content: lang.drop.dropstart, components: [btn], ephemeral: true })
+    }
 };

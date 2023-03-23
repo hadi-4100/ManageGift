@@ -1,10 +1,23 @@
 {
   "name": "managegift",
-  "version": "2.3.3",
-  "description": "ManageGift's | By Hadi Koubeissi using discord-giveaways package",
+  "version": "4.0.0",
+  "description": "ManageGift's | By Hadi Koubeissi, using discord-giveaways package and slash commands",
   "main": "index.js",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "discord-giveaways": "^6.0.1",
+    "discord.js": "^14.5.0",
+    "easy-table": "^1.2.0",
+    "moment": "^2.29.4",
+    "moment-duration-format": "^2.3.2",
+    "mongoose": "^6.7.2",
+    "ms": "^2.1.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.28.0",
+    "nodemon": "^2.0.20"
+  },
   "scripts": {
-    "test": "node index.js",
     "start": "node index.js",
     "dev": "nodemon"
   },
@@ -13,43 +26,12 @@
     "url": "git+https://github.com/Hadi-Koubeissi/ManageGift.git"
   },
   "keywords": [
-    "ManageGift",
-    "discord",
-    "ManageGift's",
-    "discord bot",
-    "giveaway discord bot",
-    "giveawaybot",
-    "Russian bot",
-    "English bot",
-    "Ukrainian bot",
-    "Arabic bot",
-    "discord.js",
-    "discord website",
-    "discord arabic bot",
-    "discord-giveaways",
-    "discord giveaway bot"
+    "ManageGift"
   ],
   "author": "Hadi-Koubeissi",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Hadi-Koubeissi/ManageGift/issues"
   },
-  "dependencies": {
-    "chalk": "^4.1.0",
-    "discord-giveaways": "github:Androz2091/discord-giveaways#develop",
-    "discord.js": "^12.5.1",
-    "moment": "^2.29.4",
-    "moment-duration-format": "^2.3.2",
-    "mongoose": "5.13.15",
-    "ms": "^2.1.2",
-    "num-parse": "^1.0.1",
-    "pretty-ms": "^7.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^7.21.0",
-    "nodemon": "2.0.2"
-  },
-  "engines": {
-    "node": "12.x"
-  }
+  "homepage": "https://github.com/Hadi-Koubeissi/ManageGift#readme"
 }

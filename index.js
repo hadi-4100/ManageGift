@@ -1,25 +1,12 @@
-/**
-  * @INFO
-  * Loading all needed File Information Parameters
-*/
 const config = require("./config.js"),
-	Client = require("./Base/Client"), 
-	client = new Client(),
 	mongoose = require("mongoose"),
-	{ readdir } = require("fs");
+	{ readdir } = require("fs"),
+	Client = require("./base/Client"),
+	client = new Client();
 
-	
-readdir("./events/", (_err, files) => {
-	files.forEach((file) => {
-		if (!file.endsWith(".js")) return;
-		const event = require(`./events/${file}`);
-		const eventName = file.split(".")[0];
-		client.logger.log(`(👌) Event loaded : ${eventName} !`, "event");
-		client.on(eventName, event.bind(null, client));
-		delete require.cache[require.resolve(`./events/${file}`)];
-	});
-});
-
+// creating an empty array for registering slash commands
+client.register_arr = []
+/* Load all slash commands */
 readdir("./commands/", (err, files) => {
 	files.forEach((dir) => {
 		readdir(`./commands/${dir}/`, (err, cmd) => {
@@ -27,29 +14,57 @@ readdir("./commands/", (err, files) => {
 				if (!file.endsWith(".js")) return;
 				const props = require(`./commands/${dir}/${file}`);
 				const commandName = file.split(".")[0];
-				client.commands.set(commandName, props);
-				client.logger.log(`[📕] Command loaded: ${commandName}!`, "cmd");
+				client.interactions.set(commandName, {
+					name: commandName,
+					...props
+				});
+				client.register_arr.push(props)
+				client.log(`[📕] Command loaded: ${commandName}!`, "cmd");
 			});
 		});
 	});
 });
 
+/* Load discord events */
+readdir("./events/discord", (_err, files) => {
+	files.forEach((file) => {
+		if (!file.endsWith(".js")) return;
+		const event = require(`./events/discord/${file}`);
+		const eventName = file.split(".")[0];
+		client.log(`(👌) Event loaded : ${eventName} !`, "event");
+		client.on(eventName, event.bind(null, client));
+		delete require.cache[require.resolve(`./events/discord/${file}`)];
+	});
+});
+
+/* Load Giveaway events */
+readdir("./events/giveaways", (_err, files) => {
+	files.forEach((file) => {
+		if (!file.endsWith(".js")) return;
+		const event = require(`./events/giveaways/${file}`);
+		const eventName = file.split(".")[0];
+		client.log(`(👌) Giveaway event loaded : ${eventName} !`, "event");
+		client.manager.on(eventName, event.bind());
+		delete require.cache[require.resolve(`./events/giveaways/${file}`)]
+	});
+});
+
 //Connect to mongoose database
-mongoose.connect(config.mongoDB, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }).then(() => {
+mongoose.connect(config.mongoDB, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
 	//If it connects log the following
-	client.logger.log("Connected to the Mongodb database.", "log");
+	client.log("Connected to the Mongodb database.", "done");
 }).catch((err) => {
 	//If it doesn't connect log the following
-	client.logger.log("Unable to connect to the Mongodb database. Error:" + err, "error");
+	client.log("Unable to connect to the Mongodb database. Error:" + err, "error");
 });
 
 // Login to bot
 client.login(config.token);
 
-client.on("disconnect", () => client.logger.log("Bot is disconnecting...", "warn"))
-	.on("reconnecting", () => client.logger.log("Bot reconnecting...", "log"))
-	.on("error", (e) => client.logger.log(e, "error"))
-	.on("warn", (info) => client.logger.log(info, "warn"));
+client.on("disconnect", () => client.log("Bot is disconnecting...", "warn"))
+	.on("reconnecting", () => client.log("Bot reconnecting...", "log"))
+	.on("error", (e) => client.log(e, "error"))
+	.on("warn", (info) => client.log(info, "warn"));
 
 //For any unhandled errors
 process.on("unhandledRejection", (err) => {
@@ -57,8 +72,7 @@ process.on("unhandledRejection", (err) => {
 });
 
 /**
-  * @INFO
   * Bot Coded by !  HaDi KouBeIssI | 🇱🇧#6256 | https://github.com/Hadi-Koubeissi/ManageGift
-  * @INFO
-  * Please mention Him / !  HaDi KouBeIssI | 🇱🇧, when using this Code!
+
+  * Please mention Him !  HaDi KouBeIssI | 🇱🇧, when using this Code!
 */
