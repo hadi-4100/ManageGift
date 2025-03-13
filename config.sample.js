@@ -11,7 +11,7 @@ module.exports = {
 
 	token: "", //(very important)
 
-	owners: "442793591501357056",
+	owners: "697435544812257342",
 
 	mongoDB: "", //(very important)
 
