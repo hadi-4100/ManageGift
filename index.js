@@ -50,6 +50,7 @@ readdir("./events/giveaways", (_err, files) => {
 });
 
 //Connect to mongoose database
+mongoose.set('strictQuery', false);
 mongoose.connect(config.mongoDB, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
 	//If it connects log the following
 	client.log("Connected to the Mongodb database.", "done");
