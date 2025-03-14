@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, PermissionsBitField, MessageFlags } = require("discord.js"),
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, PermissionsBitField, MessageFlags } = require("discord.js"),
 	moment = require("moment");
 
 module.exports = {
@@ -41,7 +41,7 @@ module.exports = {
 
 		const reroll = new ActionRowBuilder()
 			.addComponents(
-				new SelectMenuBuilder()
+				new StringSelectMenuBuilder()
 					.setCustomId("reroll-giveaway")
 					.setPlaceholder(lang.selectmenu.choose)
 					.addOptions(options),

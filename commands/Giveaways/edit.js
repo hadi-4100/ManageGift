@@ -1,5 +1,5 @@
 const Discord = require("discord.js"),
-	{ EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, PermissionsBitField } = require("discord.js"),
+	{ EmbedBuilder, ActionRowBuilder, StringStringSelectMenuBuilder, PermissionsBitField } = require("discord.js"),
 	ms = require("ms"),
 	moment = require("moment");
 
@@ -70,7 +70,7 @@ module.exports = {
 
 					const editgiveaway = new ActionRowBuilder()
 						.addComponents(
-							new SelectMenuBuilder()
+							new StringStringSelectMenuBuilder()
 								.setCustomId("edit-giveaway")
 								.setPlaceholder(lang.selectmenu.choose)
 								.addOptions(options),
@@ -109,7 +109,7 @@ module.exports = {
 
 					const editgiveaway = new ActionRowBuilder()
 						.addComponents(
-							new SelectMenuBuilder()
+							new StringStringSelectMenuBuilder()
 								.setCustomId("edit-giveaway")
 								.setPlaceholder(lang.selectmenu.choose)
 								.addOptions(options),
@@ -149,7 +149,7 @@ module.exports = {
 
 					const editgiveaway = new ActionRowBuilder()
 						.addComponents(
-							new SelectMenuBuilder()
+							new StringStringSelectMenuBuilder()
 								.setCustomId("edit-giveaway")
 								.setPlaceholder(lang.selectmenu.choose)
 								.addOptions(options),

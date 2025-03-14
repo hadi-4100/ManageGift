@@ -1,6 +1,6 @@
 const config = require("../../config"),
     Discord = require("discord.js"),
-    { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, ButtonBuilder, ButtonStyle } = require("discord.js"),
+    { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle } = require("discord.js"),
     path = require("path");
 
 module.exports = {
@@ -142,7 +142,7 @@ module.exports = {
 
             const components = (state) => [
                 new ActionRowBuilder().addComponents(
-                    new SelectMenuBuilder()
+                    new StringSelectMenuBuilder()
                         .setCustomId("help-menu")
                         .setPlaceholder("Please Select a Category")
                         .setDisabled(state)

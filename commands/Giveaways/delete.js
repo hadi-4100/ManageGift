@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, PermissionsBitField } = require("discord.js"),
+const { EmbedBuilder, ActionRowBuilder, StringStringSelectMenuBuilder, PermissionsBitField } = require("discord.js"),
 	moment = require("moment");
 
 module.exports = {
@@ -39,7 +39,7 @@ module.exports = {
 
 		const deletegiveaway = new ActionRowBuilder()
 			.addComponents(
-				new SelectMenuBuilder()
+				new StringStringSelectMenuBuilder()
 					.setCustomId("delete-giveaway")
 					.setPlaceholder(lang.selectmenu.choose)
 					.addOptions(options),
