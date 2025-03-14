@@ -44,7 +44,7 @@ module.exports = {
 	run: async (client, interaction, guildData, lang) => {
 		// If the member doesn't have enough permissions
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages))
-			return interaction.reply({ content: lang.lang.perms, ephemeral: true });
+			return interaction.reply({ content: lang.lang.perms, flags: Discord.MessageFlags.Ephemeral });
 
 		const action = interaction.options.getSubcommand();
 		const role = interaction.options.getRole("role_value")
@@ -67,7 +67,7 @@ module.exports = {
 			case "status": {
 
 				if (!guildData.plugins.role.role) {
-					return interaction.reply({ ephemeral: true, content: lang.setrole.setrlebedore })
+					return interaction.reply({ flags: Discord.MessageFlags.Ephemeral, content: lang.setrole.setrlebedore })
 				}
 
 				if (status == "on") {

@@ -156,7 +156,7 @@ module.exports = {
 
                 collector.on('collect', async i => {
                     if (i.user.id !== interaction.user.id) {
-                        interaction.reply({ content: `${e.error} | error you cant use this`, ephemeral: true });
+                        interaction.reply({ content: `${e.error} | error you cant use this`, flags: Discord.MessageFlags.Ephemeral });
                         return;
                     }
 

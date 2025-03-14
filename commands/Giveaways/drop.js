@@ -40,7 +40,7 @@ module.exports = {
 
 		// If the member doesn't have enough permissions
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages) && (guildData.plugins.role.enabled && !interaction.member.roles.cache.get(guildData.plugins.role.role))) {
-			return interaction.reply({ content: lang.create.perms, ephemeral: true });
+			return interaction.reply({ content: lang.create.perms, flags: Discord.MessageFlags.Ephemeral });
 		}
 
 		const giveawayNumberWinners = interaction.options.getInteger('winners');
@@ -50,14 +50,14 @@ module.exports = {
 		if (giveawayNumberWinners < 1) {
 			return interaction.reply({
 				content: lang.create.argswinners,
-				ephemeral: true
+				flags: Discord.MessageFlags.Ephemeral
 			})
 		}
 
 		if (giveawayPrize.length > 50) {
 			return interaction.reply({
 				content: lang.create.prizee,
-				ephemeral: true
+				flags: Discord.MessageFlags.Ephemeral
 			})
 		}
 
@@ -126,6 +126,6 @@ module.exports = {
 				.setStyle(ButtonStyle.Link)
 		);
 
-		return await interaction.reply({ content: lang.drop.dropstart, components: [btn], ephemeral: true })
+		return await interaction.reply({ content: lang.drop.dropstart, components: [btn], flags: Discord.MessageFlags.Ephemeral })
     }
 };

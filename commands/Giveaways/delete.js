@@ -11,7 +11,7 @@ module.exports = {
 
 		// If the member doesn't have enough permissions
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages) && (guildData.plugins.role.enabled && !interaction.member.roles.cache.get(guildData.plugins.role.role))) {
-			return interaction.reply({ content: lang.create.perms, ephemeral: true });
+			return interaction.reply({ content: lang.create.perms, flags: Discord.MessageFlags.Ephemeral });
 		}
 
 		let options = [];
@@ -45,7 +45,7 @@ module.exports = {
 					.addOptions(options),
 			)
 
-		await interaction.reply({ content: lang.delete.fordelete, components: [deletegiveaway], ephemeral: true })
+		await interaction.reply({ content: lang.delete.fordelete, components: [deletegiveaway], flags: Discord.MessageFlags.Ephemeral })
 
 		const filter = (i) => interaction.user.id === i.user.id
 

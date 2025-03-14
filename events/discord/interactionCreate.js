@@ -1,4 +1,4 @@
-const { EmbedBuilder, WebhookClient } = require("discord.js"),
+const { EmbedBuilder, WebhookClient, MessageFlags } = require("discord.js"),
 	ms = require("ms"),
 	{ owners, embeds, webhooklogs } = require("../../config"),
 	e = require("../../emojis.json"),
@@ -33,14 +33,14 @@ module.exports = async (client, interaction) => {
 		const sreason = guildData.blacklisted.reason;
 
 		if (userData.blacklisted.status === true) {
-			return interaction.reply({ content: lang.blacklist.user(ureason), ephemeral: true })
+			return interaction.reply({ content: lang.blacklist.user(ureason), flags: MessageFlags.Ephemeral })
 		} else if (guildData.blacklisted.status === true) {
-			return interaction.reply({ content: lang.blacklist.guild(sreason), ephemeral: true })
+			return interaction.reply({ content: lang.blacklist.guild(sreason), flags: MessageFlags.Ephemeral })
 		}
 
 		if (command.owner) {
 			if (!owners.includes(interaction.user.id)) {
-				return interaction.reply({ content: lang.cmd.owneronly, ephemeral: true })
+				return interaction.reply({ content: lang.cmd.owneronly, flags: MessageFlags.Ephemeral })
 			}
 		}
 
@@ -74,7 +74,7 @@ module.exports = async (client, interaction) => {
 
 		if (!command) return void interaction.reply({
 			content: `Command \`${interaction.commandName}\` not found.`,
-			ephemeral: true
+			flags: MessageFlags.Ephemeral
 		});
 
 		// Run the command

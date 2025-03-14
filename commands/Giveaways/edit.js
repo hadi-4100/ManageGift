@@ -34,7 +34,7 @@ module.exports = {
 
 		// If the member doesn't have enough permissions
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages) && (guildData.plugins.role.enabled && !interaction.member.roles.cache.get(guildData.plugins.role.role))) {
-			return interaction.reply({ content: lang.create.perms, ephemeral: true });
+			return interaction.reply({ content: lang.create.perms, flags: Discord.MessageFlags.Ephemeral });
 		}
 
 		let valueToChange = interaction.options.getString("value")
@@ -76,7 +76,7 @@ module.exports = {
 								.addOptions(options),
 						)
 
-					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], ephemeral: true })
+					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], flags: Discord.MessageFlags.Ephemeral })
 
 				};
 
@@ -115,7 +115,7 @@ module.exports = {
 								.addOptions(options),
 						)
 
-					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], ephemeral: true })
+					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], flags: Discord.MessageFlags.Ephemeral })
 
 				};
 
@@ -155,7 +155,7 @@ module.exports = {
 								.addOptions(options),
 						)
 
-					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], ephemeral: true })
+					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], flags: Discord.MessageFlags.Ephemeral })
 
 				};
 

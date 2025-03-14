@@ -24,7 +24,7 @@ module.exports = {
 	run: async (client, interaction, guildData, lang) => {
 		// If the member doesn't have enough permissions
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages))
-			return interaction.reply({ content: lang.lang.perms, ephemeral: true });
+			return interaction.reply({ content: lang.lang.perms, flags: Discord.MessageFlags.Ephemeral });
 
 		const mentionstatus = interaction.options.getString("status");
 

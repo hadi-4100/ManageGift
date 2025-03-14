@@ -58,7 +58,7 @@ module.exports = {
 
 		// If the member doesn't have enough permissions
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages) && (guildData.plugins.role.enabled && !interaction.member.roles.cache.get(guildData.plugins.role.role))) {
-			return interaction.reply({ content: lang.create.perms, ephemeral: true });
+			return interaction.reply({ content: lang.create.perms, flags: Discord.MessageFlags.Ephemeral });
 		}
 
 		const giveawayDuration = interaction.options.getString('duration');
@@ -71,21 +71,21 @@ module.exports = {
 		if (isNaN(ms(giveawayDuration)) || ms(giveawayDuration) < ms("40s")) {
 			return interaction.reply({
 				content: lang.create.duration,
-				ephemeral: true
+				flags: Discord.MessageFlags.Ephemeral
 			})
 		}
 
 		if (giveawayNumberWinners < 1) {
 			return interaction.reply({
 				content: lang.create.argswinners,
-				ephemeral: true
+				flags: Discord.MessageFlags.Ephemeral
 			})
 		}
 
 		if (giveawayPrize.length > 50) {
 			return interaction.reply({
 				content: lang.create.prizee,
-				ephemeral: true
+				flags: Discord.MessageFlags.Ephemeral
 			})
 		}
 
@@ -102,7 +102,7 @@ module.exports = {
 		if (serverrequired) {
 
 			let serverinfo = await client.fetchInvite(serverrequired).catch((err) => {
-				return interaction.reply({ content: lang.create.errorlink, ephemeral: true })
+				return interaction.reply({ content: lang.create.errorlink, flags: Discord.MessageFlags.Ephemeral })
 			})
 
 			var serverreq = serverinfo.guild.id,
@@ -110,7 +110,7 @@ module.exports = {
 
 			let managegiftinserver = client.guilds.cache.get(serverinfo.guild.id)
 			if (!managegiftinserver) {
-				return interaction.reply({ content: lang.create.notinserver, ephemeral: true })
+				return interaction.reply({ content: lang.create.notinserver, flags: Discord.MessageFlags.Ephemeral })
 			}
 		}
 
@@ -200,6 +200,6 @@ module.exports = {
 					.setStyle(ButtonStyle.Link)
 			);
 
-		return await interaction.reply({ content: lang.create.good, components: [btn], ephemeral: true })
+		return await interaction.reply({ content: lang.create.good, components: [btn], flags: Discord.MessageFlags.Ephemeral })
 	}
 };
