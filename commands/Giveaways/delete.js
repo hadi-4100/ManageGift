@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, PermissionsBitField } = require("discord.js"),
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, PermissionsBitField, MessageFlags } = require("discord.js"),
 	moment = require("moment");
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
 
 		// If the member doesn't have enough permissions
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages) && (guildData.plugins.role.enabled && !interaction.member.roles.cache.get(guildData.plugins.role.role))) {
-			return interaction.reply({ content: lang.create.perms, flags: Discord.MessageFlags.Ephemeral });
+			return interaction.reply({ content: lang.create.perms, flags: MessageFlags.Ephemeral });
 		}
 
 		let options = [];
@@ -45,7 +45,7 @@ module.exports = {
 					.addOptions(options),
 			)
 
-		await interaction.reply({ content: lang.delete.fordelete, components: [deletegiveaway], flags: Discord.MessageFlags.Ephemeral })
+		await interaction.reply({ content: lang.delete.fordelete, components: [deletegiveaway], flags: MessageFlags.Ephemeral })
 
 		const filter = (i) => interaction.user.id === i.user.id
 
