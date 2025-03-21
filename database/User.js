@@ -11,7 +11,9 @@ const userSchema = new mongoose.Schema({
 		}
 	},
 
-	pro: { type: Boolean, default: false }
+	pro: { type: Boolean, default: false },
+
+	logged: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model("User", userSchema);

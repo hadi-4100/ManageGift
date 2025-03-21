@@ -176,6 +176,7 @@ class ManageGift extends Client {
 		this.guildsData = require("../database/Guild"); // Used to store prefixes, languages, etc...
 		this.usersData = require("../database/User"); // Used to store blacklisted user, pro user etc... 
 		this.logs = require("../database/Log"); // Log mongoose model
+		this.dashboard = require("../dashboard/index.js") // For Load the dashboard
 		this.interactions = new Discord.Collection();
 		this.manager = new GiveawayManagerWithOwnDatabase(this, {
 			default: {

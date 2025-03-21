@@ -22,6 +22,13 @@ module.exports = mongoose.model("Guild", new Schema({
 		}
 	},
 
+	commands: {
+		type: Object,
+		default: {
+			status: true
+		}
+	},
+
 	blacklisted: {
 		type: Object, default: {
 			status: false,
