@@ -13,7 +13,12 @@ const userSchema = new mongoose.Schema({
 
 	pro: { type: Boolean, default: false },
 
-	logged: { type: Boolean, default: false }
+	logged: { type: Object, default: {
+		logged: false,
+		date: null,
+	}},
+
+	createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("User", userSchema);

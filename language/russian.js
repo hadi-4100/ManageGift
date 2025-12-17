@@ -275,5 +275,11 @@ module.exports = {
 	moved: {
 		update: `${e.news} Update!`,
 		slash: "From version `v4.0.0` onwards **ManageGift** moved to **slash commands**! Please type \`/help\` to see all commands!"
-	}
+	},
+	dashboard: {
+		home: "الصفحة الرئيسية",
+		profile: "الملف الشخصي",
+		logout: "تسجيل الخروج",
+		// المزيد من الترجمة...
+	  }
 };

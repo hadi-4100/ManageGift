@@ -2,3 +2,5 @@
 config.js
 node_modules
 package-lock.json
+.eslintrc.json
+.vscode

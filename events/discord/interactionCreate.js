@@ -30,10 +30,10 @@ module.exports = async (client, interaction) => {
     cd.add(interaction.user.id);
     setTimeout(() => cd.delete(interaction.user.id), cdseconds * 1000);
 
-    // if the command is enable or disable
+    // Check if the command is enabled or disabled
     if (guildData.commands[interaction.commandName]?.status === false) {
       return interaction.reply({
-        content: "❌ هذا الأمر غير مفعل في هذا السيرفر!",
+        content: lang.cmd.notactive,
         flags: MessageFlags.Ephemeral,
       });
     }
