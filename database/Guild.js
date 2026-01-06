@@ -1,40 +1,51 @@
-const mongoose = require("mongoose"),
-	Schema = mongoose.Schema,
-	config = require("../config.js");
-module.exports = mongoose.model("Guild", new Schema({
+const mongoose = require("mongoose");
+const config = require("../config.js");
 
-	id: { type: String },
+const PluginSchema = new mongoose.Schema(
+  {
+    mention: {
+      enabled: { type: Boolean, default: false },
+    },
+    role: {
+      enabled: { type: Boolean, default: false },
+      role: { type: String, default: null },
+    },
+    dmwinners: {
+      enabled: { type: Boolean, default: false },
+    },
+  },
+  { _id: false }
+);
 
-	language: { type: String, default: config.basiclang },
+const CommandSchema = new mongoose.Schema(
+  {
+    status: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
 
-	plugins: {
-		type: Object, default: {
-			mention: {
-				enabled: false
-			},
-			role: {
-				enabled: false,
-				role: null,
-			},
-			dmwinners: {
-				enabled: false
-			}
-		}
-	},
+const BlacklistSchema = new mongoose.Schema(
+  {
+    status: { type: Boolean, default: false },
+    reason: { type: String, default: null },
+  },
+  { _id: false }
+);
 
-	commands: {
-		type: Object,
-		default: {
-			status: true
-		}
-	},
+const GuildSchema = new mongoose.Schema(
+  {
+    id: { type: String, required: true, unique: true },
+    language: { type: String, default: config.basiclang },
+    plugins: { type: PluginSchema, default: () => ({}) },
+    commands: {
+      type: Map,
+      of: mongoose.Schema.Types.Mixed,
+      default: new Map(),
+    },
+    blacklisted: { type: BlacklistSchema, default: () => ({}) },
+    premium: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
 
-	blacklisted: {
-		type: Object, default: {
-			status: false,
-			reason: null
-		}
-	},
-
-	premium: { type: Boolean, default: false }
-}));
+module.exports = mongoose.models.Guild || mongoose.model("Guild", GuildSchema);
