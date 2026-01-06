@@ -86,7 +86,7 @@ module.exports = {
     dropend: `${e.drpend} **DROP ENDED** ${e.drpend}`,
     content1: `**React with ${e.bot_logo} to enter!**`,
     content2: `・${e.winners} Winner(s) : **\` {winners} \`**`,
-    content3: `・${e.duration} Duration : **[{time} [Timer]](${config.dashboard.dashboardURL}/timer/{messageId})**`,
+    content3: `・${e.duration} Duration : **{time}**`,
     hostedBy: `・${e.host} Hosted By : {hostedBy}`,
     req: `${e.requirements} Requirements:`,
     rolereq: `・${e.rolereq} Role: <@&{rolereq}>`,
@@ -343,7 +343,8 @@ module.exports = {
     winnerdes:
       "This is the number of winners this giveaway should have. There must atleast be 1 winner.",
     durat: "Duration",
-    durationdes: "This is the duration of the giveaway, it must at least be 1 minute.",
+    durationdes:
+      "This is the duration of the giveaway, it must at least be 1 minute.",
     givchannel: "Giveaway Channel",
     channeldes: "This is the channel the giveaway should be created in.",
     requiredrole: "Required Role",
@@ -374,7 +375,8 @@ module.exports = {
     botconfiguration: "Bot Configuration",
     botconfigurationdes: "Easily configure your bot settings below.",
     changebotlang: "Change Bot Language",
-    changebotlangdes: "Select the language you want to set for the bot in your server.",
+    changebotlangdes:
+      "Select the language you want to set for the bot in your server.",
     savelanguage: "Save Language",
     activwinnerdm: "Activate Winning DM",
     activwinnerdmdes: "Enable or disable the direct message to the winner.",
@@ -382,7 +384,8 @@ module.exports = {
     deactivate: "Deactivate",
     savesettings: "Save Settings",
     activegiveawaymention: "Active Giveaway Mention",
-    activegiveawaymentiondes: "Enable or disable the giveaway mention alert when a giveaway starts.",
+    activegiveawaymentiondes:
+      "Enable or disable the giveaway mention alert when a giveaway starts.",
     activerolemanager: "Active Role Manager",
     activerolemanagerdes: "Enable or disable the role manager in your server.",
     selectrole: "Select Role:",
@@ -417,8 +420,10 @@ module.exports = {
     errfetchgiv: "An error occurred while fetching giveaways.",
     nogiv: "Giveaway not found",
     errinterserver: "Internal server error",
-    invwinnercount: "Invalid winners count! Please enter a positive whole number.",
-    invduration: "Type a valid `time` please!\n> Ex: `1d (1 day)`, `1h (1 hour)`, `1m (1 minute)`!",
+    invwinnercount:
+      "Invalid winners count! Please enter a positive whole number.",
+    invduration:
+      "Type a valid `time` please!\n> Ex: `1d (1 day)`, `1h (1 hour)`, `1m (1 minute)`!",
     winnercount: "Winner Count:",
   },
 };
