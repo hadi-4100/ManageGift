@@ -1,22 +1,36 @@
-const { EmbedBuilder, WebhookClient } = require("discord.js"),
-	e = require("../../emojis.json"),
-	{ embeds, webhooklogs } = require("../../config");
+const { EmbedBuilder, WebhookClient } = require("discord.js");
+const { embeds, webhooklogs } = require("../../config");
+const e = require("../../emojis.json");
+
+const webhookClient = webhooklogs.join_leave
+  ? new WebhookClient({ url: webhooklogs.join_leave })
+  : null;
 
 module.exports = async (client, guild) => {
+  try {
+    const owner = await guild.fetchOwner().catch(() => null);
 
-	guild = await guild.fetch();
+    if (webhookClient) {
+      const joinLog = new EmbedBuilder()
+        .addFields(
+          { name: `**${e.join} Alert**`, value: `> Type: \`Join\`` },
+          {
+            name: `**${e.dis} Server Info**`,
+            value: `> Name: \`${guild.name}\`\n> ID: \`${
+              guild.id
+            }\`\n> Owner: \`${owner?.user.username || "Unknown"}\` (${
+              owner?.id || "N/A"
+            })`,
+          }
+        )
+        .setColor("#303135")
+        .setFooter({ text: embeds.footers });
 
-	const owner = await guild.fetchOwner()
+      await webhookClient.send({ embeds: [joinLog] }).catch(() => null);
+    }
 
-	const webhookClient = new WebhookClient({ url: webhooklogs.join_leave })
-
-	const joinlog = new EmbedBuilder()
-		.addFields(
-			{ name: `**${e.join}Alert**`, value: `> ${e.line}Type : \` Join \`` },
-			{ name: `**${e.dis}Server Info :**`, value: `> ${e.linere}Name : \` ${guild.name} \`\n> ${e.linere}ID : \` ${guild.id} \`\n> ${e.line}Owner : \` ${owner.user.username} \`, \` ${owner.user.id} \`` },
-		)
-		.setColor("#303135")
-		.setFooter({ text: embeds.footers })
-	webhookClient.send({ embeds: [joinlog] });
-
+    client.log(`Joined new guild: ${guild.name} (${guild.id})`, "done");
+  } catch (error) {
+    client.log(`Error in guildCreate event: ${error.message}`, "error");
+  }
 };
