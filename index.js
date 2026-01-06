@@ -1,79 +1,93 @@
-const config = require("./config.js"),
-	mongoose = require("mongoose"),
-	{ readdir } = require("fs"),
-	Client = require("./base/Client"),
-	client = new Client();
+const config = require("./config.js");
+const mongoose = require("mongoose");
+const { readdir } = require("fs").promises;
+const Client = require("./Base/Client.js");
+const client = new Client();
 
 // creating an empty array for registering slash commands
-client.register_arr = []
-/* Load all slash commands */
-readdir("./commands/", (err, files) => {
-	files.forEach((dir) => {
-		readdir(`./commands/${dir}/`, (err, cmd) => {
-			cmd.forEach(file => {
-				if (!file.endsWith(".js")) return;
-				const props = require(`./commands/${dir}/${file}`);
-				const commandName = file.split(".")[0];
-				client.interactions.set(commandName, {
-					name: commandName,
-					...props
-				});
-				client.register_arr.push(props)
-				client.log(`[📕] Command loaded: ${commandName}!`, "cmd");
-			});
-		});
-	});
-});
+client.register_arr = [];
 
-/* Load discord events */
-readdir("./events/discord", (_err, files) => {
-	files.forEach((file) => {
-		if (!file.endsWith(".js")) return;
-		const event = require(`./events/discord/${file}`);
-		const eventName = file.split(".")[0];
-		client.log(`(👌) Event loaded : ${eventName} !`, "event");
-		client.on(eventName, event.bind(null, client));
-		delete require.cache[require.resolve(`./events/discord/${file}`)];
-	});
-});
+const init = async () => {
+  /* Load all slash commands */
+  const commandFolders = await readdir("./commands/");
+  for (const dir of commandFolders) {
+    const commandFiles = await readdir(`./commands/${dir}/`);
+    for (const file of commandFiles) {
+      if (!file.endsWith(".js")) continue;
+      const props = require(`./commands/${dir}/${file}`);
+      const commandName = file.split(".")[0];
 
-/* Load Giveaway events */
-readdir("./events/giveaways", (_err, files) => {
-	files.forEach((file) => {
-		if (!file.endsWith(".js")) return;
-		const event = require(`./events/giveaways/${file}`);
-		const eventName = file.split(".")[0];
-		client.log(`(👌) Giveaway event loaded : ${eventName} !`, "event");
-		client.manager.on(eventName, event.bind());
-		delete require.cache[require.resolve(`./events/giveaways/${file}`)]
-	});
-});
+      client.interactions.set(commandName, {
+        name: commandName,
+        ...props,
+      });
 
-//Connect to mongoose database
-mongoose.set('strictQuery', false);
-mongoose.connect(config.mongoDB, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
-	//If it connects log the following
-	client.log("Connected to the Mongodb database.", "done");
-}).catch((err) => {
-	//If it doesn't connect log the following
-	client.log("Unable to connect to the Mongodb database. Error:" + err, "error");
-});
+      // Filter properties for registration
+      client.register_arr.push({
+        name: commandName,
+        description: props.description,
+        options: props.options,
+        defaultPermission: props.default_permission,
+        type: props.type,
+      });
 
-// Login to bot
-client.login(config.token);
+      client.log(`[📕] Command loaded: ${commandName}!`, "cmd");
+    }
+  }
 
-client.on("disconnect", () => client.log("Bot is disconnecting...", "warn"))
-	.on("reconnecting", () => client.log("Bot reconnecting...", "log"))
-	.on("error", (e) => client.log(e, "error"))
-	.on("warn", (info) => client.log(info, "warn"));
+  /* Load discord events */
+  const discordEvents = await readdir("./events/discord");
+  for (const file of discordEvents) {
+    if (!file.endsWith(".js")) continue;
+    const event = require(`./events/discord/${file}`);
+    const eventName = file.split(".")[0];
+    client.log(`(👌) Event loaded : ${eventName} !`, "event");
+    client.on(eventName, (...args) => event(client, ...args));
+    // Note: Deleting cache is usually only needed for hot-reloading
+  }
 
-//For any unhandled errors
+  /* Load Giveaway events */
+  const giveawayEvents = await readdir("./events/giveaways");
+  for (const file of giveawayEvents) {
+    if (!file.endsWith(".js")) continue;
+    const event = require(`./events/giveaways/${file}`);
+    const eventName = file.split(".")[0];
+    client.log(`(👌) Giveaway event loaded : ${eventName} !`, "event");
+    client.manager.on(eventName, (...args) => event(client, ...args));
+  }
+
+  // Connect to mongoose database
+  mongoose.set("strictQuery", false);
+  try {
+    await mongoose.connect(config.mongoDB, {
+      serverSelectionTimeoutMS: 30000,
+      connectTimeoutMS: 30000,
+    });
+    client.log("Connected to the Mongodb database.", "done");
+  } catch (err) {
+    client.log(
+      `Unable to connect to the Mongodb database. Error: ${err}`,
+      "error"
+    );
+  }
+
+  // Login to bot
+  await client.login(config.token);
+};
+
+init();
+
+client
+  .on("disconnect", () => client.log("Bot is disconnecting...", "warn"))
+  .on("reconnecting", () => client.log("Bot reconnecting...", "log"))
+  .on("error", (e) => client.log(e, "error"))
+  .on("warn", (info) => client.log(info, "warn"));
+
+// For any unhandled errors
 process.on("unhandledRejection", (err) => {
-	console.error(err);
+  client.log(`Unhandled Rejection: ${err.stack}`, "error");
 });
 
-/**
-  * Bot Coded by !  HaDi KouBeIssI | 🇱🇧#6256 | https://github.com/Hadi-Koubeissi/ManageGift
-
-  * Please mention Him !  HaDi KouBeIssI | 🇱🇧, when using this Code!
-*/
+process.on("uncaughtException", (err) => {
+  client.log(`Uncaught Exception: ${err.stack}`, "error");
+});
