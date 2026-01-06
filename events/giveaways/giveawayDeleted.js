@@ -1,3 +1,3 @@
-module.exports = async (giveaway) => {
-    console.log('Giveaway with message Id ' + giveaway.messageId + ' was deleted.')
-}
+module.exports = async (client, giveaway) => {
+  client.log(`Giveaway deleted: ${giveaway.messageId}`, "log");
+};

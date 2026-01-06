@@ -1,122 +1,98 @@
 const { EmbedBuilder } = require("discord.js");
 const GiveawayModel = require("../../database/Giveaway");
 
-module.exports = async (giveaway, member, reaction) => {
-  // التحقق من القيم قبل استخدامها
-  let approvedTitle = giveaway.messages.approved1 || "Default Approved Title";
-  let deniedTitle = giveaway.messages.denied1 || "Default Denied Title";
+module.exports = async (client, giveaway, member, reaction) => {
+  if (member.user.bot) return;
 
-  // التأكد من أن القيم موجودة قبل استخدام replace
-  let approvedDescription = giveaway.messages.approved2
-    ? giveaway.messages.approved2.replace(`{messageURL}`, giveaway.messageURL)
-    : "No description available";
-  let deniedDescription = giveaway.messages.denied2
-    ? giveaway.messages.denied2.replace(`{messageURL}`, giveaway.messageURL)
-    : "No description available";
+  const { messages, extraData, messageURL, messageId } = giveaway;
+  const { required_role: roleReq, required_server: serverReq } =
+    extraData || {};
 
-  let approved = new EmbedBuilder()
-    .setTitle(approvedTitle)
-    .setDescription(approvedDescription)
-    .setThumbnail("https://probot.media/Vi7an1G8jW.png")
-    .setImage("https://b.top4top.io/p_2533c3xjg1.png")
-    .setFooter({ text: `ManageGift` })
-    .setColor("#5C63E5")
-    .setTimestamp();
+  // Build embeds
+  const createEmbed = (title, desc, color) =>
+    new EmbedBuilder()
+      .setTitle(title)
+      .setDescription(desc.replace("{messageURL}", messageURL))
+      .setThumbnail("https://probot.media/Vi7an1G8jW.png")
+      .setImage("https://b.top4top.io/p_2533c3xjg1.png")
+      .setFooter({ text: "ManageGift" })
+      .setColor(color)
+      .setTimestamp();
 
-  let denied = new EmbedBuilder()
-    .setTitle(deniedTitle)
-    .setDescription(deniedDescription)
-    .setThumbnail("https://probot.media/Vi7an1G8jW.png")
-    .setImage("https://b.top4top.io/p_2533c3xjg1.png")
-    .setFooter({ text: `ManageGift` })
-    .setColor("#212CC8")
-    .setTimestamp();
+  const approvedEmbed = createEmbed(
+    messages.approved1 || "Entry Approved",
+    messages.approved2 ||
+      "Your entry to [this giveaway]({messageURL}) has been approved.",
+    "#5C63E5"
+  );
 
-  let { required_role: roleReq, required_server: serverReq } =
-    giveaway.extraData || {}; // Safely handle missing extraData
-  let client = reaction.message.client;
-  let guild = reaction.message.guild;
+  const deniedEmbed = createEmbed(
+    messages.denied1 || "Entry Denied",
+    messages.denied2 ||
+      "You do not meet the requirements for [this giveaway]({messageURL}).",
+    "#212CC8"
+  );
 
-  let sendError = false,
-    sendAcc = false;
+  let isApproved = true;
 
-  if (member.user.bot) return; // Ignore bot reactions
+  // Requirement checks
+  if (roleReq) {
+    const hasRole = member.roles.cache.has(roleReq);
+    if (!hasRole) isApproved = false;
+  }
 
-  if (giveaway.extraData) {
-    if (roleReq) {
-      let role = guild.roles.cache.find((role) => role.id === roleReq);
-      if (role) {
-        if (guild.members.cache.get(member.id).roles.cache.has(role.id)) {
-          sendAcc = true;
-        } else {
-          try {
-            await reaction.users.remove(member.user);
-          } catch (e) {
-            console.error(e);
-          }
-          sendError = true;
-        }
+  if (isApproved && serverReq) {
+    try {
+      const targetGuild = client.guilds.cache.get(serverReq);
+      if (targetGuild) {
+        const targetMember = await targetGuild.members
+          .fetch(member.id)
+          .catch(() => null);
+        if (!targetMember) isApproved = false;
       }
+    } catch (err) {
+      client.log(`Error checking server requirement: ${err.message}`, "error");
+      isApproved = false;
     }
+  }
 
-    if (serverReq) {
-      let server = client.guilds.cache.get(serverReq);
-      let user = await server.members.fetch(member.id).catch(() => {
-        /* NOT IN THE SERVER */
-      });
-      if (!user) {
-        try {
-          await reaction.users.remove(member.user);
-        } catch (e) {
-          console.error(e);
-        }
-        sendError = true;
-      } else {
-        sendAcc = true;
-      }
-    }
+  // if there are specific requirements (role or server)
+  // so they know if they qualified or why they were rejected.
+  const hasRequirements = !!(roleReq || serverReq);
+  const shouldNotify = hasRequirements;
 
-    if (sendError) {
-      member.send({ embeds: [denied] }).catch(() => {
-        /* OPEN YOUR DM DUMP */
-      });
-      console.log(
-        `${member.user.username} entered giveaway #${giveaway.messageId} but was not approved.`
-      );
-    } else if (sendAcc) {
-      member.send({ embeds: [approved] }).catch(() => {
-        /* OPEN YOUR DM DUMP */
-      });
-      const giveawaydb = await GiveawayModel.findOne({
-        messageId: giveaway.messageId,
-      });
-      if (giveawaydb) {
-        try {
-          giveawaydb.reactionUsers.addToSet(member.id); // إضافة العنصر إلى المصفوفة إذا لم يكن موجودًا
-          await giveawaydb.save(); // حفظ التغييرات
-        } catch (err) {
-          console.error("Error adding user to giveaway:", err);
-        }
+  if (!isApproved) {
+    try {
+      await reaction.users.remove(member.user);
+      if (shouldNotify) {
+        await member.send({ embeds: [deniedEmbed] }).catch(() => null);
       }
-      console.log(
-        `${member.user.username} entered giveaway #${giveaway.messageId}`
-      );
-    } else {
-      // If no extra data, still log the participation
-      const giveawaydb = await GiveawayModel.findOne({
-        messageId: giveaway.messageId,
-      });
-      if (giveawaydb) {
-        try {
-          giveawaydb.reactionUsers.addToSet(member.id); // إضافة العنصر إلى المصفوفة إذا لم يكن موجودًا
-          await giveawaydb.save(); // حفظ التغييرات
-        } catch (err) {
-          console.error("Error adding user to giveaway:", err);
-        }
-      }
-      console.log(
-        `${member.user.username} entered giveaway #${giveaway.messageId} (No extra data)`
+    } catch (err) {
+      client.log(
+        `Failed to process denied entry for ${member.user.tag}: ${err.message}`,
+        "warn"
       );
     }
+    return;
+  }
+
+  // Approved entry
+  try {
+    if (shouldNotify) {
+      await member.send({ embeds: [approvedEmbed] }).catch(() => null);
+    }
+
+    // Update participating users in DB
+    await GiveawayModel.findOneAndUpdate(
+      { messageId },
+      { $addToSet: { reactionUsers: member.id } }
+    );
+
+    client.log(`${member.user.tag} entered giveaway #${messageId}`, "log");
+  } catch (err) {
+    client.log(
+      `Error processing approved entry for ${member.user.tag}: ${err.message}`,
+      "error"
+    );
   }
 };

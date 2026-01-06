@@ -1,25 +1,30 @@
 const { EmbedBuilder } = require("discord.js");
 
-module.exports = async (giveaway, winners) => {
+module.exports = async (client, giveaway, winners) => {
+  if (giveaway.extraData?.dmwinners) {
+    winners.forEach((member) => {
+      const dmEmbed = new EmbedBuilder()
+        .setDescription(
+          giveaway.messages.dm1.replace("{winner}", member.user.username)
+        )
+        .addFields(
+          { name: giveaway.messages.dm2, value: `\`${giveaway.prize}\`` },
+          { name: giveaway.messages.dm3, value: `${giveaway.hostedBy}` }
+        )
+        .setThumbnail("https://probot.media/Vi7an1G8jW.png")
+        .setImage("https://b.top4top.io/p_2533c3xjg1.png")
+        .setFooter({ text: "ManageGift" })
+        .setTimestamp()
+        .setColor(client.config.embeds.color || "#454DFC");
 
-    if (giveaway.extraData) {
-        if (giveaway.extraData.dmwinners) {
-            winners.forEach((member) => {
+      member.send({ embeds: [dmEmbed] }).catch(() => {
+        client.log(`Failed to send win DM to ${member.user.tag}`, "warn");
+      });
+    });
+  }
 
-                let dm = new EmbedBuilder()
-                    .setDescription(giveaway.messages.dm1.replace(`{winner}`, member))
-                    .addFields({ name: giveaway.messages.dm2, value: "\`" + giveaway.prize + "\`" })
-                    .addFields({ name: giveaway.messages.dm3, value: giveaway.hostedBy })
-                    .setThumbnail("https://probot.media/Vi7an1G8jW.png")
-                    .setImage("https://media.discordapp.net/attachments/615154373953191937/1022846792011882536/ManageGift2.png")
-                    .setFooter({ text: "ManageGift" })
-                    .setTimestamp()
-                    .setColor("#454DFC")
-
-                member.send({ embeds: [dm] }).catch((err) => { /* OPEN YOUR DM DUMP */ })
-            })
-        }
-    }
-
-    console.log('Giveaway with message Id ' + giveaway.messageId + ' was ended.')
+  client.log(
+    `Giveaway ended: ${giveaway.messageId} (Prize: ${giveaway.prize})`,
+    "log"
+  );
 };
