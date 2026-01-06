@@ -1,235 +1,191 @@
-const Discord = require("discord.js"),
-	{ EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, PermissionsBitField } = require("discord.js"),
-	ms = require("ms"),
-	moment = require("moment");
+const {
+  EmbedBuilder,
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
+  PermissionsBitField,
+  ApplicationCommandOptionType,
+  MessageFlags,
+} = require("discord.js");
+const ms = require("ms");
+const moment = require("moment");
 
 module.exports = {
-	name: 'edit',
-	description: 'edit a giveaway',
-	group: __dirname,
-	owner: false,
-	premium: false,
+  name: "edit",
+  description: "Edit an existing giveaway",
+  group: __dirname,
+  options: [
+    {
+      name: "type",
+      description: "What do you want to change?",
+      required: true,
+      type: ApplicationCommandOptionType.String,
+      choices: [
+        { name: "Winners", value: "winners" },
+        { name: "Prize", value: "prize" },
+        { name: "Duration", value: "duration" },
+      ],
+    },
+    {
+      name: "new_value",
+      description: "Enter the new value",
+      required: true,
+      type: ApplicationCommandOptionType.String,
+    },
+  ],
 
-	options: [
-		{
-			name: "value",
-			description: "Choose the value to change",
-			required: true,
-			type: Discord.ApplicationCommandOptionType.String,
-			choices: [
-				{ name: "Winners", value: "newWinners" },
-				{ name: "Prize", value: "newPrize" },
-				{ name: "duration", value: "newDuration" }
-			]
-		},
-		{
-			name: "new_value",
-			description: "New value",
-			required: true,
-			type: Discord.ApplicationCommandOptionType.String
-		}
-	],
+  run: async (client, interaction, guildData, lang) => {
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	run: async (client, interaction, guildData, lang) => {
+    const hasManageMessages = interaction.member.permissions.has(
+      PermissionsBitField.Flags.ManageMessages
+    );
+    const hasRequiredRole =
+      guildData.plugins.role.enabled &&
+      interaction.member.roles.cache.has(guildData.plugins.role.role);
 
-		// If the member doesn't have enough permissions
-		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages) && (guildData.plugins.role.enabled && !interaction.member.roles.cache.get(guildData.plugins.role.role))) {
-			return interaction.reply({ content: lang.create.perms, flags: Discord.MessageFlags.Ephemeral });
-		}
+    if (!hasManageMessages && !hasRequiredRole) {
+      return interaction.editReply({
+        content: lang.create.perms,
+      });
+    }
 
-		let valueToChange = interaction.options.getString("value")
-		switch (valueToChange) {
-			case "newWinners":
-				var newwinner = interaction.options.getString("new_value")
-				newwinner = newwinner.replace(/-/g, '')
-				newwinner = parseInt(newwinner)
-				newwinner = newwinner.toString()
-				if (newwinner === 'NaN') {
-					return interaction.reply(lang.create.argswinners)
-				} else {
-					newwinner = Math.trunc(newwinner)
-					let options = [];
-					const activeegivs = client.manager.giveaways.filter((g) => g.guildId === interaction.guild.id && g.ended !== true && g.pauseOptions.isPaused !== true && !g.isDrop);
+    const editType = interaction.options.getString("type");
+    const newValue = interaction.options.getString("new_value");
 
-					for (let i = 0; i < activeegivs.length; i++) {
-						let value = activeegivs[i];
-						options.push({
-							label: lang.delete.option1(value),
-							description: lang.delete.option2(value) + "\n |" + lang.edit.ending + `${moment(value.endAt).fromNow()} `,
-							value: `w|${newwinner}|${value.messageId}`,
-							emoji: `<:botlogo:1024760383677927484>`
-						})
-					}
+    // Pre-validation
+    if (editType === "winners") {
+      const winners = parseInt(newValue.replace(/[^0-9]/g, ""));
+      if (isNaN(winners) || winners < 1) {
+        return interaction.editReply({
+          content: lang.create.argswinners,
+        });
+      }
+    } else if (editType === "prize" && newValue.length > 50) {
+      return interaction.editReply({
+        content: lang.create.prizee,
+      });
+    } else if (editType === "duration") {
+      const durationMs = ms(newValue);
+      if (!durationMs || durationMs < ms("40s")) {
+        return interaction.editReply({
+          content: lang.create.duration,
+        });
+      }
+    }
 
-					options.push({
-						label: lang.cancel.option1,
-						description: lang.cancel.option2,
-						value: `cancel`,
-						emoji: `<:backk:1021855656879341659>`
-					})
+    const activeGiveaways = client.manager.giveaways.filter(
+      (g) =>
+        g.guildId === interaction.guild.id &&
+        !g.ended &&
+        !g.pauseOptions.isPaused &&
+        !g.isDrop
+    );
 
-					const editgiveaway = new ActionRowBuilder()
-						.addComponents(
-							new StringSelectMenuBuilder()
-								.setCustomId("edit-giveaway")
-								.setPlaceholder(lang.selectmenu.choose)
-								.addOptions(options),
-						)
+    if (activeGiveaways.length === 0) {
+      return interaction.editReply({
+        content: "No active giveaways found to edit.",
+      });
+    }
 
-					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], flags: Discord.MessageFlags.Ephemeral })
+    const selectOptions = activeGiveaways.map((g) => ({
+      label: lang.delete.option1(g),
+      description: `${lang.delete.option2(g)} | ${lang.edit.ending} ${moment(
+        g.endAt
+      ).fromNow()}`,
+      value: g.messageId,
+      emoji: "<:botlogo:1024760383677927484>",
+    }));
 
-				};
+    selectOptions.push({
+      label: lang.cancel.option1,
+      description: lang.cancel.option2,
+      value: "cancel",
+      emoji: "<:backk:1021855656879341659>",
+    });
 
-				break;
-			case "newPrize":
+    const selectMenu = new ActionRowBuilder().addComponents(
+      new StringSelectMenuBuilder()
+        .setCustomId("edit_giveaway_select")
+        .setPlaceholder(lang.selectmenu.choose)
+        .addOptions(selectOptions)
+    );
 
-				var newprize = interaction.options.getString("new_value")
-				if (newprize.length > 50) {
-					return interaction.reply(lang.create.prizee)
-				} else {
-					let options = [];
-					const activeegivs = client.manager.giveaways.filter((g) => g.guildId === interaction.guild.id && g.ended !== true && g.pauseOptions.isPaused !== true && !g.isDrop);
+    const response = await interaction.editReply({
+      content: lang.edit.foredit,
+      components: [selectMenu],
+    });
 
-					for (let i = 0; i < activeegivs.length; i++) {
-						let value = activeegivs[i];
-						options.push({
-							label: lang.delete.option1(value),
-							description: lang.delete.option2(value) + "\n |" + lang.edit.ending + `${moment(value.endAt).fromNow()} `,
-							value: `p|${newprize}|${value.messageId}`,
-							emoji: `<:botlogo:1024760383677927484>`
-						})
-					}
+    const collector = response.createMessageComponentCollector({
+      filter: (i) => i.user.id === interaction.user.id,
+      time: 60000,
+    });
 
-					options.push({
-						label: lang.cancel.option1,
-						description: lang.cancel.option2,
-						value: `cancel`,
-						emoji: `<:backk:1021855656879341659>`
-					})
+    collector.on("collect", async (i) => {
+      const messageId = i.values[0];
 
-					const editgiveaway = new ActionRowBuilder()
-						.addComponents(
-							new StringSelectMenuBuilder()
-								.setCustomId("edit-giveaway")
-								.setPlaceholder(lang.selectmenu.choose)
-								.addOptions(options),
-						)
+      if (messageId === "cancel") {
+        return i.update({ content: lang.cancel.cancelled, components: [] });
+      }
 
-					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], flags: Discord.MessageFlags.Ephemeral })
+      const giveaway = client.manager.giveaways.find(
+        (g) => g.messageId === messageId
+      );
+      if (!giveaway) {
+        return i.update({ content: "Giveaway not found.", components: [] });
+      }
 
-				};
+      // Check if user is host or has manage permissions
+      const isHost =
+        giveaway.hostedBy.includes(i.user.id) ||
+        giveaway.hostedBy === i.user.toString();
+      if (
+        !isHost &&
+        !i.member.permissions.has(PermissionsBitField.Flags.ManageMessages)
+      ) {
+        return i.reply({
+          content: lang.otherUser,
+          flags: MessageFlags.Ephemeral,
+        });
+      }
 
-				break;
-			case "newDuration":
+      const editOptions = {};
+      let successMessage = "";
 
-				var newduration = interaction.options.getString("new_value")
-				if (isNaN(ms(newduration)) || ms(newduration) < ms("40s")) {
-					return interaction.reply(lang.create.duration);
-				} else {
-					let options = [];
-					let activeegivs;
-					activeegivs = client.manager.giveaways.filter((g) => g.guildId === interaction.guild.id && g.ended !== true && g.pauseOptions.isPaused !== true && !g.isDrop);
+      try {
+        switch (editType) {
+          case "winners":
+            editOptions.newWinnerCount = parseInt(
+              newValue.replace(/[^0-9]/g, "")
+            );
+            successMessage = lang.edit.wi(messageId);
+            break;
+          case "prize":
+            editOptions.newPrize = newValue;
+            successMessage = lang.edit.pr(messageId);
+            break;
+          case "duration":
+            editOptions.setEndTimestamp = Date.now() + ms(newValue);
+            successMessage = lang.edit.ti(messageId);
+            break;
+        }
 
-					for (let i = 0; i < activeegivs.length; i++) {
-						let value = activeegivs[i];
-						options.push({
-							label: lang.delete.option1(value),
-							description: lang.delete.option2(value) + "\n |" + lang.edit.ending + `${moment(value.endAt).fromNow()} `,
-							value: `t|${newduration}|${value.messageId}`,
-							emoji: `<:botlogo:1024760383677927484>`
-						})
-					}
+        await client.manager.edit(messageId, editOptions);
+        await i.update({ content: successMessage, components: [] });
+      } catch (err) {
+        client.log(
+          `Error editing giveaway ${messageId}: ${err.message}`,
+          "error"
+        );
+        await i.update({ content: lang.edit.errmod, components: [] });
+      }
+    });
 
-					options.push({
-						label: lang.cancel.option1,
-						description: lang.cancel.option2,
-						value: `cancel`,
-						emoji: `<:backk:1021855656879341659>`
-					})
-
-					const editgiveaway = new ActionRowBuilder()
-						.addComponents(
-							new StringSelectMenuBuilder()
-								.setCustomId("edit-giveaway")
-								.setPlaceholder(lang.selectmenu.choose)
-								.addOptions(options),
-						)
-
-					await interaction.reply({ content: lang.edit.foredit, components: [editgiveaway], flags: Discord.MessageFlags.Ephemeral })
-
-				};
-
-				break;
-		}
-
-		const filter = (i) => interaction.user.id === i.user.id
-
-		const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 300000 });
-
-		collector.on('collect', (interaction) => {
-			if (interaction.values[0] === "cancel") {
-				interaction.update({ content: lang.cancel.cancelled, components: [] })
-			} else {
-
-				const mod = interaction.values[0].split("|")[0];
-				const messageID = interaction.values[0].split("|")[2];
-
-				switch (mod) {
-					case "w":
-						// check if user his the host of giveaway
-						if ("<@" + interaction.user.id + ">" != client.manager.giveaways.find((g) => g.messageId === messageID).hostedBy) {
-							return interaction.reply(lang.otherUser);
-						}
-
-						client.manager.edit(messageID, {
-							newWinnerCount: newwinner,
-							addTime: 5000
-						}).then(() => {
-							interaction.reply(lang.edit.wi(messageID));
-						}).catch((err) => {
-							interaction.reply(lang.edit.errmod);
-						});
-						break;
-					case "p":
-						// check if user his the host of giveaway
-						if ("<@" + interaction.user.id + ">" != client.manager.giveaways.find((g) => g.messageId === messageID).hostedBy) {
-							return interaction.reply(lang.otherUser);
-						}
-
-						client.manager.edit(messageID, {
-							newPrize: newprize,
-							addTime: 5000
-						}).then(() => {
-							interaction.reply(lang.edit.pr(messageID));
-						}).catch((err) => {
-							interaction.reply(lang.edit.errmod);
-						});
-						break;
-					case "t":
-						// check if user his the host of giveaway
-						if ("<@" + interaction.user.id + ">" != client.manager.giveaways.find((g) => g.messageId === messageID).hostedBy) {
-							return interaction.reply(lang.otherUser);
-						}
-
-						client.manager.edit(messageID, {
-							setEndTimestamp: Date.now() + ms(newduration)
-						}).then(() => {
-							interaction.reply(lang.edit.ti(messageID));
-						}).catch((err) => {
-							interaction.reply(lang.edit.errmod);
-						});
-						break;
-				}
-			}
-		})
-
-		collector.on('end', (collected, reason) => {
-			if (reason == "time") {
-				interaction.update({
-					content: lang.collector.time,
-					components: [],
-				});
-			}
-		});
-	}
+    collector.on("end", (collected, reason) => {
+      if (reason === "time") {
+        interaction
+          .editReply({ content: lang.collector.time, components: [] })
+          .catch(() => null);
+      }
+    });
+  },
 };
