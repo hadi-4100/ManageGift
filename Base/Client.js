@@ -1,47 +1,39 @@
-const Discord = require("discord.js"),
-  { Client, EmbedBuilder } = require("discord.js");
+const {
+  Client,
+  EmbedBuilder,
+  GatewayIntentBits,
+  Collection,
+} = require("discord.js");
+const { GiveawaysManager } = require("discord-giveaways");
+const giveawayModel = require("../database/Giveaway.js");
+const config = require("../config.js");
+const Logger = require("../utils/Logger.js");
+const GuildModel = require("../database/Guild.js");
+const UserModel = require("../database/User.js");
+const LogModel = require("../database/Log.js");
 
-const { GiveawaysManager } = require("discord-giveaways"),
-  giveawayModel = require("../database/Giveaway");
-
-const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
-  // This function is called when the manager needs to get all giveaways which are stored in the database.
+class GiveawayManagerWithOwnDatabase extends GiveawaysManager {
   async getAllGiveaways() {
-    // Get all giveaways from the database. We fetch all documents by passing an empty condition.
     return await giveawayModel.find().lean().exec();
   }
 
-  // This function is called when a giveaway needs to be saved in the database.
   async saveGiveaway(messageId, giveawayData) {
-    // Add the new giveaway to the database
     await giveawayModel.create(giveawayData);
-    // Don't forget to return something!
     return true;
   }
 
-  // This function is called when a giveaway needs to be edited in the database.
   async editGiveaway(messageId, giveawayData) {
-    // Find by messageId and update it
     await giveawayModel.updateOne({ messageId }, giveawayData).exec();
-    // Don't forget to return something!
     return true;
   }
 
-  // This function is called when a giveaway needs to be deleted from the database.
   async deleteGiveaway(messageId) {
-    // Find by messageId and delete it
     await giveawayModel.deleteOne({ messageId }).exec();
-    // Don't forget to return something!
     return true;
   }
 
-  /**
-   * Generate an embed displayed when a giveaway is ended and when there is no valid participant
-   * @param {Giveaway} giveaway The giveaway the embed needs to be generated for
-   * @returns {Discord.EmbedBuilder} The generated embed
-   */
   generateMainEmbed(giveaway, lastChanceEnabled) {
-    const mainembed = new EmbedBuilder()
+    const mainEmbed = new EmbedBuilder()
       .setAuthor({ name: giveaway.prize })
       .setTitle(
         giveaway.isDrop
@@ -54,35 +46,32 @@ const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
       )
       .setDescription(
         giveaway.isDrop
-          ? giveaway.messages.dropMessage +
-              "\n" +
-              giveaway.messages.content2.replace(
-                "{winners}",
-                giveaway.winnerCount
-              ) +
-              "\n" +
-              giveaway.messages.hostedBy.replace(
-                `{hostedBy}`,
-                giveaway.hostedBy
-              )
-          : giveaway.messages.content1 +
-              "\n" +
-              giveaway.messages.content2.replace(
-                "{winners}",
-                giveaway.winnerCount
-              ) +
-              "\n" +
-              giveaway.messages.content3.replace(
+          ? `${giveaway.messages.drop}\n${giveaway.messages.content2.replace(
+              "{winners}",
+              giveaway.winnerCount
+            )}\n${giveaway.messages.hostedBy.replace(
+              "{hostedBy}",
+              giveaway.hostedBy
+            )}`
+          : `${
+              giveaway.messages.content1
+            }\n${giveaway.messages.content2.replace(
+              "{winners}",
+              giveaway.winnerCount
+            )}\n${giveaway.messages.content3
+              .replace(
                 "{time}",
                 giveaway.endAt === Infinity
                   ? giveaway.pauseOptions.infiniteDurationText
                   : `<t:${Math.round(giveaway.endAt / 1000)}:R>`
-              ) +
-              "\n" +
-              giveaway.messages.hostedBy.replace(
-                `{hostedBy}`,
-                giveaway.hostedBy
               )
+              .replace(
+                "{messageId}",
+                giveaway.messageId
+              )}\n${giveaway.messages.hostedBy.replace(
+              "{hostedBy}",
+              giveaway.hostedBy
+            )}`
       )
       .setImage("https://b.top4top.io/p_2533c3xjg1.png")
       .setColor(
@@ -94,24 +83,24 @@ const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
           ? giveaway.lastChance.embedColor
           : giveaway.embedColor
       );
-    if (!giveaway.isDrop)
-      mainembed.setFooter({
-        text: giveaway.messages.embedFooter,
-        iconURL: this.client.user.displayAvatarURL(),
-      });
-    if (giveaway.isDrop)
-      mainembed.setFooter({
-        text: giveaway.messages.dropfooter,
-        iconURL: this.client.user.displayAvatarURL(),
-      });
+
+    const footerText = giveaway.isDrop
+      ? giveaway.messages.dropfooter
+      : giveaway.messages.embedFooter;
+
+    mainEmbed.setFooter({
+      text: footerText,
+      iconURL: this.client.user.displayAvatarURL(),
+    });
+
     if (giveaway.extraData) {
       if (
         giveaway.extraData.required_role &&
         !giveaway.extraData.required_server
       ) {
-        mainembed.addFields({
-          name: giveaway.messages.requirements,
-          value: giveaway.messages.rolereq.replace(
+        mainEmbed.addFields({
+          name: giveaway.messages.req || "Requirements:",
+          value: (giveaway.messages.rolereq || "Role: {rolereq}").replace(
             "{rolereq}",
             giveaway.extraData.required_role
           ),
@@ -121,48 +110,61 @@ const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
         giveaway.extraData.required_server &&
         !giveaway.extraData.required_role
       ) {
-        mainembed.addFields({
-          name: giveaway.messages.requirements,
-          value: giveaway.messages.serverreq,
+        mainEmbed.addFields({
+          name: giveaway.messages.req || "Requirements:",
+          value:
+            typeof giveaway.messages.serverreq === "function"
+              ? giveaway.messages.serverreq(
+                  "Click to join",
+                  giveaway.extraData.required_server
+                )
+              : giveaway.messages.serverreq ||
+                `Guild: [Click to join](${giveaway.extraData.required_server})`,
         });
       }
       if (
         giveaway.extraData.required_server &&
         giveaway.extraData.required_role
       ) {
-        mainembed.addFields({
-          name: giveaway.messages.requirements,
+        mainEmbed.addFields({
+          name: giveaway.messages.req || "Requirements:",
           value:
-            giveaway.messages.rolereq.replace(
+            (giveaway.messages.rolereq || "Role: {rolereq}").replace(
               "{rolereq}",
               giveaway.extraData.required_role
             ) +
             "\n" +
-            giveaway.messages.serverreq,
+            (typeof giveaway.messages.serverreq === "function"
+              ? giveaway.messages.serverreq(
+                  "Click to join",
+                  giveaway.extraData.required_server
+                )
+              : giveaway.messages.serverreq ||
+                `Guild: [Click to join](${giveaway.extraData.required_server})`),
         });
       }
     }
-    if (giveaway.endAt !== Infinity) mainembed.setTimestamp(giveaway.endAt);
-    return mainembed;
+
+    if (giveaway.endAt !== Infinity) mainEmbed.setTimestamp(giveaway.endAt);
+    return mainEmbed;
   }
 
-  /**
-   * Generate an embed displayed when a giveaway is ended (with the winners list)
-   * @param {Giveaway} giveaway The giveaway the embed needs to be generated for
-   * @param {Discord.GuildMember[]} winners The giveaway winners
-   * @returns {Discord.EmbedBuilder} The generated embed
-   */
   generateEndEmbed(giveaway, winners) {
-    const endembed = new EmbedBuilder()
+    const endEmbed = new EmbedBuilder()
       .setTitle(
         giveaway.isDrop ? giveaway.messages.drpend : giveaway.messages.end1
       )
       .setDescription(
-        giveaway.messages.end2.replace("{prize}", giveaway.prize) +
-          "\n" +
-          giveaway.messages.end3.replace("{winners}", winners) +
-          "\n" +
-          giveaway.messages.hostedBy.replace(`{hostedBy}`, giveaway.hostedBy)
+        `${giveaway.messages.end2.replace(
+          "{prize}",
+          giveaway.prize
+        )}\n${giveaway.messages.end3.replace(
+          "{winners}",
+          winners
+        )}\n${giveaway.messages.hostedBy.replace(
+          "{hostedBy}",
+          giveaway.hostedBy
+        )}`
       )
       .setImage("https://b.top4top.io/p_2533c3xjg1.png")
       .setFooter({
@@ -170,35 +172,31 @@ const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
         iconURL: this.client.user.displayAvatarURL(),
       })
       .setColor("#454DFC");
-    if (giveaway.extraData) {
-      if (giveaway.extraData.required_role) {
-        endembed.addFields({
-          name: giveaway.messages.requirements,
-          value: giveaway.messages.rolereq.replace(
-            "{rolereq}",
-            giveaway.extraData.required_role
-          ),
-        });
-      }
+
+    if (giveaway.extraData?.required_role) {
+      endEmbed.addFields({
+        name: giveaway.messages.req || "Requirements:",
+        value: (giveaway.messages.rolereq || "Role: {rolereq}").replace(
+          "{rolereq}",
+          giveaway.extraData.required_role
+        ),
+      });
     }
-    if (giveaway.endAt !== Infinity) endembed.setTimestamp(giveaway.endAt);
-    return endembed;
+
+    if (giveaway.endAt !== Infinity) endEmbed.setTimestamp(giveaway.endAt);
+    return endEmbed;
   }
 
-  /**
-   * Generate an embed displayed when a giveaway is ended and when there is no valid participant
-   * @param {Giveaway} giveaway The giveaway the embed needs to be generated for
-   * @returns {Discord.EmbedBuilder} The generated embed
-   */
   generateNoValidParticipantsEndEmbed(giveaway) {
-    const novalidembed = new EmbedBuilder()
+    return new EmbedBuilder()
       .setAuthor({ name: giveaway.prize })
       .setDescription(
-        giveaway.messages.novalid1 +
-          "\n" +
-          giveaway.messages.novalid2 +
-          "\n" +
-          giveaway.messages.hostedBy.replace(`{hostedBy}`, giveaway.hostedBy)
+        `${giveaway.messages.novalid1}\n${
+          giveaway.messages.novalid2
+        }\n${giveaway.messages.hostedBy.replace(
+          "{hostedBy}",
+          giveaway.hostedBy
+        )}`
       )
       .setImage("https://b.top4top.io/p_2533c3xjg1.png")
       .setFooter({
@@ -206,27 +204,30 @@ const GiveawayManagerWithOwnDatabase = class extends GiveawaysManager {
         iconURL: this.client.user.displayAvatarURL(),
       })
       .setColor("#5c63e5");
-    return novalidembed;
   }
-};
+}
 
 class ManageGift extends Client {
-  constructor(options) {
+  constructor() {
     super({
       intents: [
-        Discord.GatewayIntentBits.Guilds,
-        Discord.GatewayIntentBits.GuildMembers,
-        Discord.GatewayIntentBits.GuildMessages,
-        Discord.GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
       ],
     });
-    this.config = require("../config.js");
-    this.log = require("../utils/Logger"); // Used to beautify the appearance ofor log.
-    this.guildsData = require("../database/Guild"); // Used to store prefixes, languages, etc...
-    this.usersData = require("../database/User"); // Used to store blacklisted user, pro user etc...
-    this.logs = require("../database/Log"); // Log mongoose model
-    this.dashboard = require("../dashboard/index.js"); // For Load the dashboard
-    this.interactions = new Discord.Collection();
+
+    this.config = config;
+    this.log = Logger;
+    this.guildsData = GuildModel;
+    this.usersData = UserModel;
+    this.logs = LogModel;
+    this.interactions = new Collection();
+
+    // Lazy load dashboard to avoid circular dependency or early start
+    this.dashboard = null;
+
     this.manager = new GiveawayManagerWithOwnDatabase(this, {
       default: {
         botsCanWin: false,
@@ -236,38 +237,41 @@ class ManageGift extends Client {
     });
   }
 
-  // This function is used to find a guild data or create it
-  async findOrCreateGuild(param, isLean) {
-    const Guild = this.guildsData;
-    return new Promise(async function (resolve, reject) {
-      let guild = isLean
-        ? await Guild.findOne(param).lean()
-        : await Guild.findOne(param);
-      if (guild) {
-        resolve(guild);
-      } else {
-        guild = new Guild(param);
-        await guild.save();
-        resolve(isLean ? guild.toJSON() : guild);
-      }
-    });
+  async findOrCreateGuild({ id }, isLean = false) {
+    if (!id) return null;
+    if (!this.guildsData) {
+      this.log("Guild data model is not initialized!", "error");
+      return null;
+    }
+
+    let guild = isLean
+      ? await this.guildsData.findOne({ id }).lean()
+      : await this.guildsData.findOne({ id });
+
+    if (!guild) {
+      guild = await this.guildsData.create({ id });
+      if (isLean) guild = guild.toJSON();
+    }
+    return guild;
   }
 
-  // This function is used to find a user data or create it
-  async findOrCreateUser(param, isLean) {
-    const User = this.usersData;
-    return new Promise(async function (resolve, reject) {
-      let user = isLean
-        ? await User.findOne(param).lean()
-        : await User.findOne(param);
-      if (user) {
-        resolve(user);
-      } else {
-        user = new User(param);
-        await user.save();
-        resolve(isLean ? user.toJSON() : user);
-      }
-    });
+  async findOrCreateUser({ id }, isLean = false) {
+    if (!id) return null;
+    if (!this.usersData) {
+      this.log("User data model is not initialized!", "error");
+      return null;
+    }
+
+    let user = isLean
+      ? await this.usersData.findOne({ id }).lean()
+      : await this.usersData.findOne({ id });
+
+    if (!user) {
+      user = await this.usersData.create({ id });
+      if (isLean) user = user.toJSON();
+    }
+    return user;
   }
 }
+
 module.exports = ManageGift;
