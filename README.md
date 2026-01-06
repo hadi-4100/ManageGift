@@ -43,7 +43,7 @@ You must follow some simple steps:
 2. Clone the repo
 
 ```sh
-git clone https://github.com/Hadi-Koubeissi/ManageGift
+git clone https://github.com/Hadi-4100/ManageGift
 ```
 
 3. Install NPM packages
@@ -52,10 +52,19 @@ git clone https://github.com/Hadi-Koubeissi/ManageGift
 npm install
 ```
 
-4. Enter your bot token in `config.js` and enter all other requirements (`//(very important)`)
+4. Fill in all required settings in `config.js`.
+```IMPORTANT: Move sensitive tokens and URIs to a .env file.```
 
 5. Run Bot: node index.js
 
 # License
 
-Distributed under the MIT license. See [`LICENSE`](https://github.com/Hadi-Koubeissi/ManageGift/blob/master/LICENSE) for more information.
+This project is distributed under a **Non-Commercial License**.
+
+Copyright (c) 2026 Hadi-4100
+
+Permission is granted **for personal or educational use only**.  
+Commercial use, resale, or distribution for profit is strictly prohibited without explicit written permission from the copyright holder.
+
+The full license text can be found in the [`LICENSE`](https://github.com/Hadi-4100/ManageGift/blob/main/LICENSE) file.
+
