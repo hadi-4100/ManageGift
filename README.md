@@ -18,6 +18,19 @@
 
 > Choose stability and power, choose ManageGift. 🚀
 
+<br>
+<br>
+
+
+## ❤️ **Support Me**
+If you're feeling generous, you can support me financially by clicking the button below. Every contribution is truly appreciated!  
+
+<p align="center">
+  <a href="https://nowpayments.io/donation/Hadi4100">
+    <img src="https://img.shields.io/badge/Sponsor%20Me-%E2%9D%A4-red?style=for-the-badge">
+  </a>
+</p>
+
 # Features
 
 ManageGift is a Discord bot that offers many features related to giveaway creation.
