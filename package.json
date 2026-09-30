@@ -8,7 +8,7 @@
     "discord-giveaways": "^6.0.1",
     "discord.js": "^14.27.0",
     "easy-table": "^1.2.0",
-    "moment": "^2.29.4",
+    "moment": "^2.31.0",
     "moment-duration-format": "^2.3.2",
     "mongoose": "^6.13.10",
     "ms": "^2.1.3",
